@@ -34,21 +34,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Mosaic BlueNco',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a blue toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
@@ -79,50 +64,11 @@ class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   String accessToken = 'null';
 
-  static const String redirectUri = 'http://localhost:60559';
-
   void _incrementCounter() {
     setState(() {
       _counter++;
     });
   }
-
-  // Future<dynamic> kakaoTalkLogin() async { //return value : UserCredential
-  //
-  //   final clientState = const Uuid().v4();
-  //   final authUri = Uri.https('kauth.kakao.com', '/oauth/authorize', {
-  //     'response_type': 'code',
-  //     'client_id': '330134bf7dd94dd04c719abce6080d18',
-  //     'response_mode': 'form_post',
-  //     'redirect_uri': redirectUri,
-  //     'scope': 'account_email', // account_email profile
-  //     // 'state': clientState,
-  //   });
-  //   print('여기 온건가?');
-  //   print(authUri.toString());
-  //   final authResponse = await FlutterWebAuth.authenticate(
-  //       url: authUri.toString(),
-  //       callbackUrlScheme: "webauthcallback"
-  //   );
-  //   print(authResponse);
-  //   print('토큰 요청');
-  //   final code = Uri.parse(authResponse).queryParameters['code'];
-  //   final tokenUri = Uri.https('kauth.kakao.com', '/oauth/token', {
-  //     'grant_type': 'authorization_code',
-  //     'client_id': '330134bf7dd94dd04c719abce6080d18',
-  //     'redirect_uri': redirectUri,
-  //     'code': code,
-  //   });
-  //   print('토큰 받아 왔어');
-  //   final tokenResult = await http.post(tokenUri);
-  //   final accessToken = json.decode(tokenResult.body)['access_token'];
-  //   print(accessToken.toString());
-  //   final response = await http.get(
-  //       Uri.parse('$redirectUri/kakao/token?accessToken=$accessToken')
-  //   );
-  //   print(response.body);
-  //   // return await FirebaseAuth.instance.signInWithCustomToken(response.body);
-  // }
 
   Future<dynamic> kakaoTalkLogin() async{
 
@@ -132,7 +78,6 @@ class _MyHomePageState extends State<MyHomePage> {
     //     ? await UserApi.instance.loginWithKakaoTalk()
     //     : await UserApi.instance.loginWithKakaoAccount();
 
-    print('여긴 온거니?');
     setState(() {
       accessToken = '여기서 시작';
     });
@@ -141,51 +86,46 @@ class _MyHomePageState extends State<MyHomePage> {
     // 카카오톡 실행이 가능하면 카카오톡으로 로그인, 아니면 카카오계정으로 로그인
 
     if (await isKakaoTalkInstalled()) {
-      print('카카오 깔았네');
       try {
-        setState(() {
-          accessToken = '카카오 있어서 이리로 왔구나?';
-        });
-        print('기점 1');
         OAuthToken token =
         await UserApi.instance.loginWithKakaoTalk();
-        print('카카오톡으로 로그인 성공 ${token.accessToken}');
         setState(() {
           accessToken = token.accessToken;
         });
       } catch (error) {
-        print('카카오톡으로 로그인 실패 $error');
+        setState(() {
+          accessToken = error.toString();
+        });
 
         // 사용자가 카카오톡 설치 후 디바이스 권한 요청 화면에서 로그인을 취소한 경우,
         // 의도적인 로그인 취소로 보고 카카오계정으로 로그인 시도 없이 로그인 취소로 처리 (예: 뒤로 가기)
         if (error is PlatformException && error.code == 'CANCELED') {
           return;
         }
-        // 카카오톡에 연결된 카카오계정이 없는 경우, 카카오계정으로 로그인
+
         try {
-          print('기점 2');
           OAuthToken token =
           await UserApi.instance.loginWithKakaoAccount();
-          print('카카오계정으로 로그인 성공 ${token.accessToken}');
+          setState(() {
+            accessToken = '엑세스 토큰 : ${token.accessToken}';
+          });
         } catch (error) {
-          print('카카오계정으로 로그인 실패 $error');
+          setState(() {
+            accessToken = error.toString();
+          });
         }
       }
     } else {
-      print('카카오 없어?');
       try {
-        print('카카오 없어서 로그인하러 왔구나?');
-        setState(() {
-          accessToken = '카카오 없어서 로그인하러 왔구나?';
-        });
         OAuthToken token =
         await UserApi.instance.loginWithKakaoAccount();
-        print('카카오계정으로 로그인 성공 ${token.accessToken}');
         setState(() {
-          accessToken = token.accessToken;
+          accessToken = '엑세스 토큰 : ${token.accessToken}';
         });
       } catch (error) {
-        print('카카오계정으로 로그인 실패 $error');
+        setState(() {
+          accessToken = error.toString();
+        });
       }
     }
 
