@@ -29,6 +29,13 @@
             {
               "client_id": "21784424587-uqasdih1n4vnvg4dnn4aeu18sjl3l2kc.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "21784424587-6grtdeai3ir21gd5m3ocg3obi2q21qdb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.bluenco.mosaicbluenco"
+              }
             }
           ]
         }

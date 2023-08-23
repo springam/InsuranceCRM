@@ -23,9 +23,15 @@ class DefaultFirebaseOptions {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        return ios;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for ios - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -59,25 +65,5 @@ class DefaultFirebaseOptions {
     messagingSenderId: '21784424587',
     projectId: 'mosaic-bluenco',
     storageBucket: 'mosaic-bluenco.appspot.com',
-  );
-
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyD3OfBITz4-ic1LGNvri0cXlLPe4pPDRaQ',
-    appId: '1:21784424587:ios:6cc7eb6898fa5263bc648e',
-    messagingSenderId: '21784424587',
-    projectId: 'mosaic-bluenco',
-    storageBucket: 'mosaic-bluenco.appspot.com',
-    iosClientId: '21784424587-6grtdeai3ir21gd5m3ocg3obi2q21qdb.apps.googleusercontent.com',
-    iosBundleId: 'com.bluenco.mosaicbluenco',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyD3OfBITz4-ic1LGNvri0cXlLPe4pPDRaQ',
-    appId: '1:21784424587:ios:cbc73152ebda6d81bc648e',
-    messagingSenderId: '21784424587',
-    projectId: 'mosaic-bluenco',
-    storageBucket: 'mosaic-bluenco.appspot.com',
-    iosClientId: '21784424587-pofios9qe6va8394qlhs0vpb6lell7de.apps.googleusercontent.com',
-    iosBundleId: 'com.bluenco.mosaicbluenco.RunnerTests',
   );
 }
