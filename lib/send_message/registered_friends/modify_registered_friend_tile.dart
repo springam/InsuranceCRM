@@ -7,21 +7,17 @@ import 'package:mosaicbluenco/user_data/user_data.dart';
 import 'package:provider/provider.dart';
 import '../../user_data/registered_friends_provider.dart';
 
-class NewFriendTile extends StatefulWidget {
-  const NewFriendTile({required this.friends, required this.index, required this.registering, required this.updateStateNewFriend, super.key});
+class ModifyFriendTile extends StatefulWidget {
+  const ModifyFriendTile({required this.registeredFriend, required this.registering, super.key});
 
-  final Friends friends;
-  final int index;
+  final RegisteredFriendsItem registeredFriend;
   final bool registering;
-  final Function() updateStateNewFriend;
 
   @override
-  State<NewFriendTile> createState() => NewFriendTileState();
+  State<ModifyFriendTile> createState() => ModifyFriendTileState();
 }
 
-class NewFriendTileState extends State<NewFriendTile> {
-
-  late Friends friends = widget.friends;
+class ModifyFriendTileState extends State<ModifyFriendTile> {
 
   late RegisteredFriendsItemProvider fIP;
 
@@ -32,7 +28,7 @@ class NewFriendTileState extends State<NewFriendTile> {
 
   int selectedIndex = 2;
   int selectedFilterIndex = 10;
-  List<String> options = ['반말', '존말'];
+  List<String> options = ['반말', '존대'];
 
   double xMousePosition = 0.0;
   double yMousePosition = 0.0;
@@ -41,14 +37,28 @@ class NewFriendTileState extends State<NewFriendTile> {
   bool warnNick = false;
   bool warnSelectChip = false;
   bool warnTag = false;
+  bool registering = false;
   bool registered = false;
 
   Color warnColor = Colors.transparent;
 
-  String testMsg = 'none';
+  String testMsg = '';
   int selectedOption = 5;
-  List<String> hashTag =  TagList.tagList;
-  List<String> selectedHashTag = [];
+  List<dynamic> hashTag =  TagList.tagList;
+  List<dynamic> selectedHashTag = [];
+
+  @override
+  void initState() {
+    super.initState();
+    middleNickController.text = widget.registeredFriend.name;
+    selectedIndex = widget.registeredFriend.talkDown;
+    selectedHashTag = widget.registeredFriend.tag;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   List<Widget> selectChip() {
     return List<Widget>.generate(2, (optionIndex) => SizedBox(
@@ -69,7 +79,6 @@ class NewFriendTileState extends State<NewFriendTile> {
           setState(() {
             selectedIndex = (selected) ? optionIndex : 2;
             selectedOption = optionIndex;
-            testMsg = selectedIndex.toString();
           });
         },
       ),
@@ -83,7 +92,7 @@ class NewFriendTileState extends State<NewFriendTile> {
         label: Text('#${hashTag[optionIndex]}', style: const TextStyle(fontSize: 12.0)),
         padding: const EdgeInsets.symmetric(vertical: -3, horizontal: -3),
         shape: const StadiumBorder(
-          side: BorderSide(color: Color(0xff000000), width: 1.0)
+            side: BorderSide(color: Color(0xff000000), width: 1.0)
         ),
         selected: selectedHashTag.contains(hashTag[optionIndex]),
         visualDensity: const VisualDensity(vertical: -4, horizontal: -4),
@@ -97,6 +106,7 @@ class NewFriendTileState extends State<NewFriendTile> {
               selectedHashTag.remove(hashTag[optionIndex]);
               testMsg = 'remove $optionIndex';
             }
+            debugPrint(widget.registeredFriend.tag.toString());
           });
         },
       ),
@@ -122,46 +132,26 @@ class NewFriendTileState extends State<NewFriendTile> {
   //   });
   // }
 
-  Future<void> notRegisterFriends(int index) async{
-    final docRef = FirebaseFirestore.instance.collection('friends').doc();
-    await docRef.set({
-      'document_id': docRef.id,
-      'etc': '',
-      'kakao_id': friends.elements?[index].id,
-      'kakao_nickname': friends.elements?[index].profileNickname,
-      'kakao_uuid': friends.elements?[index].uuid,
-      'managed_count': 0,
-      'managed_last_date': '',
-      'manager_id': UserData.userId,
-      'name': '',
-      'registered': false,
+  Future<void> notRegisterFriends() async{
+    final docRef = FirebaseFirestore.instance.collection('friends').doc(widget.registeredFriend.documentId);
+    await docRef.update({
       'registered_date': DateFormat("yyyy년 MM월 dd일 hh시 mm분").format(now),
-      'tag': [],
-      'talk_down': 2,
-      'tier': 'normal'
+      'registered': false,
     });
   }
 
-  Future<void> registerFriends(int index) async{
+  Future<void> registerFriends() async{
 
-    final docRef = FirebaseFirestore.instance.collection('friends').doc();
-    await docRef.set({
-      'document_id': docRef.id,
-      'etc': '',
-      'kakao_id': friends.elements?[index].id,
-      'kakao_nickname': friends.elements?[index].profileNickname,
-      'kakao_uuid': friends.elements?[index].uuid,
-      'managed_count': 0,
+    final docRef = FirebaseFirestore.instance.collection('friends').doc(widget.registeredFriend.documentId);
+    await docRef.update({
       'registered_date': DateFormat("yyyy년 MM월 dd일 hh시 mm분").format(now),
-      'managed_last_date': '',
-      'manager_id': UserData.userId,
       'name': middleNickController.text,
-      'registered': true,
       'tag': selectedHashTag,
       'talk_down': selectedIndex,
       'tier': 'normal'
     });
-    widget.updateStateNewFriend();
+
+    debugPrint('update ${middleNickController.text}');
   }
 
   @override
@@ -169,27 +159,29 @@ class NewFriendTileState extends State<NewFriendTile> {
 
     fIP = Provider.of<RegisteredFriendsItemProvider>(context);
 
-    if (!widget.registering) {
-      if (!registered) {
-        warnColor = Colors.transparent;
-      } else {
-        if (middleNickController.text.isNotEmpty && selectedIndex != 2 && selectedHashTag.isNotEmpty) {
-          warnColor = Colors.transparent;
-        } else {
-          warnColor = Colors.red;
-        }
-      }
+    if (middleNickController.text.isNotEmpty && selectedIndex != 2 && selectedHashTag.isNotEmpty) {
+      warnColor = Colors.transparent;
+    } else {
+      warnColor = Colors.red;
     }
 
-    if (widget.registering) {
-      if (middleNickController.text.isEmpty || selectedIndex == 2 || selectedHashTag.isEmpty) {
-        setState(() {
-          warnColor = Colors.red;
-          registered = true;
-        });
-      } else {
-        registerFriends(widget.index);
+    if (widget.registering) { //완료 버튼 누를시
+
+      if (widget.registeredFriend.name != middleNickController.text
+          || widget.registeredFriend.talkDown != selectedIndex
+          || widget.registeredFriend.tag != selectedHashTag) { //변화가 있다면
+        if (middleNickController.text.isEmpty || selectedIndex ==2 || selectedHashTag.isEmpty) { //비어 있는 것이 있으면
+          debugPrint('passing');
+        } else {  //모든 필드 채워 졌을 시
+          if (!registered) {
+            registered = true;
+            registerFriends();
+          }
+        }
+      } else {  //변화가 없으면
+        debugPrint('passing ${middleNickController.text}');
       }
+
     }
 
     return Stack(
@@ -197,10 +189,10 @@ class NewFriendTileState extends State<NewFriendTile> {
         Container(
           margin: const EdgeInsets.only(top: 8),
           decoration: BoxDecoration(
-            border: Border.all(
-              color: warnColor,
-              width: 1
-            )
+              border: Border.all(
+                  color: Colors.transparent,
+                  width: 1
+              )
           ),
           child: Row(
             children: [
@@ -230,7 +222,7 @@ class NewFriendTileState extends State<NewFriendTile> {
                             color: Color(0xffffffff),
                           ),
                           child: Text(
-                            '${friends.elements?[widget.index].profileNickname}',
+                            widget.registeredFriend.kakaoNickname,
                             style: buttonTextStyle,
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -254,10 +246,6 @@ class NewFriendTileState extends State<NewFriendTile> {
                       controller: middleNickController,
                       style: buttonTextStyle,
                       decoration: const InputDecoration(
-                        // hintText: '10자 이내로 입력해 주세요.',
-                        // enabledBorder: OutlineInputBorder(
-                        //     borderSide: BorderSide(color: Color(0xffd9d9d9), width: 1.0,)
-                        // ),
                           border: InputBorder.none
                       ),
                       onChanged: (value) {
@@ -307,8 +295,8 @@ class NewFriendTileState extends State<NewFriendTile> {
                       textAlign: TextAlign.center
                   ),
                   onTap: () async{
-                    await notRegisterFriends(widget.index);
-                    widget.updateStateNewFriend();
+                    // await notRegisterFriends();
+                    // widget.updateStateNewFriend();
                   },
                 ),
               )
@@ -318,7 +306,7 @@ class NewFriendTileState extends State<NewFriendTile> {
 
         (enterBox) ? Positioned(
           left: 7,
-          child: TextMessageNormal('${friends.elements?[widget.index].profileNickname}', 12.0),
+          child: TextMessageNormal(widget.registeredFriend.kakaoNickname, 12.0),
         ) : const SizedBox()
       ],
     );

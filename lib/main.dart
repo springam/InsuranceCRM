@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
+import 'package:mosaicbluenco/kakao_login.dart';
 import 'package:mosaicbluenco/user_data/registered_friends_provider.dart';
+import 'package:mosaicbluenco/user_data/status_provider.dart';
+import 'package:mosaicbluenco/user_data/message_provider.dart';
 import 'package:mosaicbluenco/user_data/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
@@ -20,15 +23,6 @@ Future<void> main() async {
     javaScriptAppKey: '2849088ddba15764563fb0f98e2a1cdf',
   );
   runApp(const MyApp());
-  // runApp(MultiProvider(
-  //   providers: [
-  //     ChangeNotifierProvider(
-  //         create: (_) => UserItemProvider()),
-  //     ChangeNotifierProvider(
-  //         create: (_) => RegisteredFriendsItemProvider()),
-  //   ],
-  //   child: const MyApp(),
-  // ));
 }
 
 class MyApp extends StatelessWidget {
@@ -42,6 +36,14 @@ class MyApp extends StatelessWidget {
             create: (_) => UserItemProvider()),
         ChangeNotifierProvider(
             create: (_) => RegisteredFriendsItemProvider()),
+        ChangeNotifierProvider(
+            create: (_) => SendMessageFriendsItemProvider()),
+        ChangeNotifierProvider(
+            create: (_) => CurrentPageProvider()),
+        ChangeNotifierProvider(
+            create: (_) => MessageItemProvider()),
+        ChangeNotifierProvider(
+            create: (_) => TextMessageProvider()),
       ],
       child: MaterialApp(
         title: 'Mosaic Blue&co',
@@ -51,21 +53,10 @@ class MyApp extends StatelessWidget {
         ),
         // home: const Login(title: 'Mosaic Blue&co'),
         home: const Scaffold(
-            body: UserItemList()
+            body: Login()
         ),
       ),
     );
-    // return MaterialApp(
-    //   title: 'Mosaic Blue&co',
-    //   theme: ThemeData(
-    //     colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-    //     useMaterial3: true,
-    //   ),
-    //   // home: const Login(title: 'Mosaic Blue&co'),
-    //   home: const Scaffold(
-    //       body: UserItemList()
-    //   ),
-    // );
   }
 }
 

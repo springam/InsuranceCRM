@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
+import 'package:mosaicbluenco/send_message/registered_friends/registered_friends.dart';
 import 'package:provider/provider.dart';
 import '../../etc_widget/text_message.dart';
 import '../../user_data/registered_friends_provider.dart';
 import 'new_friend_tile.dart';
 
 class NewFriends extends StatefulWidget {
-  const NewFriends(this.friends, {super.key});
+  const NewFriends({required this.friends, required this.updateStateSelect, super.key});
 
   final Friends friends;
+  final Function() updateStateSelect;
 
   @override
   State<NewFriends> createState() => _NewFriendsState();
@@ -19,44 +21,23 @@ class _NewFriendsState extends State<NewFriends> {
   late Friends friends;
   late RegisteredFriendsItemProvider fIP;
 
+  bool registerFriend = false;
+
   final ScrollController controller = ScrollController();
   final TextEditingController middleNickController = TextEditingController();
 
   int selectedIndex = 0;
   List<String> options = ['존대', '반말'];
 
-  TextStyle buttonTextStyle = const TextStyle(
-      color:  Color(0xff000000),
-      fontWeight: FontWeight.w400,
-      fontFamily: "NotoSansCJKKR",
-      fontStyle:  FontStyle.normal,
-      fontSize: 12.0
-  );
-
-  List<Widget> selectChip() {
-
-    return List<Widget>.generate(2, (index) => ChoiceChip(
-      // padding: const EdgeInsets.all(5),
-      selectedColor: const Color(0xffd9d9d9),
-      selected: false,
-      label: Text(options[index]),
-      shape: ContinuousRectangleBorder(
-        borderRadius: BorderRadius.circular(0.0),
-      ),
-      labelStyle: buttonTextStyle,
-      avatar: null,
-      onSelected: (selected) {
-        setState(() {
-          selectedIndex = (selected) ? index : 2;
-        });
-      },
-    )).toList();
+  void updateStateNewFriend() {
+    // setState(() {});
+    widget.updateStateSelect();
   }
 
   @override
   Widget build(BuildContext context) {
 
-    fIP = Provider.of<RegisteredFriendsItemProvider>(context);
+    fIP = Provider.of<RegisteredFriendsItemProvider>(context, listen: true);
 
     friends = widget.friends;
 
@@ -110,25 +91,34 @@ class _NewFriendsState extends State<NewFriends> {
                   height: (friends.totalCount < 10) ? friends.totalCount * 45 : 500,
                   child: (friends.totalCount == 0) ? const Center(child: TextMessageNormal('불러온 친구 목록이 없습니다.', 12.0)) :
                   ListView.builder(
-                      itemCount: friends.totalCount,
+                      itemCount: friends.totalCount + 1,
                       controller: controller,
                       itemBuilder: (BuildContext context, int index) {
-                        //신규 목록 중에 등록된 친구가 있는지 체크
-                        bool existItem = false;
-                        int itemCount = 0;
-                        for (RegisteredFriendsItem registeredFriend in fIP.getItem()) {
-                          itemCount++;
-                          if (registeredFriend.kakaoId == friends.elements?[index].id) {
-                            existItem = true;
+
+                        if (index == friends.totalCount) {
+                          if (registerFriend) {
+                            registerFriend = false;
+                            // widget.updateStateSelect();
                           }
-                          if (itemCount == fIP.getItem().length) {
-                            if (existItem) {
-                              return const SizedBox();
-                            } else {
-                              return NewFriendTile(index, friends);
+                        } else {
+                          //신규 목록 중에 등록된 친구가 있는지 체크
+                          bool existItem = false;
+                          int itemCount = 0;
+                          for (RegisteredFriendsItem registeredFriend in Provider.of<RegisteredFriendsItemProvider>(context, listen: true).getItem()) {
+                            itemCount++;
+                            if (registeredFriend.kakaoId == friends.elements?[index].id) {
+                              existItem = true;
+                            }
+                            if (itemCount == fIP.getItem().length) {
+                              if (existItem) {
+                                return const SizedBox();
+                              } else {
+                                return NewFriendTile(friends: friends, index: index, updateStateNewFriend: updateStateNewFriend, registering: registerFriend,);
+                              }
                             }
                           }
                         }
+
                       }
                   )
               ),
@@ -156,7 +146,9 @@ class _NewFriendsState extends State<NewFriends> {
                       ),
                     ),
                     onTap: () {
-
+                      setState(() {
+                        registerFriend = true;
+                      });
                     },
                   ),
                 ),

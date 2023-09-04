@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
+import 'package:mosaicbluenco/send_message/registered_friends/modify_registered_friend_tile.dart';
 import 'package:mosaicbluenco/send_message/registered_friends/registered_friend_tile.dart';
 import 'package:provider/provider.dart';
 
 import '../../etc_widget/text_message.dart';
+import '../../gate/gate_main.dart';
 import '../../user_data/registered_friends_provider.dart';
 
+GlobalKey<RegisteredFriendsState> registeredFriendsStateKey = GlobalKey();
+
 class RegisteredFriends extends StatefulWidget {
-  const RegisteredFriends({super.key});
+  const RegisteredFriends({required this.updateStateSelect, Key? key}) : super(key: key);
+
+  final Function() updateStateSelect;
 
   @override
   State<RegisteredFriends> createState() => RegisteredFriendsState();
@@ -20,27 +26,22 @@ class RegisteredFriendsState extends State<RegisteredFriends> {
 
   // bool registeredFriendBool = false;
   int registeredCount = 0;
+  bool modifyRegisteredFriend = false;
+  bool registering = false;
+  List<String> buttonTitleList = ['수정', '완료'];
+  int buttonIndex = 0;
 
   final ScrollController controller = ScrollController();
   final TextEditingController searchFriendController = TextEditingController();
-
-  TextStyle buttonTextStyle = const TextStyle(
-      color:  Color(0xff000000),
-      fontWeight: FontWeight.w400,
-      fontFamily: "NotoSansCJKKR",
-      fontStyle:  FontStyle.normal,
-      fontSize: 12.0
-  );
 
   @override
   Widget build(BuildContext context) {
 
     fIP = Provider.of<RegisteredFriendsItemProvider>(context);
 
-    int itemCount = 0;
-    int boolCount = 0;
-
     if (fIP.getItem().length != 0) {
+      int itemCount = 0;
+      int boolCount = 0;
       for (RegisteredFriendsItem registeredFriend in fIP.getItem()) {
         itemCount++;
         if (registeredFriend.registered) {
@@ -79,17 +80,33 @@ class RegisteredFriendsState extends State<RegisteredFriends> {
                     splashColor: const Color(0xffffdf8e),
                     hoverColor: Colors.grey,
                     child: Ink(
-                      width: 53,
+                      width: 100,
                       height: 21,
                       decoration: const BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                         color: Color(0xffffffff),
                       ),
                       child: Center(
-                        child: Text('수정', style: buttonTextStyle,),
+                        child: Text(buttonTitleList[buttonIndex], style: buttonTextStyle,),
                       ),
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      switch (buttonIndex) {
+                        case 0:
+                          buttonIndex = 1;
+                          setState(() {
+                            modifyRegisteredFriend = true;
+                            registering = false;
+                          });
+                          break;
+                        case 1:
+                          buttonIndex = 0;
+                          setState(() {
+                            registering = true;
+                          });
+                          break;
+                      }
+                    },
                   ),
                 ),
               ),
@@ -131,20 +148,33 @@ class RegisteredFriendsState extends State<RegisteredFriends> {
                         14.0
                     ),
                   ) : ListView.builder(
-                  itemCount: registeredCount,
-                  controller: controller,
-                  itemBuilder: (BuildContext context, int index) {
-                    //등록된 친구 목록 provider 에서 등록된 목록만 보여줌
-                    for (RegisteredFriendsItem registeredFriend in fIP.getItem()) {
-                      if (registeredFriend.registered) {
-                        return RegisteredFriendTile(registeredFriend);
-                      } else {
-                        return const SizedBox();
+                      itemCount: fIP.getItem().length + 1,
+                      controller: controller,
+                      itemBuilder: (BuildContext context, int index) {
+                        //등록된 친구 목록 provider 에서 등록된 목록만 보여줌
+                        if (index == fIP.getItem().length) {
+                          if (registering) {
+                            Future.delayed(const Duration(milliseconds: 500), () {
+                              setState(() {
+                                modifyRegisteredFriend = false;
+                                registering = false;
+                              });
+                            });
+                          }
+                        } else {
+                          if (modifyRegisteredFriend) {
+                            return ModifyFriendTile(registeredFriend: fIP.getItem()[index], registering: registering);
+                          } else {
+                            if (fIP.getItem()[index].registered) {
+                              return RegisteredFriendTile(fIP.getItem()[index]);
+                            } else {
+                              return const SizedBox();
+                            }
+                          }
+                        }
+
                       }
-                    }
-                    return const SizedBox();
-                  }
-              )
+                    )
               )
             ],
           ),

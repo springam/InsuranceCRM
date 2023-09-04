@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:mosaicbluenco/kakao_login.dart';
 import 'package:mosaicbluenco/user_data/user_data.dart';
+import 'package:provider/provider.dart';
+import '../send_message/message_templates/message_preset.dart';
 import '../send_message/select_friends.dart';
+import '../send_message/select_message.dart';
+import '../user_data/registered_friends_provider.dart';
+import '../user_data/status_provider.dart';
 
 class HomeMain extends StatefulWidget {
   const HomeMain({super.key});
@@ -14,6 +19,8 @@ class HomeMain extends StatefulWidget {
 }
 
 class _HomeMainState extends State<HomeMain> {
+
+  late CurrentPageProvider cIP;
 
   int hoveringNumber = 0;
   Color menuColor = const Color(0xffbcc0c7);
@@ -40,6 +47,18 @@ class _HomeMainState extends State<HomeMain> {
 
   double screenWidth = 1280;
   double screenHeight = 720;
+
+  @override
+  void initState() {
+    super.initState();
+    CurrentPageProvider().addListener(() { });
+  }
+
+  @override
+  void dispose() {
+    CurrentPageProvider().removeListener(() { });
+    super.dispose();
+  }
 
   Widget leftMenu(int menuNumber) {
 
@@ -109,7 +128,7 @@ class _HomeMainState extends State<HomeMain> {
           ],
         ),
       ),
-      onHover: (value) {
+      onHover: (value) { //value type is bool
         setState(() {
           hoveringNumber = value? menuNumber : 0;
         });
@@ -120,8 +139,33 @@ class _HomeMainState extends State<HomeMain> {
     );
   }
 
+  Widget currentPage() {
+
+    switch (cIP.getMainPage()) {
+      case 0:
+        break;
+      case 1:
+        if (cIP.getSubPage() == 0) {
+          return const SelectFriends();
+        } else if (cIP.getSubPage() == 1) {
+          return const SelectMessage();
+        } else {
+          return const MessagePreset();
+        }
+      case 2:
+        break;
+      case 3:
+        break;
+      case 4:
+        break;
+    }
+    return const SizedBox();
+  }
+
   @override
   Widget build(BuildContext context) {
+
+    cIP = Provider.of<CurrentPageProvider>(context, listen: true);
 
     if (MediaQuery.of(context).size.width >1280) {
       screenWidth = MediaQuery.of(context).size.width;
@@ -199,7 +243,6 @@ class _HomeMainState extends State<HomeMain> {
                                       });
                                     } catch (error) {
                                       debugPrint('로그아웃 실패, SDK에서 토큰 삭제 $error');
-                                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const Login()));
                                     }
                                   },
                                   child: Ink(
@@ -234,6 +277,7 @@ class _HomeMainState extends State<HomeMain> {
                                       color: Color(0xfff0f0f0)
                                   )
                               ),
+
                               SizedBox(
                                 width: 188,
                                 child: Row(
@@ -264,7 +308,9 @@ class _HomeMainState extends State<HomeMain> {
                           color: Color(0xfff0f0f0),
                         ),
 
-                        const SelectFriends(),  //메시지 보내기, 선택된 메뉴에 따라 페이지 변경
+                        currentPage() //보여줄 페이지 선택
+
+                        // const SelectFriends(),  //메시지 보내기, 선택된 메뉴에 따라 페이지 변경
 
                       ],
                     )

@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
 import 'gate/gate_friend.dart';
+import 'gate/gate_main.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -20,8 +21,6 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
 
   late UserItemProvider uIP;
-
-  DateTime now = DateTime.now();
 
   // Future<dynamic> getUserInfoWithKakao() async{ // 웹애서 사용자 정보 받아 오기
   //
@@ -55,14 +54,6 @@ class _LoginState extends State<Login> {
   //   }
   // }
 
-  Future<dynamic> registerMosaic(int userId) async{
-    for (UserItem userItem in uIP.getItem()) {
-      if (userItem.kakaoId == userId) {
-        UserData.userId = userId;
-      }
-    }
-  }
-
   Future<dynamic> loginWithAuthorize() async{  //안드로이드 사용자 정보와 추가 동의 동시 진행
     User user;
     OAuthToken token;
@@ -88,28 +79,6 @@ class _LoginState extends State<Login> {
 
     try {
       token = await UserApi.instance.loginWithNewScopes(scopes);
-
-      await registerMosaic(user.id);  //회원 체크
-
-      if (UserData.userId == 0) { //등록된 회원정보가 없을 시
-        final docRef = FirebaseFirestore.instance.collection('customer').doc();
-        docRef.set({
-          'kakao_id': user.id,
-          'email': user.kakaoAccount?.email,
-          'phone_number': '',
-          'name': '',
-          'date_join': DateFormat("yyyy년 MM월 dd일 hh시 mm분").format(now),
-          'date_start': '',
-          'date_end': '',
-          'tier': 'normal',
-          'document_id': docRef.id,
-          'etc': ''
-        });
-      } else {
-
-      }
-
-      debugPrint('현재 사용자가 동의한 동의 항목: ${token.scopes}');
     } catch (error) {
       debugPrint('추가 동의 요청 실패 $error');
       return;
@@ -143,7 +112,7 @@ class _LoginState extends State<Login> {
       try {
         // OAuthToken token =
         await UserApi.instance.loginWithKakaoTalk();  //인가 코드 받기
-        await loginWithAuthorize();
+        await loginWithAuthorize(); //추가 항목 동의
       } catch (error) {
         debugPrint(error.toString());
         // 사용자가 카카오톡 설치 후 디바이스 권한 요청 화면에서 로그인을 취소한 경우,
@@ -155,7 +124,7 @@ class _LoginState extends State<Login> {
     } else {  //카카오톡 미 설치시
       try {
         // OAuthToken token =
-        await UserApi.instance.loginWithKakaoAccount();
+        await UserApi.instance.loginWithKakaoAccount(); //재 로그인 해야 한다네
         await loginWithAuthorize();  //기본 구현 방식? 이거 앱방식 아냐?
       } catch (error) {
         debugPrint(error.toString());
@@ -164,72 +133,62 @@ class _LoginState extends State<Login> {
 
   }
 
-  Future<dynamic> getFriendsList() async{  //친구 목록 가져오기
-    try {
-      Friends friends = await TalkApi.instance.friends();
-      // debugPrint('카카오톡 친구 목록 가져오기 성공'
-      //     '\n${friends.elements?.map((friend) => friend.profileNickname).join('\n')}');
-    } catch (error) {
-      debugPrint('카카오톡 친구 목록 가져오기 실패 $error');
-    }
-  }
-
-  Future<dynamic> messageSendMe() async{
-
-    final FeedTemplate defaultFeed = FeedTemplate(
-      content: Content(
-        title: '고객 관리 비서 모자이크',
-        description: '#보험 #고객관리 #모자이크 #CRM #자동관리',
-        imageUrl: Uri.parse(
-            'https://mud-kage.kakao.com/dn/Q2iNx/btqgeRgV54P/VLdBs9cvyn8BJXB3o7N8UK/kakaolink40_original.png'),
-        link: Link(
-            webUrl: Uri.parse('https://mosaic-bluenco.web.app'),
-            mobileWebUrl: Uri.parse('https://mosaic-bluenco.web.app')),
-      ),
-      itemContent: ItemContent(
-        profileText: '모자이크',
-        profileImageUrl: Uri.parse(
-            'https://mud-kage.kakao.com/dn/Q2iNx/btqgeRgV54P/VLdBs9cvyn8BJXB3o7N8UK/kakaolink40_original.png'),
-        titleImageUrl: Uri.parse(
-            'https://mud-kage.kakao.com/dn/Q2iNx/btqgeRgV54P/VLdBs9cvyn8BJXB3o7N8UK/kakaolink40_original.png'),
-        titleImageText: '타이틀 이미지',
-        titleImageCategory: '이미지 category',
-        items: [
-          ItemInfo(item: '1개월 사용료', itemOp: '30,000원'),
-          ItemInfo(item: '3개월 사용료', itemOp: '80,000원'),
-          ItemInfo(item: '6개월 사용료', itemOp: '150,000원'),
-          ItemInfo(item: '1년 사용료', itemOp: '400,000원'),
-          ItemInfo(item: 'Premium', itemOp: '500,00원')
-        ],
-        sum: '오픈 이벤트',
-        sumOp: '20,000원',
-      ),
-      social: Social(likeCount: 286, commentCount: 45, sharedCount: 845),
-      buttons: [
-        Button(
-          title: '홈 페이지로 이동',
-          link: Link(
-            webUrl: Uri.parse('https://mosaic-bluenco.web.app'),
-            mobileWebUrl: Uri.parse('https://mosaic-bluenco.web.app'),
-          ),
-        ),
-        Button(
-          title: '앱으로보기',
-          link: Link(
-            androidExecutionParams: {'key1': 'value1', 'key2': 'value2'},
-            iosExecutionParams: {'key1': 'value1', 'key2': 'value2'},
-          ),
-        ),
-      ],
-    );
-
-    try {
-      await TalkApi.instance.sendDefaultMemo(defaultFeed);
-      debugPrint('나에게 보내기 성공');
-    } catch (error) {
-      debugPrint('나에게 보내기 실패 $error');
-    }
-  }
+  // Future<dynamic> messageSendMe() async{
+  //
+  //   final FeedTemplate defaultFeed = FeedTemplate(
+  //     content: Content(
+  //       title: '고객 관리 비서 모자이크',
+  //       description: '#보험 #고객관리 #모자이크 #CRM #자동관리',
+  //       imageUrl: Uri.parse(
+  //           'https://mud-kage.kakao.com/dn/Q2iNx/btqgeRgV54P/VLdBs9cvyn8BJXB3o7N8UK/kakaolink40_original.png'),
+  //       link: Link(
+  //           webUrl: Uri.parse('https://mosaic-bluenco.web.app'),
+  //           mobileWebUrl: Uri.parse('https://mosaic-bluenco.web.app')),
+  //     ),
+  //     itemContent: ItemContent(
+  //       profileText: '모자이크',
+  //       profileImageUrl: Uri.parse(
+  //           'https://mud-kage.kakao.com/dn/Q2iNx/btqgeRgV54P/VLdBs9cvyn8BJXB3o7N8UK/kakaolink40_original.png'),
+  //       titleImageUrl: Uri.parse(
+  //           'https://mud-kage.kakao.com/dn/Q2iNx/btqgeRgV54P/VLdBs9cvyn8BJXB3o7N8UK/kakaolink40_original.png'),
+  //       titleImageText: '타이틀 이미지',
+  //       titleImageCategory: '이미지 category',
+  //       items: [
+  //         ItemInfo(item: '1개월 사용료', itemOp: '30,000원'),
+  //         ItemInfo(item: '3개월 사용료', itemOp: '80,000원'),
+  //         ItemInfo(item: '6개월 사용료', itemOp: '150,000원'),
+  //         ItemInfo(item: '1년 사용료', itemOp: '400,000원'),
+  //         ItemInfo(item: 'Premium', itemOp: '500,00원')
+  //       ],
+  //       sum: '오픈 이벤트',
+  //       sumOp: '20,000원',
+  //     ),
+  //     social: Social(likeCount: 286, commentCount: 45, sharedCount: 845),
+  //     buttons: [
+  //       Button(
+  //         title: '홈 페이지로 이동',
+  //         link: Link(
+  //           webUrl: Uri.parse('https://mosaic-bluenco.web.app'),
+  //           mobileWebUrl: Uri.parse('https://mosaic-bluenco.web.app'),
+  //         ),
+  //       ),
+  //       Button(
+  //         title: '앱으로보기',
+  //         link: Link(
+  //           androidExecutionParams: {'key1': 'value1', 'key2': 'value2'},
+  //           iosExecutionParams: {'key1': 'value1', 'key2': 'value2'},
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  //
+  //   try {
+  //     await TalkApi.instance.sendDefaultMemo(defaultFeed);
+  //     debugPrint('나에게 보내기 성공');
+  //   } catch (error) {
+  //     debugPrint('나에게 보내기 실패 $error');
+  //   }
+  // }
 
   Future<void> hasToken() async{
     if (await AuthApi.instance.hasToken()) {
@@ -302,7 +261,7 @@ class _LoginState extends State<Login> {
         kakaoTalkLogin();
         return loginPage();
       } else {
-        return const RegisteredFriendsItemList();
+        return const UserCheck();
       }
     } else {
       return loginPage();

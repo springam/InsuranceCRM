@@ -1,13 +1,13 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:mosaicbluenco/user_data/user_data.dart';
 import 'package:mosaicbluenco/user_data/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../kakao_login.dart';
+import 'gate_friend.dart';
 
-
-class UserItemList extends StatelessWidget {
-  const UserItemList({Key? key}) : super(key: key);
+class UserCheck extends StatelessWidget {
+  const UserCheck({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,8 +16,10 @@ class UserItemList extends StatelessWidget {
 
     uIP = Provider.of<UserItemProvider>(context);
 
+    DateTime now = DateTime.now();
+
     return StreamBuilder(
-      stream: FirebaseFirestore.instance.collection('customer').snapshots(),
+      stream: FirebaseFirestore.instance.collection('customer').where('kakao_id', isEqualTo: UserData.userId).snapshots(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
           List<UserItem> userItemsMap = [];
@@ -32,11 +34,33 @@ class UserItemList extends StatelessWidget {
                   dateEnd: doc.data()['date_end'],
                   tier: doc.data()['tier'],
                   documentId: doc.data()['document_id'],
-                  etc: doc.data()['etc']
+                  etc: doc.data()['etc'],
+                  userCompany: doc.data()['user_company'],
+                  userTeam: doc.data()['user_team']
               ))
           ).toList();
-          uIP.setItem(userItemsMap);
-          return const Login();
+
+          if (userItemsMap.isNotEmpty) {
+            uIP.setItem(userItemsMap);
+            return const RegisteredFriendsItemList();
+          } else {
+            final docRef = FirebaseFirestore.instance.collection('customer').doc();
+            docRef.set({
+              'kakao_id': UserData.userId,
+              'email': UserData.userEmail,
+              'phone_number': '',
+              'name': '',
+              'date_join': DateFormat("yyyy년 MM월 dd일 hh시 mm분").format(now),
+              'date_start': '',
+              'date_end': '',
+              'tier': 'normal',
+              'document_id': docRef.id,
+              'etc': '',
+              'user_company': '',
+              'user_team': ''
+            });
+          }
+
         } else if (snapshot.hasError) {
           Text('${snapshot.error}');
         }

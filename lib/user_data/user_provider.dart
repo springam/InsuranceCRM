@@ -29,7 +29,10 @@ class UserItem {
   String tier = '';
   String documentId = '';
   String etc = '';
+  String userCompany = '';
+  String userTeam = '';
 
   UserItem({required this.kakaoId, required this.email, required this.phoneNumber, required this.name, required this.dateJoin, required this.dateStart,
-    required this.dateEnd, required this.tier, required this.documentId, required this.etc});
+    required this.dateEnd, required this.tier, required this.documentId, required this.etc, required this.userCompany, required this.userTeam});
 }
+

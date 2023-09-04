@@ -2,10 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:mosaicbluenco/send_message/new_friends/new_friends.dart';
 import 'package:mosaicbluenco/send_message/registered_friends/registered_friends.dart';
+import 'package:mosaicbluenco/send_message/send_message_friends/send_message_friend_tile.dart';
+import 'package:mosaicbluenco/send_message/send_message_friends/tag_list.dart';
+import 'package:mosaicbluenco/user_data/status_provider.dart';
 import 'package:mosaicbluenco/user_data/user_data.dart';
+import 'package:provider/provider.dart';
 
-import '../etc_widget/dialog_message.dart';
+import '../etc_widget/design_widget.dart';
+import '../etc_widget/tag_dialog_message.dart';
 import '../etc_widget/text_message.dart';
+import '../user_data/registered_friends_provider.dart';
 
 class SelectFriends extends StatefulWidget {
   const SelectFriends({super.key});
@@ -16,29 +22,43 @@ class SelectFriends extends StatefulWidget {
 
 class SelectFriendsState extends State<SelectFriends> {
 
+  late SendMessageFriendsItemProvider sIP;
+  late CurrentPageProvider cIP;
+
   final ScrollController controller = ScrollController();
+  final ScrollController sendMessageFriendController = ScrollController();
   final TextEditingController searchFriendController = TextEditingController();
 
   late Friends friends;
   bool getFriends = false;
-  bool gettingFriends = false;
+  bool gettingFriends = false; //카톡 친구 불러 오는 중
   bool testBool = false;
   double middleFrameWidth = 728;
   double endFrameWidth = 256;
 
-  TextStyle buttonTextStyle = const TextStyle(
-      color:  Color(0xff000000),
-      fontWeight: FontWeight.w400,
-      fontFamily: "NotoSansCJKKR",
-      fontStyle:  FontStyle.normal,
-      fontSize: 12.0
-  );
+  @override
+  void initState() {
+    super.initState();
+    SendMessageFriendsItemProvider().addListener(() { });
+  }
+
+  @override
+  void dispose() {
+    SendMessageFriendsItemProvider().removeListener(() { });
+    super.dispose();
+  }
+
+  void updateStateSelect() { //상태 update callback 함수
+    setState(() {
+      registeredFriendsStateKey.currentState?.setState(() {});
+    });
+  }
 
   Future<dynamic> getFriendsList() async{  //친구 목록 가져오기
     try {
       friends = await TalkApi.instance.friends(limit: 10);
-      debugPrint('카카오톡 친구 목록 가져오기 성공'
-          '\n${friends.elements?.map((friend) => friend.profileNickname).join('\n')}');
+      // debugPrint('카카오톡 친구 목록 가져오기 성공'
+      //     '\n${friends.elements?.map((friend) => friend.profileNickname).join('\n')}');
       setState(() {
         getFriends = true;
         gettingFriends = false;
@@ -49,23 +69,15 @@ class SelectFriendsState extends State<SelectFriends> {
   }
 
   List<Widget> tagList() {
-    return List<Widget>.generate(TagList.tagList.length, (tagIndex) => Container(
-      width: 105,
-      height: 33,
-      alignment: Alignment.center,
-      margin: const EdgeInsets.only(left: 7),
-      decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(
-              Radius.circular(15)
-          ),
-          color: Color(0xffffffff)
-      ),
-      child: TextMessageNormal('#${TagList.tagList[tagIndex]}', 14.0),
-    )).toList();
+    return List<Widget>.generate(
+        TagList.tagList.length, (tagIndex) => TagListChip(tagIndex: tagIndex,)).toList();
   }
 
   @override
   Widget build(BuildContext context) {
+
+    sIP = Provider.of<SendMessageFriendsItemProvider>(context, listen: true);
+    cIP = Provider.of<CurrentPageProvider>(context, listen: true);
 
     return Stack(
       children: [
@@ -97,7 +109,7 @@ class SelectFriendsState extends State<SelectFriends> {
                         ],
                       ),
 
-                      const SizedBox(height: 17,),
+                      const SizedBox(height: 17),
 
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -135,6 +147,9 @@ class SelectFriendsState extends State<SelectFriends> {
                                 // setState(() {
                                 //   gettingFriends = true;
                                 // });
+                                setState(() {
+                                  friends = Friends([], 0, 0, '', '');
+                                });
                                 await getFriendsList();
                               },
                             ),
@@ -143,7 +158,7 @@ class SelectFriendsState extends State<SelectFriends> {
                         ],
                       ),
 
-                      const SizedBox(height: 10,),
+                      const SizedBox(height: 10),
 
                       Container(
                         height: 58,
@@ -216,7 +231,7 @@ class SelectFriendsState extends State<SelectFriends> {
                         ),
                       ),
 
-                      const SizedBox(height: 13,),
+                      const SizedBox(height: 13),
 
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
@@ -262,10 +277,9 @@ class SelectFriendsState extends State<SelectFriends> {
 
                       const SizedBox(height: 13),
 
-                      (getFriends) ? NewFriends(friends) : const SizedBox(),
+                      (getFriends) ? NewFriends(friends: friends, updateStateSelect: updateStateSelect,) : const SizedBox(),
 
-                      const RegisteredFriends()
-
+                      RegisteredFriends(updateStateSelect: updateStateSelect, key: registeredFriendsStateKey),
 
                     ],
                   ),
@@ -274,16 +288,16 @@ class SelectFriendsState extends State<SelectFriends> {
 
               Expanded(
                 flex: 1,
-                child: SizedBox(
+                child: Container(
                   width: 38,
-                  child: Center(
-                    child: ClipPath(
-                      clipper: MyTriangle(),
-                      child: Container(
-                        width: 22,
-                        height: 43,
-                        color: const Color(0xffd9d9d9),
-                      ),
+                  alignment: Alignment.topCenter,
+                  margin: const EdgeInsets.only(top: 300),
+                  child: ClipPath(
+                    clipper: MyTriangle(),
+                    child: Container(
+                      width: 22,
+                      height: 43,
+                      color: const Color(0xffd9d9d9),
                     ),
                   ),
                 ),
@@ -324,7 +338,9 @@ class SelectFriendsState extends State<SelectFriends> {
                                 ),
                               ),
                             ),
-                            onTap: () {},
+                            onTap: () {
+                              sIP.setItem([]);
+                            },
                           ),
                         ),
                       ),
@@ -355,11 +371,24 @@ class SelectFriendsState extends State<SelectFriends> {
 
                       Container(
                         height: 388,
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(10),
                         decoration: const BoxDecoration(
                           border: Border(
                             left: BorderSide(color: Color(0xff000000), width: 1.0),
                             right: BorderSide(color: Color(0xff000000), width: 1.0),
                           ),
+                        ),
+                        child: ListView.builder(
+                            itemCount: sIP.getItem().length,
+                            controller: sendMessageFriendController,
+                            itemBuilder: (BuildContext context, int index) {
+                              if (sIP.getItem().length == 0) {
+                                return const Text('select friend');
+                              } else {
+                                return SendMessageFriendTile(registeredFriend: sIP.getItem()[index]);
+                              }
+                            }
                         ),
                       ),
 
@@ -375,7 +404,7 @@ class SelectFriendsState extends State<SelectFriends> {
                             bottom: BorderSide(color: Color(0xff000000), width: 1.0),
                           ),
                         ),
-                        child: const TextMessageNormal('카톡 보내는 사람: 0명', 12.0),
+                        child: TextMessageNormal('카톡 보내는 사람: ${sIP.getItem().length.toString()}명', 12.0),
                       ),
 
                       const SizedBox(height: 13),
@@ -396,7 +425,28 @@ class SelectFriendsState extends State<SelectFriends> {
                               child: Text('메시지 작성', style: buttonTextStyle,),
                             ),
                           ),
-                          onTap: () {},
+                          onTap: () {
+                            if (sIP.getItem().isEmpty) {
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: const Text('친구를 선택해 주세요.'),
+                                      actions: [
+                                        ElevatedButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: const Text('확인')
+                                        )
+                                      ],
+                                    );
+                                  }
+                              );
+                            } else {
+                              cIP.setCurrentSubPage(1);
+                            }
+                          },
                         ),
                       ),
                     ],
@@ -433,24 +483,6 @@ class SelectFriendsState extends State<SelectFriends> {
         ) : const SizedBox(),
       ],
     );
-  }
-}
-
-class MyTriangle extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    Path path = Path();
-    path.addPolygon([
-      Offset(0, size.height),
-      const Offset(0, 0),
-      Offset(size.width, size.height / 2)
-    ], true);
-    return path;
-  }
-
-  @override
-  bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
-    return false;
   }
 }
 

@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "21784424587",
+    "project_id": "mosaic-bluenco",
+    "storage_bucket": "mosaic-bluenco.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:21784424587:android:ee848e76e268e13fbc648e",
+        "android_client_info": {
+          "package_name": "com.bluenco.mosaicbluenco"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "21784424587-uqasdih1n4vnvg4dnn4aeu18sjl3l2kc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB62Fw5AAmaQMNs-d75VQVAZf3JIv8afFM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "21784424587-uqasdih1n4vnvg4dnn4aeu18sjl3l2kc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "21784424587-6grtdeai3ir21gd5m3ocg3obi2q21qdb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.bluenco.mosaicbluenco"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
