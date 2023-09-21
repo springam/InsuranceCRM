@@ -11,40 +11,40 @@ Future<dynamic> messageSendMe() async{
       link: Link(webUrl: Uri.parse(''), mobileWebUrl: Uri.parse('')),
     ),
     itemContent: ItemContent(
-    //   profileText: '모자이크',
-    //   profileImageUrl: Uri.parse(
-    //       'https://mud-kage.kakao.com/dn/Q2iNx/btqgeRgV54P/VLdBs9cvyn8BJXB3o7N8UK/kakaolink40_original.png'),
-    //   titleImageUrl: Uri.parse(
-    //       'https://mud-kage.kakao.com/dn/Q2iNx/btqgeRgV54P/VLdBs9cvyn8BJXB3o7N8UK/kakaolink40_original.png'),
-    //   titleImageText: '타이틀 이미지',
-    //   titleImageCategory: '이미지 category',
-    //   items: [
-    //     ItemInfo(item: '1개월 사용료', itemOp: '30,000원'),
-    //     ItemInfo(item: '3개월 사용료', itemOp: '80,000원'),
-    //     ItemInfo(item: '6개월 사용료', itemOp: '150,000원'),
-    //     ItemInfo(item: '1년 사용료', itemOp: '400,000원'),
-    //     ItemInfo(item: 'Premium', itemOp: '500,00원')
-    //   ],
-    //   sum: '오픈 이벤트',
-    //   sumOp: '20,000원',
-    // ),
-    // social: Social(likeCount: 286, commentCount: 45, sharedCount: 845),
-    // buttons: [
-    //   Button(
-    //     title: '홈 페이지로 이동',
-    //     link: Link(
-    //       webUrl: Uri.parse('https://mosaic-bluenco.web.app'),
-    //       mobileWebUrl: Uri.parse('https://mosaic-bluenco.web.app'),
-    //     ),
-    //   ),
-    //   Button(
-    //     title: '앱으로보기',
-    //     link: Link(
-    //       androidExecutionParams: {'key1': 'value1', 'key2': 'value2'},
-    //       iosExecutionParams: {'key1': 'value1', 'key2': 'value2'},
-    //     ),
-    //   ),
-    // ],
+      profileText: '모자이크',
+      profileImageUrl: Uri.parse(
+          'https://mud-kage.kakao.com/dn/Q2iNx/btqgeRgV54P/VLdBs9cvyn8BJXB3o7N8UK/kakaolink40_original.png'),
+      titleImageUrl: Uri.parse(
+          'https://mud-kage.kakao.com/dn/Q2iNx/btqgeRgV54P/VLdBs9cvyn8BJXB3o7N8UK/kakaolink40_original.png'),
+      titleImageText: '타이틀 이미지',
+      titleImageCategory: '이미지 category',
+      items: [
+        ItemInfo(item: '1개월 사용료', itemOp: '30,000원'),
+        ItemInfo(item: '3개월 사용료', itemOp: '80,000원'),
+        ItemInfo(item: '6개월 사용료', itemOp: '150,000원'),
+        ItemInfo(item: '1년 사용료', itemOp: '400,000원'),
+        ItemInfo(item: 'Premium', itemOp: '500,00원')
+      ],
+      sum: '오픈 이벤트',
+      sumOp: '20,000원',
+    ),
+    social: Social(likeCount: 286, commentCount: 45, sharedCount: 845),
+    buttons: [
+      Button(
+        title: '홈 페이지로 이동',
+        link: Link(
+          webUrl: Uri.parse('https://mosaic-bluenco.web.app'),
+          mobileWebUrl: Uri.parse('https://mosaic-bluenco.web.app'),
+        ),
+      ),
+      Button(
+        title: '앱으로보기',
+        link: Link(
+          androidExecutionParams: {'key1': 'value1', 'key2': 'value2'},
+          iosExecutionParams: {'key1': 'value1', 'key2': 'value2'},
+        ),
+      ),
+    ],
   );
 
   try {

@@ -7,6 +7,7 @@ import 'package:mosaicbluenco/send_message/send_message_friends/tag_list.dart';
 import 'package:mosaicbluenco/user_data/status_provider.dart';
 import 'package:mosaicbluenco/user_data/user_data.dart';
 import 'package:provider/provider.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 import '../etc_widget/design_widget.dart';
 import '../etc_widget/tag_dialog_message.dart';
@@ -21,6 +22,11 @@ class SelectFriends extends StatefulWidget {
 }
 
 class SelectFriendsState extends State<SelectFriends> {
+
+  final _channel = WebSocketChannel.connect(
+    // Uri.parse('wss://echo.websocket.events'),
+    Uri.parse('ws://localhost:8080'),
+  );
 
   late SendMessageFriendsItemProvider sIP;
   late CurrentPageProvider cIP;
@@ -45,6 +51,7 @@ class SelectFriendsState extends State<SelectFriends> {
   @override
   void dispose() {
     SendMessageFriendsItemProvider().removeListener(() { });
+    _channel.sink.close();
     super.dispose();
   }
 
@@ -54,19 +61,19 @@ class SelectFriendsState extends State<SelectFriends> {
     });
   }
 
-  Future<dynamic> getFriendsList() async{  //친구 목록 가져오기
-    try {
-      friends = await TalkApi.instance.friends(limit: 10);
-      // debugPrint('카카오톡 친구 목록 가져오기 성공'
-      //     '\n${friends.elements?.map((friend) => friend.profileNickname).join('\n')}');
-      setState(() {
-        getFriends = true;
-        gettingFriends = false;
-      });
-    } catch (error) {
-      debugPrint('카카오톡 친구 목록 가져오기 실패 $error');
-    }
-  }
+  // Future<dynamic> getFriendsList() async{  //친구 목록 가져오기
+  //   try {
+  //     friends = await TalkApi.instance.friends(limit: 10);
+  //     // debugPrint('카카오톡 친구 목록 가져오기 성공'
+  //     //     '\n${friends.elements?.map((friend) => friend.profileNickname).join('\n')}');
+  //     setState(() {
+  //       getFriends = true;
+  //       gettingFriends = false;
+  //     });
+  //   } catch (error) {
+  //     debugPrint('카카오톡 친구 목록 가져오기 실패 $error');
+  //   }
+  // }
 
   List<Widget> tagList() {
     return List<Widget>.generate(
@@ -78,6 +85,10 @@ class SelectFriendsState extends State<SelectFriends> {
 
     sIP = Provider.of<SendMessageFriendsItemProvider>(context, listen: true);
     cIP = Provider.of<CurrentPageProvider>(context, listen: true);
+
+    // _channel.stream.listen((message) {
+    //   print(message);
+    // });
 
     return Stack(
       children: [
@@ -150,7 +161,8 @@ class SelectFriendsState extends State<SelectFriends> {
                                 setState(() {
                                   friends = Friends([], 0, 0, '', '');
                                 });
-                                await getFriendsList();
+                                _channel.sink.add('getFriend');
+                                // await getFriendsList();
                               },
                             ),
                           ),
@@ -277,7 +289,29 @@ class SelectFriendsState extends State<SelectFriends> {
 
                       const SizedBox(height: 13),
 
-                      (getFriends) ? NewFriends(friends: friends, updateStateSelect: updateStateSelect,) : const SizedBox(),
+                      StreamBuilder(
+                        stream: _channel.stream,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            List<String> result = snapshot.data.split(',');
+                            return NewFriends(friendList: result, updateStateSelect: updateStateSelect);
+                          } else {
+                            return Text((snapshot.hasData) ? snapshot.data : '');
+                          }
+
+                          // if (snapshot.hasData) {
+                          //   if (snapshot.data == 'getFriend complete') {
+                          //     return NewFriends(updateStateSelect: updateStateSelect);
+                          //   } else if (snapshot.data == 'KakaoTalk is not installed'){
+                          //     return Text(snapshot.data);
+                          //   } else {
+                          //     return const SizedBox();
+                          //   }
+                          // } else {
+                          //   return const SizedBox();
+                          // }
+                        },
+                      ),
 
                       RegisteredFriends(updateStateSelect: updateStateSelect, key: registeredFriendsStateKey),
 

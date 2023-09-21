@@ -51,6 +51,7 @@ dependencies:
   intl: ^0.18.1
   firebase_app_installations: ^0.2.3+5
   fluttertoast: ^8.2.2
+  web_socket_channel: ^2.4.0
 
 
 dev_dependencies:

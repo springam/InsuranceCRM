@@ -1,14 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
-import 'package:mosaicbluenco/home_main/home_main.dart';
 import 'package:mosaicbluenco/user_data/user_data.dart';
 import 'package:mosaicbluenco/user_data/user_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:intl/intl.dart';
-
-import 'gate/gate_friend.dart';
 import 'gate/gate_main.dart';
 
 class Login extends StatefulWidget {
@@ -22,22 +17,21 @@ class _LoginState extends State<Login> {
 
   late UserItemProvider uIP;
 
-  // Future<dynamic> getUserInfoWithKakao() async{ // 웹애서 사용자 정보 받아 오기
-  //
-  //   try {
-  //     User user = await UserApi.instance.me();
-  //     setState(() {
-  //       accessToken = 'UserID : ${user.id}\n nickname : ${user.kakaoAccount?.profile?.nickname}\n Email : ${user.kakaoAccount?.email}';
-  //       userId = user.id;
-  //       userProfileImage = '${user.kakaoAccount?.profile?.profileImageUrl}';
-  //       userNickname = '${user.kakaoAccount?.profile?.nickname}';
-  //       userEmail = '${user.kakaoAccount?.email}';
-  //     });
-  //
-  //   } catch (error) {
-  //     debugPrint('사용자 정보 요청 실패 $error');
-  //   }
-  // }
+  Future<dynamic> getUserInfoWithKakao() async{ // 웹애서 사용자 정보 받아 오기
+
+    try {
+      User user = await UserApi.instance.me();
+      setState(() {
+        UserData.userId = user.id;
+        UserData.userNickname = '${user.kakaoAccount?.profile?.nickname}';
+        UserData.userEmail = '${user.kakaoAccount?.email}';
+        UserData.userImageUrl = '${user.kakaoAccount?.profile?.profileImageUrl}';
+      });
+
+    } catch (error) {
+      debugPrint('사용자 정보 요청 실패 $error');
+    }
+  }
 
   // Future<dynamic> authorizeNewScope() async{ //redirect 방식에는 이리 가서 authorizeNewScope() 써야 한다는데 '/' 오류 남
   //   List<String> scopes = ['friends', 'talk_message', 'account_email'];
@@ -243,6 +237,7 @@ class _LoginState extends State<Login> {
               child: Image.asset('assets/images/kakao_login_large_narrow.png', scale: 2.0,),
               onTap: () async{
                 await kakaoTalkLogin();
+                // await getUserInfoWithKakao();
               },
             ),
           ],

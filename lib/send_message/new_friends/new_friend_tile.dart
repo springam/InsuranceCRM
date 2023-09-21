@@ -10,7 +10,7 @@ import '../../user_data/registered_friends_provider.dart';
 class NewFriendTile extends StatefulWidget {
   const NewFriendTile({required this.friends, required this.index, required this.registering, required this.updateStateNewFriend, super.key});
 
-  final Friends friends;
+  final List<String> friends;
   final int index;
   final bool registering;
   final Function() updateStateNewFriend;
@@ -21,7 +21,7 @@ class NewFriendTile extends StatefulWidget {
 
 class NewFriendTileState extends State<NewFriendTile> {
 
-  late Friends friends = widget.friends;
+  late List<String> friends = widget.friends;
 
   late RegisteredFriendsItemProvider fIP;
 
@@ -127,9 +127,9 @@ class NewFriendTileState extends State<NewFriendTile> {
     await docRef.set({
       'document_id': docRef.id,
       'etc': '',
-      'kakao_id': friends.elements?[index].id,
-      'kakao_nickname': friends.elements?[index].profileNickname,
-      'kakao_uuid': friends.elements?[index].uuid,
+      'kakao_id': 0,
+      'kakao_nickname': friends[index],
+      'kakao_uuid': 'mosaic',
       'managed_count': 0,
       'managed_last_date': '',
       'manager_id': UserData.userId,
@@ -148,9 +148,9 @@ class NewFriendTileState extends State<NewFriendTile> {
     await docRef.set({
       'document_id': docRef.id,
       'etc': '',
-      'kakao_id': friends.elements?[index].id,
-      'kakao_nickname': friends.elements?[index].profileNickname,
-      'kakao_uuid': friends.elements?[index].uuid,
+      'kakao_id': 0,
+      'kakao_nickname': friends[index],
+      'kakao_uuid': 'mosaic',
       'managed_count': 0,
       'registered_date': DateFormat("yyyy년 MM월 dd일 hh시 mm분").format(now),
       'managed_last_date': '',
@@ -230,7 +230,7 @@ class NewFriendTileState extends State<NewFriendTile> {
                             color: Color(0xffffffff),
                           ),
                           child: Text(
-                            '${friends.elements?[widget.index].profileNickname}',
+                            friends[widget.index],
                             style: buttonTextStyle,
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -318,7 +318,7 @@ class NewFriendTileState extends State<NewFriendTile> {
 
         (enterBox) ? Positioned(
           left: 7,
-          child: TextMessageNormal('${friends.elements?[widget.index].profileNickname}', 12.0),
+          child: TextMessageNormal(friends[widget.index], 12.0),
         ) : const SizedBox()
       ],
     );

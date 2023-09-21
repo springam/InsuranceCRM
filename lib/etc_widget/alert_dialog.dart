@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mosaicbluenco/etc_widget/text_message.dart';
 
-import '../user_data/user_data.dart';
 
 class AlertMessage extends StatefulWidget {
   const AlertMessage({required this.title, required this.alertMessage, super.key});

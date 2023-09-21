@@ -7,9 +7,9 @@ import '../../user_data/registered_friends_provider.dart';
 import 'new_friend_tile.dart';
 
 class NewFriends extends StatefulWidget {
-  const NewFriends({required this.friends, required this.updateStateSelect, super.key});
+  const NewFriends({required this.friendList, required this.updateStateSelect, super.key});
 
-  final Friends friends;
+  final List<String> friendList;
   final Function() updateStateSelect;
 
   @override
@@ -18,7 +18,6 @@ class NewFriends extends StatefulWidget {
 
 class _NewFriendsState extends State<NewFriends> {
 
-  late Friends friends;
   late RegisteredFriendsItemProvider fIP;
 
   bool registerFriend = false;
@@ -38,8 +37,7 @@ class _NewFriendsState extends State<NewFriends> {
   Widget build(BuildContext context) {
 
     fIP = Provider.of<RegisteredFriendsItemProvider>(context, listen: true);
-
-    friends = widget.friends;
+    int itemCount = widget.friendList.length;
 
     return Column(
       children: [
@@ -88,14 +86,14 @@ class _NewFriendsState extends State<NewFriends> {
               const Divider(height: 1,),
 
               SizedBox(
-                  height: (friends.totalCount < 10) ? friends.totalCount * 45 : 500,
-                  child: (friends.totalCount == 0) ? const Center(child: TextMessageNormal('불러온 친구 목록이 없습니다.', 12.0)) :
+                  height: (itemCount < 10) ? itemCount * 45 : 500,
+                  child: (itemCount == 0) ? const Center(child: TextMessageNormal('불러온 친구 목록이 없습니다.', 12.0)) :
                   ListView.builder(
-                      itemCount: friends.totalCount + 1,
+                      itemCount: itemCount + 1,
                       controller: controller,
                       itemBuilder: (BuildContext context, int index) {
 
-                        if (index == friends.totalCount) {
+                        if (index == itemCount) {
                           if (registerFriend) {
                             registerFriend = false;
                             // widget.updateStateSelect();
@@ -106,14 +104,14 @@ class _NewFriendsState extends State<NewFriends> {
                           int itemCount = 0;
                           for (RegisteredFriendsItem registeredFriend in Provider.of<RegisteredFriendsItemProvider>(context, listen: true).getItem()) {
                             itemCount++;
-                            if (registeredFriend.kakaoId == friends.elements?[index].id) {
+                            if (registeredFriend.kakaoNickname == widget.friendList[index]) {
                               existItem = true;
                             }
                             if (itemCount == fIP.getItem().length) {
                               if (existItem) {
                                 return const SizedBox();
                               } else {
-                                return NewFriendTile(friends: friends, index: index, updateStateNewFriend: updateStateNewFriend, registering: registerFriend,);
+                                return NewFriendTile(friends: widget.friendList, index: index, updateStateNewFriend: updateStateNewFriend, registering: registerFriend,);
                               }
                             }
                           }

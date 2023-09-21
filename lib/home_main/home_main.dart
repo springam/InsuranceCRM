@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import '../send_message/message_templates/message_preset.dart';
 import '../send_message/select_friends.dart';
 import '../send_message/select_message.dart';
-import '../user_data/registered_friends_provider.dart';
 import '../user_data/status_provider.dart';
 
 class HomeMain extends StatefulWidget {

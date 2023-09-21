@@ -15,7 +15,16 @@ import 'gate/gate_main.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
+    // options: DefaultFirebaseOptions.currentPlatform,
+    options: const FirebaseOptions(
+      apiKey: 'AIzaSyCYifgblNoq-cYEAXpUFyzMlpfuXFtNtYc',
+      appId: '1:21784424587:web:182e43a8fad5997cbc648e',
+      messagingSenderId: '21784424587',
+      projectId: 'mosaic-bluenco',
+      authDomain: 'mosaic-bluenco.firebaseapp.com',
+      storageBucket: 'mosaic-bluenco.appspot.com',
+      measurementId: 'G-XQB6FE3Z74',
+    )
   );
   setPathUrlStrategy(); //
   KakaoSdk.init(

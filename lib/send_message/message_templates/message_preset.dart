@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../../etc_widget/text_message.dart';
 import '../../user_data/registered_friends_provider.dart';
 import '../../user_data/status_provider.dart';
 import '../../user_data/message_provider.dart';
-import '../../user_data/user_data.dart';
 import 'message_preset_gridview_box.dart';
 import 'message_theme_subject.dart';
 
