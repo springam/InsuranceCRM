@@ -133,7 +133,7 @@ class _RegisteredFriendTileState extends State<RegisteredFriendTile> {
             child: Container(
               alignment: Alignment.center,
               child: Text(
-                (widget.registeredFriend.talkDown == 0) ? '반말' : '존대',
+                (widget.registeredFriend.talkDown == 0) ? '존대' : '반말',
                 style: const TextStyle(
                     color:  Color(0xff000000),
                     fontWeight: FontWeight.w400,

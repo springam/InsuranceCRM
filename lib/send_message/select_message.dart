@@ -7,6 +7,7 @@ import '../etc_widget/design_widget.dart';
 import '../etc_widget/text_message.dart';
 import '../user_data/message_provider.dart';
 import '../user_data/registered_friends_provider.dart';
+import '../user_data/status_provider.dart';
 import 'message_templates/message_view.dart';
 
 class SelectMessage extends StatefulWidget {
@@ -20,12 +21,15 @@ class _SelectMessageState extends State<SelectMessage> {
 
   late SendMessageFriendsItemProvider sIP;
   late TextMessageProvider tIP;
+  late CurrentPageProvider cIP;
 
   double listHeight = 0.0;
   String talkDownFalseName = '';
   String talkDownTrueName = '';
   int talkDownFalseCount = 0;
   int talkDownTrueCount = 0;
+
+  bool messageClear = false;
 
   List<Widget> themeList() {
     return List<Widget>.generate(
@@ -37,6 +41,7 @@ class _SelectMessageState extends State<SelectMessage> {
 
     sIP = Provider.of<SendMessageFriendsItemProvider>(context, listen: true);
     tIP = Provider.of<TextMessageProvider>(context, listen: true);
+    cIP = Provider.of<CurrentPageProvider>(context, listen: true);
 
     if (MediaQuery.of(context).size.width >1280) {
       listHeight = 100;
@@ -138,22 +143,26 @@ class _SelectMessageState extends State<SelectMessage> {
                                       child: Center(child: Text('내용 지우기', style: buttonTextStyle),
                                       ),
                                     ),
-                                    onTap: () {},
+                                    onTap: () {
+                                      setState(() {
+                                        messageClear = true;
+                                      });
+                                    },
                                   ),
                                 ),
                               ],
                             ),
 
-                            const Row(
+                            Row(
                               children: [
                                 Flexible(
                                   flex: 1,
-                                  child: MessageView(talkDown: false)
+                                  child: MessageView(talkDown: false, reset: messageClear)
                                 ),
-                                SizedBox(width: 30),
+                                const SizedBox(width: 30),
                                 Flexible(
                                     flex: 1,
-                                    child: MessageView(talkDown: true)
+                                    child: MessageView(talkDown: true, reset: messageClear)
                                 ),
                               ],
                             ),
@@ -380,7 +389,7 @@ class _SelectMessageState extends State<SelectMessage> {
                             ),
                           ),
                           onTap: () {
-                            // cIP.setCurrentSubPage();
+                            cIP.setCurrentSubPage(0);
                           },
                         ),
                       ),

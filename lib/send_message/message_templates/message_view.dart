@@ -6,9 +6,10 @@ import '../../user_data/message_provider.dart';
 import '../../user_data/registered_friends_provider.dart';
 
 class MessageView extends StatefulWidget {
-  const MessageView({required this.talkDown, super.key});
+  const MessageView({required this.talkDown, required this.reset, super.key});
 
   final bool talkDown;
+  final bool reset;
 
   @override
   State<MessageView> createState() => _MessageViewState();
@@ -26,15 +27,26 @@ class _MessageViewState extends State<MessageView> {
   String talkDownName = '';
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
 
     sIP = Provider.of<SendMessageFriendsItemProvider>(context, listen: true);
     tIP = Provider.of<TextMessageProvider>(context, listen: true);
 
-    if (widget.talkDown) {
-      messagePresetController.text = tIP.getTextMessageTalkDown();
+    talkDownCount = 0;
+
+    if (widget.reset) {
+      messagePresetController.text = '';
     } else {
-      messagePresetController.text = tIP.getTextMessage();
+      if (widget.talkDown) {
+        messagePresetController.text = tIP.getTextMessageTalkDown();
+      } else {
+        messagePresetController.text = tIP.getTextMessage();
+      }
     }
 
     for (RegisteredFriendsItem sendMessageFriend in sIP.getItem()) {
@@ -51,8 +63,9 @@ class _MessageViewState extends State<MessageView> {
           talkDownName = '${sendMessageFriend.name}외';
         }
       }
-
     }
+
+
 
     return SizedBox(
       width: double.infinity,

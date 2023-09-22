@@ -48,7 +48,7 @@ class RegisteredFriendsItem {
   int managerId = 0;
   String name = '';
   String kakaoNickname = '';
-  int talkDown = 0; //0: 반말, 1: 존대, 2: 설정 되지 않음
+  int talkDown = 0; //0: 존대, 1: 반말, 2: 설정 되지 않음
   List<dynamic> tag = [];
   bool registered = false;
   String registeredDate = '';

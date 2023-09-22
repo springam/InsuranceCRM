@@ -32,7 +32,7 @@ class NewFriendTileState extends State<NewFriendTile> {
 
   int selectedIndex = 2;
   int selectedFilterIndex = 10;
-  List<String> options = ['반말', '존말'];
+  List<String> options = ['존대', '반말'];
 
   double xMousePosition = 0.0;
   double yMousePosition = 0.0;

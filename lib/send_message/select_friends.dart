@@ -8,7 +8,6 @@ import 'package:mosaicbluenco/user_data/status_provider.dart';
 import 'package:mosaicbluenco/user_data/user_data.dart';
 import 'package:provider/provider.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
-
 import '../etc_widget/design_widget.dart';
 import '../etc_widget/tag_dialog_message.dart';
 import '../etc_widget/text_message.dart';
@@ -46,6 +45,7 @@ class SelectFriendsState extends State<SelectFriends> {
   void initState() {
     super.initState();
     SendMessageFriendsItemProvider().addListener(() { });
+    _channel.sink.add('version');
   }
 
   @override
@@ -86,9 +86,7 @@ class SelectFriendsState extends State<SelectFriends> {
     sIP = Provider.of<SendMessageFriendsItemProvider>(context, listen: true);
     cIP = Provider.of<CurrentPageProvider>(context, listen: true);
 
-    // _channel.stream.listen((message) {
-    //   print(message);
-    // });
+
 
     return Stack(
       children: [
@@ -293,23 +291,23 @@ class SelectFriendsState extends State<SelectFriends> {
                         stream: _channel.stream,
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
-                            List<String> result = snapshot.data.split(',');
-                            return NewFriends(friendList: result, updateStateSelect: updateStateSelect);
+                            if (snapshot.data.contains('version')) {
+                              var version = int.parse(snapshot.data.substring(8));
+                              if (version < 1) {
+                                return const Text('새로운 버전이 출시 되었습니다.\n업그레이드 후 재 실행해 주시기 바랍니다.');
+                              } else {
+                                return const SizedBox();
+                              }
+                            } else if (snapshot.data == 'kakaotalk not found') {
+                              print(snapshot.data);
+                              return const Text('카카오톡을 실행해 주세요');
+                            } else {
+                              List<String> result = snapshot.data.split(',');
+                              return NewFriends(friendList: result, updateStateSelect: updateStateSelect);
+                            }
                           } else {
                             return Text((snapshot.hasData) ? snapshot.data : '');
                           }
-
-                          // if (snapshot.hasData) {
-                          //   if (snapshot.data == 'getFriend complete') {
-                          //     return NewFriends(updateStateSelect: updateStateSelect);
-                          //   } else if (snapshot.data == 'KakaoTalk is not installed'){
-                          //     return Text(snapshot.data);
-                          //   } else {
-                          //     return const SizedBox();
-                          //   }
-                          // } else {
-                          //   return const SizedBox();
-                          // }
                         },
                       ),
 
