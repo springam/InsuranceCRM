@@ -3,12 +3,13 @@ import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:mosaicbluenco/send_message/new_friends/new_friends.dart';
 import 'package:mosaicbluenco/send_message/registered_friends/registered_friends.dart';
 import 'package:mosaicbluenco/send_message/send_message_friends/send_message_friend_tile.dart';
-import 'package:mosaicbluenco/send_message/send_message_friends/tag_list.dart';
+import 'package:mosaicbluenco/send_message/registered_friends/tag_list_chip.dart';
 import 'package:mosaicbluenco/user_data/status_provider.dart';
 import 'package:mosaicbluenco/user_data/user_data.dart';
 import 'package:provider/provider.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import '../etc_widget/design_widget.dart';
+import 'registered_friends/tag_list_chip_add.dart';
 import '../etc_widget/tag_dialog_message.dart';
 import '../etc_widget/text_message.dart';
 import '../user_data/registered_friends_provider.dart';
@@ -62,21 +63,7 @@ class SelectFriendsState extends State<SelectFriends> {
     });
   }
 
-  // Future<dynamic> getFriendsList() async{  //친구 목록 가져오기
-  //   try {
-  //     friends = await TalkApi.instance.friends(limit: 10);
-  //     // debugPrint('카카오톡 친구 목록 가져오기 성공'
-  //     //     '\n${friends.elements?.map((friend) => friend.profileNickname).join('\n')}');
-  //     setState(() {
-  //       getFriends = true;
-  //       gettingFriends = false;
-  //     });
-  //   } catch (error) {
-  //     debugPrint('카카오톡 친구 목록 가져오기 실패 $error');
-  //   }
-  // }
-
-  List<Widget> tagList() {
+  List<Widget> tagList() {  //등록된 친구
     return List<Widget>.generate(
         TagList.tagList.length, (tagIndex) => TagListChip(tagIndex: tagIndex,)).toList();
   }
@@ -126,7 +113,7 @@ class SelectFriendsState extends State<SelectFriends> {
                         children: [
                           const TextMessageNormal("1. 태그를 선택하거나 등록한 사람 중 카톡 대화명을 선택하세요", 16.0),
 
-                          Material(  //카톡 주소 가져오기
+                          Material(  //친구 목록 가져오기
                             color: Colors.white,
                             child: InkWell(
                               borderRadius: BorderRadius.circular(10),
@@ -178,64 +165,11 @@ class SelectFriendsState extends State<SelectFriends> {
                           children: [
                             Wrap(
                               spacing: 3,
-                              children: tagList(),
+                              children: tagList(),  //tag list widget
                             ),
-                            
-                            Container(
-                              width: 33,
-                              height: 33,
-                              margin: const EdgeInsets.only(left: 7),
-                              alignment: Alignment.center,
-                              child: Material(
-                                color: const Color(0xfff0f0f0),
-                                child: InkWell(
-                                  borderRadius: BorderRadius.circular(33),
-                                  splashColor: const Color(0xffffdf8e),
-                                  hoverColor: Colors.grey,
-                                  child: Ink(
-                                    width: 33,
-                                    height: 33,
-                                    decoration: const BoxDecoration(
-                                      borderRadius: BorderRadius.all(Radius.circular(33)),
-                                      color: Color(0xffffffff),
-                                    ),
-                                    child: const CircleAvatar(
-                                      backgroundColor: Colors.transparent,
-                                      child: Text('+', style: TextStyle(color: Colors.black, fontSize: 14.0)),
-                                    ),
-                                  ),
-                                  onTap: () {
-                                    if (TagList.tagList.length < 6) {
-                                      showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return const TagPopupDialog();
-                                          }
-                                      ).then((value) {
-                                        setState(() {});
-                                      });
-                                    } else {
-                                      showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return AlertDialog(
-                                              title: const Text('더이상 태그를 추가할 수 없습니다.'),
-                                              actions: [
-                                                ElevatedButton(
-                                                    onPressed: () {
-                                                      Navigator.of(context).pop();
-                                                    },
-                                                    child: const Text('확인')
-                                                )
-                                              ],
-                                            );
-                                          }
-                                      );
-                                    }
-                                  },
-                                ),
-                              ),
-                            ),
+
+                            const TagListChipAdd(),  //tag list add widget
+
                           ],
                         ),
                       ),
@@ -286,7 +220,7 @@ class SelectFriendsState extends State<SelectFriends> {
 
                       const SizedBox(height: 13),
 
-                      StreamBuilder(
+                      StreamBuilder(  //웹소켓 메시지 스트림
                         stream: _channel.stream,
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
@@ -313,7 +247,7 @@ class SelectFriendsState extends State<SelectFriends> {
                         },
                       ),
 
-                      RegisteredFriends(updateStateSelect: updateStateSelect, key: registeredFriendsStateKey),
+                      RegisteredFriends(updateStateSelect: updateStateSelect, key: registeredFriendsStateKey),  //등록친구 widget
 
                     ],
                   ),
@@ -322,7 +256,7 @@ class SelectFriendsState extends State<SelectFriends> {
 
               Expanded(
                 flex: 1,
-                child: Container(
+                child: Container( //화살표
                   width: 38,
                   alignment: Alignment.topCenter,
                   margin: const EdgeInsets.only(top: 300),
@@ -349,7 +283,7 @@ class SelectFriendsState extends State<SelectFriends> {
                         child: const TextMessageNormal('2. 카톡 보낼 사람을 확인하세요.', 16.0),
                       ),
 
-                      Container(
+                      Container(  //명단 리셋 버튼
                         margin: const EdgeInsets.only(top: 10, bottom: 7),
                         alignment: Alignment.centerRight,
                         child: Material(
@@ -403,7 +337,7 @@ class SelectFriendsState extends State<SelectFriends> {
                         ),
                       ),
 
-                      Container(
+                      Container(  //메시지 보낼 친구 리스트
                         height: 388,
                         width: double.infinity,
                         padding: const EdgeInsets.all(10),

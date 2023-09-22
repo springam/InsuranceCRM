@@ -38,6 +38,11 @@ class SendMessageFriendsItemProvider with ChangeNotifier {
     sendMessageFriendsMap.remove(sendMessageFriend);
     notifyListeners();
   }
+
+  initItem() {
+    sendMessageFriendsMap = [];
+    notifyListeners();
+  }
 }
 
 

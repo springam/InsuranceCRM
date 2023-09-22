@@ -3,7 +3,7 @@
 // import 'package:mosaicbluenco/send_message/new_friends/new_friends.dart';
 // import 'package:mosaicbluenco/send_message/registered_friends/registered_friends.dart';
 // import 'package:mosaicbluenco/send_message/send_message_friends/send_message_friend_tile.dart';
-// import 'package:mosaicbluenco/send_message/send_message_friends/tag_list.dart';
+// import 'package:mosaicbluenco/send_message/send_message_friends/tag_list_chip.dart';
 // import 'package:mosaicbluenco/user_data/status_provider.dart';
 // import 'package:mosaicbluenco/user_data/user_data.dart';
 // import 'package:provider/provider.dart';

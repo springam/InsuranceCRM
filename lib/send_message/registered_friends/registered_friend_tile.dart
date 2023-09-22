@@ -100,12 +100,14 @@ class _RegisteredFriendTileState extends State<RegisteredFriendTile> {
                         selectedTile = false;
                       });
                     } else {
-                      sIP.addItem(widget.registeredFriend);
-                      setState(() {
-                        selectedColor = const Color(0xffbcc0c7);
-                        selectedBorderColor = const Color(0xffbcc0c7);
-                        selectedTile = true;
-                      });
+                      if (!sIP.getItem().contains(widget.registeredFriend)) {
+                        sIP.addItem(widget.registeredFriend);
+                        setState(() {
+                          selectedColor = const Color(0xffbcc0c7);
+                          selectedBorderColor = const Color(0xffbcc0c7);
+                          selectedTile = true;
+                        });
+                      }
                     }
                   },
                 ),

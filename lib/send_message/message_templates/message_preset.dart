@@ -20,6 +20,8 @@ class _MessagePresetState extends State<MessagePreset> {
   late MessageItemProvider mIP;
   late CurrentPageProvider cIP;
 
+  List<PresetMessageItem> messageList = [];
+
   Color selectedColor = const Color(0xffc9ced9);
   Color normalColor = const Color(0xfff0f0f0);
   Color messageColor = const Color(0xffc9ced9);
@@ -55,6 +57,14 @@ class _MessagePresetState extends State<MessagePreset> {
       sIP = Provider.of<SendMessageFriendsItemProvider>(context, listen: true);
       mIP = Provider.of<MessageItemProvider>(context, listen: true);
       cIP = Provider.of<CurrentPageProvider>(context, listen: true);
+
+      messageList = [];
+
+      for (var message in mIP.getItem()) {
+        if (message.subjectIndex.contains(cIP.getSelectedThemeIndex())) {
+          messageList.add(message);
+        }
+      }
 
       return Container(
         height: MediaQuery.of(context).size.height * 1.3,
@@ -207,12 +217,9 @@ class _MessagePresetState extends State<MessagePreset> {
                       crossAxisSpacing: 20,
                       childAspectRatio: 1.5
                     ),
-                    itemCount: mIP.getItem().length,
+                    itemCount: messageList.length,
                     itemBuilder: (BuildContext context, int index) {
-                      if (mIP.getItem()[index].subjectIndex.contains(cIP.getSelectedThemeIndex())) {
-                        return GridViewBox(presetMessage: mIP.getItem()[index]);
-                      }
-                      print(cIP.getSelectedThemeIndex());
+                      return GridViewBox(presetMessage: messageList[index]);
                     }
                 )
               ),

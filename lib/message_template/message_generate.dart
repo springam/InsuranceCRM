@@ -6,7 +6,7 @@ import 'package:mosaicbluenco/message_template/theme_list.dart';
 import '../etc_widget/tag_dialog_message.dart';
 import '../etc_widget/text_message.dart';
 import '../user_data/user_data.dart';
-import '../send_message/send_message_friends/tag_list.dart';
+import '../send_message/registered_friends/tag_list_chip.dart';
 
 
 class MessageGenerate extends StatefulWidget {
@@ -20,6 +20,8 @@ class _MessageGenerateState extends State<MessageGenerate> {
 
   final TextEditingController messageController = TextEditingController();
   final TextEditingController messageTalkDownController = TextEditingController();
+
+  double listHeight = 0.0;
 
   @override
   void initState() {
@@ -49,13 +51,20 @@ class _MessageGenerateState extends State<MessageGenerate> {
   @override
   Widget build(BuildContext context) {
 
+    if (MediaQuery.of(context).size.width >1280) {
+      listHeight = 100;
+    } else {
+      listHeight = 100; //140
+    }
+
     return Column(
       children: [
         Text('입력자: ${UserData.userNickname}'),
         const Text('커스텀 메시지: false'),
         const Text ('사용된 횟수: 0'),
         Container(
-          height: 58,
+          width: double.infinity,
+          height: listHeight,
           decoration: const BoxDecoration(
               color: Color(0xfff0f0f0)
           ),
