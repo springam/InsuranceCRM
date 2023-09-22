@@ -209,11 +209,10 @@ class _MessagePresetState extends State<MessagePreset> {
                     ),
                     itemCount: mIP.getItem().length,
                     itemBuilder: (BuildContext context, int index) {
-                      if (mIP.getItem()[index].subjectIndex == cIP.getSelectedThemeIndex()) {
+                      if (mIP.getItem()[index].subjectIndex.contains(cIP.getSelectedThemeIndex())) {
                         return GridViewBox(presetMessage: mIP.getItem()[index]);
-                      } else {
-                        const SizedBox();
                       }
+                      print(cIP.getSelectedThemeIndex());
                     }
                 )
               ),

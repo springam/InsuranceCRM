@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:mosaicbluenco/kakao_login.dart';
+import 'package:mosaicbluenco/message_template/message_generate.dart';
 import 'package:mosaicbluenco/user_data/user_data.dart';
 import 'package:provider/provider.dart';
 import '../send_message/message_templates/message_preset.dart';
@@ -134,6 +135,7 @@ class _HomeMainState extends State<HomeMain> {
       },
       onTap: () {
         debugPrint('$menuNumber Tap');
+        cIP.setCurrentMainPage(menuNumber - 1);
       },
     );
   }
@@ -142,7 +144,7 @@ class _HomeMainState extends State<HomeMain> {
 
     switch (cIP.getMainPage()) {
       case 0:
-        break;
+        return const MessageGenerate();
       case 1:
         if (cIP.getSubPage() == 0) {
           return const SelectFriends();

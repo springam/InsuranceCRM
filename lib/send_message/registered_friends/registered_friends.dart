@@ -21,7 +21,7 @@ class RegisteredFriends extends StatefulWidget {
 
 class RegisteredFriendsState extends State<RegisteredFriends> {
 
-  late Friends friends;
+  // late Friends friends;
   late RegisteredFriendsItemProvider fIP;
 
   // bool registeredFriendBool = false;

@@ -42,7 +42,7 @@ class MessageItemProvider with ChangeNotifier {
 
 ////////////////////////////////////////////////////////////////////////////////
 class PresetMessageItem {
-  int subjectIndex = 0; //메시지 제목
+  List<dynamic> subjectIndex = []; //메시지 제목
   String messageBody = '';  //메시지 내용
   String messageBodyTalkDown = '';
   bool customMessage = false; //커스텀 메시지 인지

@@ -29,6 +29,7 @@ class SelectFriendsState extends State<SelectFriends> {
 
   late SendMessageFriendsItemProvider sIP;
   late CurrentPageProvider cIP;
+  late RegisteredFriendsItemProvider fIP;
 
   final ScrollController controller = ScrollController();
   final ScrollController sendMessageFriendController = ScrollController();
@@ -85,7 +86,7 @@ class SelectFriendsState extends State<SelectFriends> {
 
     sIP = Provider.of<SendMessageFriendsItemProvider>(context, listen: true);
     cIP = Provider.of<CurrentPageProvider>(context, listen: true);
-
+    fIP = Provider.of<RegisteredFriendsItemProvider>(context, listen: true);
 
 
     return Stack(
@@ -153,14 +154,12 @@ class SelectFriendsState extends State<SelectFriends> {
                                 ),
                               ),
                               onTap: () async{
-                                // setState(() {
-                                //   gettingFriends = true;
-                                // });
                                 setState(() {
                                   friends = Friends([], 0, 0, '', '');
+                                  getFriends = true;
+                                  // fIP.setItem([]);
                                 });
                                 _channel.sink.add('getFriend');
-                                // await getFriendsList();
                               },
                             ),
                           ),
@@ -302,6 +301,9 @@ class SelectFriendsState extends State<SelectFriends> {
                               print(snapshot.data);
                               return const Text('카카오톡을 실행해 주세요');
                             } else {
+                              setState(() {
+                                getFriends = false;
+                              });
                               List<String> result = snapshot.data.split(',');
                               return NewFriends(friendList: result, updateStateSelect: updateStateSelect);
                             }
