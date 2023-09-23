@@ -1,8 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:mosaicbluenco/send_message/message_templates/message_theme_list.dart';
 import 'package:mosaicbluenco/user_data/user_data.dart';
 import 'package:provider/provider.dart';
-
+import 'package:web_socket_channel/web_socket_channel.dart';
 import '../etc_widget/design_widget.dart';
 import '../etc_widget/text_message.dart';
 import '../user_data/message_provider.dart';
@@ -19,6 +21,11 @@ class SelectMessage extends StatefulWidget {
 
 class _SelectMessageState extends State<SelectMessage> {
 
+  final _channel = WebSocketChannel.connect(
+    // Uri.parse('wss://echo.websocket.events'),
+    Uri.parse('ws://localhost:8080'),
+  );
+
   late SendMessageFriendsItemProvider sIP;
   late TextMessageProvider tIP;
   late CurrentPageProvider cIP;
@@ -31,9 +38,35 @@ class _SelectMessageState extends State<SelectMessage> {
 
   bool messageClear = false;
 
+  @override
+  void initState() {
+    super.initState();
+    SendMessageFriendsItemProvider().addListener(() { });
+  }
+
+  @override
+  void dispose() {
+    SendMessageFriendsItemProvider().removeListener(() { });
+    _channel.sink.close();
+    super.dispose();
+  }
+
   List<Widget> themeList() {
     return List<Widget>.generate(
         ThemeList.themeList.length + 1, (themeIndex) => MessageThemeListChip(themeIndex: themeIndex,)).toList();
+  }
+
+  void convertData() async {
+    List<dynamic> messageItem = [];
+    for (RegisteredFriendsItem value in sIP.getItem()) {
+      if (value.talkDown == 0) {
+        messageItem.add({'request':'message', 'body':tIP.getTextMessage(), 'name':value.kakaoNickname});
+      } else {
+        messageItem.add({'request':'message', 'body':tIP.getTextMessageTalkDown(), 'name':value.kakaoNickname});
+      }
+    }
+    String result = json.encode(messageItem);
+    _channel.sink.add(result);
   }
 
   @override
@@ -365,7 +398,9 @@ class _SelectMessageState extends State<SelectMessage> {
                             ),
                           ),
                           onTap: () {
-                            sIP.initItem();
+                            // sIP.initItem();
+                            convertData();
+                            // _channel.sink.add('getFriend');
                           },
                         ),
                       ),
