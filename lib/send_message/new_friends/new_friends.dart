@@ -21,6 +21,7 @@ class _NewFriendsState extends State<NewFriends> {
   late RegisteredFriendsItemProvider fIP;
 
   bool registerFriend = false;
+  List<String> response =[];
 
   final ScrollController controller = ScrollController();
   final TextEditingController middleNickController = TextEditingController();
@@ -38,6 +39,16 @@ class _NewFriendsState extends State<NewFriends> {
 
     fIP = Provider.of<RegisteredFriendsItemProvider>(context, listen: true);
     int itemCount = widget.friendList.length;
+    response = widget.friendList;
+
+    int count = fIP.getItem().length;
+    for (int i = 0; i < count; i++) {
+      if (i < count) {
+        if (response.contains(fIP.getItem()[i].kakaoNickname)) {
+          response.remove(fIP.getItem()[i].kakaoNickname);
+        }
+      }
+    }
 
     return Column(
       children: [
@@ -99,22 +110,23 @@ class _NewFriendsState extends State<NewFriends> {
                             // widget.updateStateSelect();
                           }
                         } else {
-                          //신규 목록 중에 등록된 친구가 있는지 체크
-                          bool existItem = false;
-                          int itemCount = 0;
-                          for (RegisteredFriendsItem registeredFriend in Provider.of<RegisteredFriendsItemProvider>(context, listen: true).getItem()) {
-                            itemCount++;
-                            if (registeredFriend.kakaoNickname == widget.friendList[index]) {
-                              existItem = true;
-                            }
-                            if (itemCount == fIP.getItem().length) {
-                              if (existItem) {
-                                return const SizedBox();
-                              } else {
-                                return NewFriendTile(friends: widget.friendList, index: index, updateStateNewFriend: updateStateNewFriend, registering: registerFriend,);
-                              }
-                            }
-                          }
+                          return NewFriendTile(friends: response, index: index, updateStateNewFriend: updateStateNewFriend, registering: registerFriend);
+                          // //신규 목록 중에 등록된 친구가 있는지 체크
+                          // bool existItem = false;
+                          // int itemCount = 0;
+                          // for (RegisteredFriendsItem registeredFriend in fIP.getItem()) {
+                          //   itemCount++;
+                          //   if (registeredFriend.kakaoNickname == widget.friendList[index]) {
+                          //     existItem = true;
+                          //   }
+                          //   if (itemCount == fIP.getItem().length) {
+                          //     if (existItem) {
+                          //       return const SizedBox();
+                          //     } else {
+                          //       return NewFriendTile(friends: widget.friendList, index: index, updateStateNewFriend: updateStateNewFriend, registering: registerFriend,);
+                          //     }
+                          //   }
+                          // }
                         }
 
                       }
@@ -144,9 +156,10 @@ class _NewFriendsState extends State<NewFriends> {
                       ),
                     ),
                     onTap: () {
-                      setState(() {
-                        registerFriend = true;
-                      });
+                      NewFriendTileState().registerItem();
+                      // setState(() {
+                      //   registerFriend = true;
+                      // });
                     },
                   ),
                 ),

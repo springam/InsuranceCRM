@@ -68,13 +68,44 @@ class SelectFriendsState extends State<SelectFriends> {
         TagList.tagList.length, (tagIndex) => TagListChip(tagIndex: tagIndex,)).toList();
   }
 
+  Widget channelStream(String data) {
+
+    if (data.contains('version')) {
+      var version = int.parse(data.substring(8));
+      if (version < 1) {
+        return const Text('새로운 버전이 출시 되었습니다.\n업그레이드 후 재 실행해 주시기 바랍니다.');
+      } else {
+        return const SizedBox();
+      }
+    } else if (data == 'kakaotalk not found') {
+      print(data);
+      return const Text('카카오톡을 실행해 주세요');
+    } else {
+      List<String> response = data.split(',');
+      return NewFriends(friendList: response, updateStateSelect: updateStateSelect);
+      // print(response);
+      // int count = fIP.getItem().length;
+      // for (int i = 0; i < count + 1; i++) {
+      //   if (i < count) {
+      //     if (response.contains(fIP.getItem()[i].kakaoNickname)) {
+      //       response.remove(fIP.getItem()[i].kakaoNickname);
+      //     }
+      //   } else {
+      //     print(response);
+      //     return NewFriends(friendList: response, updateStateSelect: updateStateSelect);
+      //   }
+      // }
+      // return const SizedBox();
+    }
+
+  }
+
   @override
   Widget build(BuildContext context) {
 
     sIP = Provider.of<SendMessageFriendsItemProvider>(context, listen: true);
     cIP = Provider.of<CurrentPageProvider>(context, listen: true);
     fIP = Provider.of<RegisteredFriendsItemProvider>(context, listen: true);
-
 
     return Stack(
       children: [
@@ -143,7 +174,6 @@ class SelectFriendsState extends State<SelectFriends> {
                               onTap: () async{
                                 setState(() {
                                   friends = Friends([], 0, 0, '', '');
-                                  getFriends = true;
                                   // fIP.setItem([]);
                                 });
                                 _channel.sink.add('getFriend');
@@ -224,25 +254,35 @@ class SelectFriendsState extends State<SelectFriends> {
                         stream: _channel.stream,
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
-                            if (snapshot.data.contains('version')) {
-                              var version = int.parse(snapshot.data.substring(8));
-                              if (version < 1) {
-                                return const Text('새로운 버전이 출시 되었습니다.\n업그레이드 후 재 실행해 주시기 바랍니다.');
-                              } else {
-                                return const SizedBox();
-                              }
-                            } else if (snapshot.data == 'kakaotalk not found') {
-                              print(snapshot.data);
-                              return const Text('카카오톡을 실행해 주세요');
-                            } else {
-                              setState(() {
-                                getFriends = false;
-                              });
-                              List<String> result = snapshot.data.split(',');
-                              return NewFriends(friendList: result, updateStateSelect: updateStateSelect);
-                            }
+                            return channelStream(snapshot.data);
+
+                          //   if (snapshot.data.contains('version')) {
+                          //     var version = int.parse(snapshot.data.substring(8));
+                          //     if (version < 1) {
+                          //       return const Text('새로운 버전이 출시 되었습니다.\n업그레이드 후 재 실행해 주시기 바랍니다.');
+                          //     } else {
+                          //       return const SizedBox();
+                          //     }
+                          //   } else if (snapshot.data == 'kakaotalk not found') {
+                          //     print(snapshot.data);
+                          //     return const Text('카카오톡을 실행해 주세요');
+                          //   } else {
+                          //     List<String> response = snapshot.data.split(',');
+                          //     int count = fIP.getItem().length;
+                          //     for (int i = 0; i < count + 1; i++) {
+                          //       if (i < count) {
+                          //         if (response.contains(fIP.getItem()[i].kakaoNickname)) {
+                          //           response.remove(fIP.getItem()[i].kakaoNickname);
+                          //         }
+                          //       } else {
+                          //         return NewFriends(friendList: response, updateStateSelect: updateStateSelect);
+                          //       }
+                          //     }
+                          //     return const SizedBox();
+                          //   }
+                          //
                           } else {
-                            return Text((snapshot.hasData) ? snapshot.data : '');
+                            return Text((snapshot.hasData) ? snapshot.data : 'snapshot is empty');
                           }
                         },
                       ),

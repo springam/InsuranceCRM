@@ -41,7 +41,7 @@ class NewFriendTileState extends State<NewFriendTile> {
   bool warnNick = false;
   bool warnSelectChip = false;
   bool warnTag = false;
-  bool registered = false;
+  bool tryRegistered = false;  //
 
   Color warnColor = Colors.transparent;
 
@@ -49,6 +49,17 @@ class NewFriendTileState extends State<NewFriendTile> {
   int selectedOption = 5;
   List<String> hashTag =  TagList.tagList;
   List<String> selectedHashTag = [];
+
+  @override
+  void initState() {
+    super.initState();
+    tryRegistered = false;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   List<Widget> selectChip() {
     return List<Widget>.generate(2, (optionIndex) => SizedBox(
@@ -164,33 +175,54 @@ class NewFriendTileState extends State<NewFriendTile> {
     widget.updateStateNewFriend();
   }
 
+  void registerItem() {
+    if (middleNickController.text.isEmpty || selectedIndex == 2 || selectedHashTag.isEmpty) {
+      setState(() {
+        warnColor = Colors.red;
+        tryRegistered = true;
+      });
+    } else {
+      registerFriends(widget.index);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
 
     fIP = Provider.of<RegisteredFriendsItemProvider>(context);
 
-    if (!widget.registering) {
-      if (!registered) {
+    if (tryRegistered) {
+      if (middleNickController.text.isNotEmpty && selectedIndex != 2 && selectedHashTag.isNotEmpty) {
         warnColor = Colors.transparent;
       } else {
-        if (middleNickController.text.isNotEmpty && selectedIndex != 2 && selectedHashTag.isNotEmpty) {
-          warnColor = Colors.transparent;
-        } else {
-          warnColor = Colors.red;
-        }
+        warnColor = Colors.red;
       }
+    } else {
+      warnColor = Colors.transparent;
     }
 
-    if (widget.registering) {
-      if (middleNickController.text.isEmpty || selectedIndex == 2 || selectedHashTag.isEmpty) {
-        setState(() {
-          warnColor = Colors.red;
-          registered = true;
-        });
-      } else {
-        registerFriends(widget.index);
-      }
-    }
+    // if (!widget.registering || tryRegistered) {
+    //   if (!tryRegistered) {
+    //     warnColor = Colors.transparent;
+    //   } else {
+    //     if (middleNickController.text.isNotEmpty && selectedIndex != 2 && selectedHashTag.isNotEmpty) {
+    //       warnColor = Colors.transparent;
+    //     } else {
+    //       warnColor = Colors.red;
+    //     }
+    //   }
+    // }
+
+    // if (widget.registering && !tryRegistered) {
+    //   if (middleNickController.text.isEmpty || selectedIndex == 2 || selectedHashTag.isEmpty) {
+    //     setState(() {
+    //       warnColor = Colors.red;
+    //       tryRegistered = true;
+    //     });
+    //   } else {
+    //     registerFriends(widget.index);
+    //   }
+    // }
 
     return Stack(
       children: [
