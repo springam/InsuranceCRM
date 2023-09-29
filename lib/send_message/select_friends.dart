@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:mosaicbluenco/send_message/new_friends/new_friends.dart';
 import 'package:mosaicbluenco/send_message/registered_friends/registered_friends.dart';
 import 'package:mosaicbluenco/send_message/send_message_friends/send_message_friend_tile.dart';
@@ -10,7 +9,6 @@ import 'package:provider/provider.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import '../etc_widget/design_widget.dart';
 import 'registered_friends/tag_list_chip_add.dart';
-import '../etc_widget/tag_dialog_message.dart';
 import '../etc_widget/text_message.dart';
 import '../user_data/registered_friends_provider.dart';
 
@@ -23,8 +21,7 @@ class SelectFriends extends StatefulWidget {
 
 class SelectFriendsState extends State<SelectFriends> {
 
-  final _channel = WebSocketChannel.connect(
-    // Uri.parse('wss://echo.websocket.events'),
+  final channel = WebSocketChannel.connect(
     Uri.parse('ws://localhost:8080'),
   );
 
@@ -36,7 +33,9 @@ class SelectFriendsState extends State<SelectFriends> {
   final ScrollController sendMessageFriendController = ScrollController();
   final TextEditingController searchFriendController = TextEditingController();
 
-  late Friends friends;
+  // late Friends friends;
+  int channelValue = 0;
+  List<String> response = [];
   bool getFriends = false;
   bool gettingFriends = false; //카톡 친구 불러 오는 중
   bool testBool = false;
@@ -46,19 +45,25 @@ class SelectFriendsState extends State<SelectFriends> {
   @override
   void initState() {
     super.initState();
+    streamListen();
     SendMessageFriendsItemProvider().addListener(() { });
-    _channel.sink.add('version');
+    CurrentPageProvider().addListener(() { });
+    RegisteredFriendsItemProvider().addListener(() { });
+    channel.sink.add('version');
   }
 
   @override
   void dispose() {
     SendMessageFriendsItemProvider().removeListener(() { });
-    _channel.sink.close();
+    CurrentPageProvider().removeListener(() { });
+    RegisteredFriendsItemProvider().removeListener(() { });
+    channel.sink.close();
     super.dispose();
   }
 
   void updateStateSelect() { //상태 update callback 함수
     setState(() {
+      // channelValue = 3;
       registeredFriendsStateKey.currentState?.setState(() {});
     });
   }
@@ -68,36 +73,74 @@ class SelectFriendsState extends State<SelectFriends> {
         TagList.tagList.length, (tagIndex) => TagListChip(tagIndex: tagIndex,)).toList();
   }
 
-  Widget channelStream(String data) {
-
-    if (data.contains('version')) {
-      var version = int.parse(data.substring(8));
-      if (version < 1) {
-        return const Text('새로운 버전이 출시 되었습니다.\n업그레이드 후 재 실행해 주시기 바랍니다.');
-      } else {
+  Widget channelWidget(int value) {
+    switch (value) {
+      case 0:
         return const SizedBox();
-      }
-    } else if (data == 'kakaotalk not found') {
-      print(data);
-      return const Text('카카오톡을 실행해 주세요');
-    } else {
-      List<String> response = data.split(',');
-      return NewFriends(friendList: response, updateStateSelect: updateStateSelect);
-      // print(response);
-      // int count = fIP.getItem().length;
-      // for (int i = 0; i < count + 1; i++) {
-      //   if (i < count) {
-      //     if (response.contains(fIP.getItem()[i].kakaoNickname)) {
-      //       response.remove(fIP.getItem()[i].kakaoNickname);
-      //     }
-      //   } else {
-      //     print(response);
-      //     return NewFriends(friendList: response, updateStateSelect: updateStateSelect);
-      //   }
-      // }
-      // return const SizedBox();
+      case 1:
+        return const Text('새로운 버전이 출시 되었습니다.\n업그레이드 후 재 실행해 주시기 바랍니다.');
+      case 2:
+        return const Text('카카오톡을 실행해 주세요');
+      case 3:
+        return NewFriends(friendList: ResponseFriendItem.responseFriend, updateStateSelect: updateStateSelect);
+      default:
+        return const SizedBox();
     }
+  }
 
+  void streamListen() {
+
+    channel.stream.listen((data) {
+      if (data.contains('version')) {
+        var version = int.parse(data.substring(8));
+        if (version < 1) {
+          setState(() {
+            channelValue = 1; //localserver 버전 체크
+          });
+        } else {
+          setState(() {
+            channelValue = 0;
+          });
+        }
+      } else if (data == 'kakaotalk not found') {
+        setState(() {
+          channelValue = 2; //카카오톡 실행
+        });
+      } else {
+        response = data.split(',');
+        int count = fIP.getItem().length;
+        for (int i = 0; i < count + 1; i++) {
+          if (i < count) {
+            if (response.contains(fIP.getItem()[i].kakaoNickname)) { //등록 거부이든 수락이든 어차피 지워야함
+              response.remove(fIP.getItem()[i].kakaoNickname);
+            }
+          } else {
+            ResponseFriendItem.responseFriend = [];
+
+            for (String name in response) {
+              ResponseFriendItem.responseFriend.add(RegisteredFriendsItem(
+                  managerEmail: UserData.userEmail,
+                  name: '',
+                  kakaoNickname: name,
+                  talkDown: 2,
+                  tag: [],
+                  registered: false,
+                  registeredDate: '',
+                  managedLastDate: '',
+                  managedCount: 0,
+                  tier: '',
+                  documentId: '',
+                  etc: ''
+              ));
+            }
+          }
+        }
+        setState(() {
+          gettingFriends = false;
+          channelValue = 3; //친구 목록 json 반환시
+        });
+      }
+    });
   }
 
   @override
@@ -173,10 +216,10 @@ class SelectFriendsState extends State<SelectFriends> {
                               ),
                               onTap: () async{
                                 setState(() {
-                                  friends = Friends([], 0, 0, '', '');
-                                  // fIP.setItem([]);
+                                  channelValue = 0;
+                                  gettingFriends = true;
                                 });
-                                _channel.sink.add('getFriend');
+                                channel.sink.add('getFriend');
                               },
                             ),
                           ),
@@ -250,42 +293,7 @@ class SelectFriendsState extends State<SelectFriends> {
 
                       const SizedBox(height: 13),
 
-                      StreamBuilder(  //웹소켓 메시지 스트림
-                        stream: _channel.stream,
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            return channelStream(snapshot.data);
-
-                          //   if (snapshot.data.contains('version')) {
-                          //     var version = int.parse(snapshot.data.substring(8));
-                          //     if (version < 1) {
-                          //       return const Text('새로운 버전이 출시 되었습니다.\n업그레이드 후 재 실행해 주시기 바랍니다.');
-                          //     } else {
-                          //       return const SizedBox();
-                          //     }
-                          //   } else if (snapshot.data == 'kakaotalk not found') {
-                          //     print(snapshot.data);
-                          //     return const Text('카카오톡을 실행해 주세요');
-                          //   } else {
-                          //     List<String> response = snapshot.data.split(',');
-                          //     int count = fIP.getItem().length;
-                          //     for (int i = 0; i < count + 1; i++) {
-                          //       if (i < count) {
-                          //         if (response.contains(fIP.getItem()[i].kakaoNickname)) {
-                          //           response.remove(fIP.getItem()[i].kakaoNickname);
-                          //         }
-                          //       } else {
-                          //         return NewFriends(friendList: response, updateStateSelect: updateStateSelect);
-                          //       }
-                          //     }
-                          //     return const SizedBox();
-                          //   }
-                          //
-                          } else {
-                            return Text((snapshot.hasData) ? snapshot.data : 'snapshot is empty');
-                          }
-                        },
-                      ),
+                      channelWidget(channelValue),
 
                       RegisteredFriends(updateStateSelect: updateStateSelect, key: registeredFriendsStateKey),  //등록친구 widget
 

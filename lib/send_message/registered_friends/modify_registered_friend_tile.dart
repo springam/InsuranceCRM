@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:mosaicbluenco/etc_widget/text_message.dart';
 import 'package:mosaicbluenco/user_data/user_data.dart';
 import 'package:provider/provider.dart';

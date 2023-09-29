@@ -7,9 +7,7 @@ import 'package:mosaicbluenco/user_data/status_provider.dart';
 import 'package:mosaicbluenco/user_data/message_provider.dart';
 import 'package:mosaicbluenco/user_data/user_provider.dart';
 import 'package:provider/provider.dart';
-import 'firebase_options.dart';
 import 'package:url_strategy/url_strategy.dart';
-import 'gate/gate_main.dart';
 
 
 Future<void> main() async {

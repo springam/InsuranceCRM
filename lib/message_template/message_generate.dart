@@ -6,7 +6,6 @@ import 'package:mosaicbluenco/message_template/theme_list.dart';
 import '../etc_widget/tag_dialog_message.dart';
 import '../etc_widget/text_message.dart';
 import '../user_data/user_data.dart';
-import '../send_message/registered_friends/tag_list_chip.dart';
 
 
 class MessageGenerate extends StatefulWidget {

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mosaicbluenco/user_data/status_provider.dart';
 import 'package:provider/provider.dart';
-
-import '../../user_data/message_provider.dart';
 import '../../user_data/user_data.dart';
 
 class MessageThemeSubject extends StatefulWidget {

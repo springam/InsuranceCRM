@@ -1,6 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
-import 'package:mosaicbluenco/send_message/registered_friends/registered_friends.dart';
+import 'package:intl/intl.dart';
+import 'package:mosaicbluenco/user_data/user_data.dart';
 import 'package:provider/provider.dart';
 import '../../etc_widget/text_message.dart';
 import '../../user_data/registered_friends_provider.dart';
@@ -9,7 +10,7 @@ import 'new_friend_tile.dart';
 class NewFriends extends StatefulWidget {
   const NewFriends({required this.friendList, required this.updateStateSelect, super.key});
 
-  final List<String> friendList;
+  final List<RegisteredFriendsItem> friendList;
   final Function() updateStateSelect;
 
   @override
@@ -21,7 +22,7 @@ class _NewFriendsState extends State<NewFriends> {
   late RegisteredFriendsItemProvider fIP;
 
   bool registerFriend = false;
-  List<String> response =[];
+  bool refresh = false;
 
   final ScrollController controller = ScrollController();
   final TextEditingController middleNickController = TextEditingController();
@@ -35,20 +36,59 @@ class _NewFriendsState extends State<NewFriends> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    // SendMessageFriendsItemProvider().addListener(() { });
+    // RegisteredFriendsItemProvider().addListener(() { });
+  }
+
+  @override
+  void dispose() {
+    // SendMessageFriendsItemProvider().removeListener(() { });
+    // RegisteredFriendsItemProvider().removeListener(() { });
+    super.dispose();
+  }
+
+  Future<void> registerFriends() async{
+    final docRef = FirebaseFirestore.instance.collection('friends').doc();
+    List<RegisteredFriendsItem> tempItem = [];
+    int count = ResponseFriendItem.responseFriend.length;
+
+    for (int i = 0; i < count + 1; i++) {
+      if (i < count) {
+        if (ResponseFriendItem.responseFriend[i].registered) {
+          await docRef.set({
+            'document_id': docRef.id,
+            'etc': '',
+            'kakao_nickname': ResponseFriendItem.responseFriend[i].kakaoNickname,
+            'managed_count': 0,
+            'registered_date': DateFormat("yyyy년 MM월 dd일 hh시 mm분").format(DateTime.now()),
+            'managed_last_date': '',
+            'manager_email': UserData.userEmail,
+            'name': ResponseFriendItem.responseFriend[i].name,
+            'registered': true,
+            'tag': ResponseFriendItem.responseFriend[i].tag,
+            'talk_down': ResponseFriendItem.responseFriend[i].talkDown,
+            'tier': 'normal'
+          });
+        } else {
+          tempItem.add(ResponseFriendItem.responseFriend[i]);
+        }
+      } else {
+        setState(() {
+          registerFriend = false;
+          ResponseFriendItem.responseFriend = tempItem;
+        });
+        widget.updateStateSelect();
+      }
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
 
     fIP = Provider.of<RegisteredFriendsItemProvider>(context, listen: true);
     int itemCount = widget.friendList.length;
-    response = widget.friendList;
-
-    int count = fIP.getItem().length;
-    for (int i = 0; i < count; i++) {
-      if (i < count) {
-        if (response.contains(fIP.getItem()[i].kakaoNickname)) {
-          response.remove(fIP.getItem()[i].kakaoNickname);
-        }
-      }
-    }
 
     return Column(
       children: [
@@ -94,41 +134,16 @@ class _NewFriendsState extends State<NewFriends> {
                 ),
               ),
 
-              const Divider(height: 1,),
+              const Divider(height: 1),
 
-              SizedBox(
+              (registerFriend) ? const SizedBox() : SizedBox(
                   height: (itemCount < 10) ? itemCount * 45 : 500,
                   child: (itemCount == 0) ? const Center(child: TextMessageNormal('불러온 친구 목록이 없습니다.', 12.0)) :
                   ListView.builder(
-                      itemCount: itemCount + 1,
+                      itemCount: itemCount,
                       controller: controller,
                       itemBuilder: (BuildContext context, int index) {
-
-                        if (index == itemCount) {
-                          if (registerFriend) {
-                            registerFriend = false;
-                            // widget.updateStateSelect();
-                          }
-                        } else {
-                          return NewFriendTile(friends: response, index: index, updateStateNewFriend: updateStateNewFriend, registering: registerFriend);
-                          // //신규 목록 중에 등록된 친구가 있는지 체크
-                          // bool existItem = false;
-                          // int itemCount = 0;
-                          // for (RegisteredFriendsItem registeredFriend in fIP.getItem()) {
-                          //   itemCount++;
-                          //   if (registeredFriend.kakaoNickname == widget.friendList[index]) {
-                          //     existItem = true;
-                          //   }
-                          //   if (itemCount == fIP.getItem().length) {
-                          //     if (existItem) {
-                          //       return const SizedBox();
-                          //     } else {
-                          //       return NewFriendTile(friends: widget.friendList, index: index, updateStateNewFriend: updateStateNewFriend, registering: registerFriend,);
-                          //     }
-                          //   }
-                          // }
-                        }
-
+                        return NewFriendTile(friendList: widget.friendList, index: index, updateStateNewFriend: updateStateNewFriend, registering: registerFriend);
                       }
                   )
               ),
@@ -155,11 +170,11 @@ class _NewFriendsState extends State<NewFriends> {
                         child: Text('등록하기', style: buttonTextStyle,),
                       ),
                     ),
-                    onTap: () {
-                      NewFriendTileState().registerItem();
-                      // setState(() {
-                      //   registerFriend = true;
-                      // });
+                    onTap: () async {
+                      setState(() {
+                        registerFriend = true;
+                      });
+                      registerFriends();
                     },
                   ),
                 ),

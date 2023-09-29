@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:mosaicbluenco/send_message/registered_friends/modify_registered_friend_tile.dart';
 import 'package:mosaicbluenco/send_message/registered_friends/registered_friend_tile.dart';
 import 'package:provider/provider.dart';
-
 import '../../etc_widget/text_message.dart';
-import '../../gate/gate_main.dart';
 import '../../user_data/registered_friends_provider.dart';
 
 GlobalKey<RegisteredFriendsState> registeredFriendsStateKey = GlobalKey();

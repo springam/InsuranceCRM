@@ -19,7 +19,7 @@ class RegisteredFriendsItemList extends StatelessWidget {
 
     return StreamBuilder(
       stream: FirebaseFirestore.instance.collection('friends')
-          .where('manager_id', isEqualTo: UserData.userId).snapshots(),
+          .where('manager_email', isEqualTo: UserData.userEmail).snapshots(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
           List<RegisteredFriendsItem> registeredFriendsMap = [];
@@ -27,9 +27,7 @@ class RegisteredFriendsItemList extends StatelessWidget {
             //디비의 등록 친구를 메니져 id 쿼리로 가져 오는게 맞으면 변경 해야 함
             //디비의 등록 친구 목록 전체를 비교하며 manager id == user id 이면 provider 에 담음
             registeredFriendsMap.add(RegisteredFriendsItem(
-                kakaoId: doc.data()['kakao_id'],
-                kakaoUuid: doc.data()['kakao_uuid'],
-                managerId: doc.data()['manager_id'],
+                managerEmail: doc.data()['manager_email'],
                 name: doc.data()['name'],
                 kakaoNickname: doc.data()['kakao_nickname'],
                 talkDown: doc.data()['talk_down'],

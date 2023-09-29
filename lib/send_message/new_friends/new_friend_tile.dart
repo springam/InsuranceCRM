@@ -1,16 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:mosaicbluenco/etc_widget/text_message.dart';
 import 'package:mosaicbluenco/user_data/user_data.dart';
 import 'package:provider/provider.dart';
 import '../../user_data/registered_friends_provider.dart';
 
 class NewFriendTile extends StatefulWidget {
-  const NewFriendTile({required this.friends, required this.index, required this.registering, required this.updateStateNewFriend, super.key});
+  const NewFriendTile({required this.friendList, required this.index, required this.registering, required this.updateStateNewFriend, super.key});
 
-  final List<String> friends;
+  final List<RegisteredFriendsItem> friendList;
   final int index;
   final bool registering;
   final Function() updateStateNewFriend;
@@ -21,8 +20,6 @@ class NewFriendTile extends StatefulWidget {
 
 class NewFriendTileState extends State<NewFriendTile> {
 
-  late List<String> friends = widget.friends;
-
   late RegisteredFriendsItemProvider fIP;
 
   final ScrollController controller = ScrollController();
@@ -32,6 +29,7 @@ class NewFriendTileState extends State<NewFriendTile> {
 
   int selectedIndex = 2;
   int selectedFilterIndex = 10;
+  String nickname = '';
   List<String> options = ['존대', '반말'];
 
   double xMousePosition = 0.0;
@@ -41,19 +39,21 @@ class NewFriendTileState extends State<NewFriendTile> {
   bool warnNick = false;
   bool warnSelectChip = false;
   bool warnTag = false;
-  bool tryRegistered = false;  //
 
   Color warnColor = Colors.transparent;
 
-  String testMsg = 'none';
-  int selectedOption = 5;
+  String testMsg = '등록취소';
+  // int selectedOption = 5;
   List<String> hashTag =  TagList.tagList;
-  List<String> selectedHashTag = [];
+  List<dynamic> selectedHashTag = [];
 
   @override
   void initState() {
     super.initState();
-    tryRegistered = false;
+    nickname = widget.friendList[widget.index].kakaoNickname;
+    middleNickController.text = widget.friendList[widget.index].name;
+    selectedIndex = widget.friendList[widget.index].talkDown;
+    selectedHashTag = widget.friendList[widget.index].tag;
   }
 
   @override
@@ -79,8 +79,8 @@ class NewFriendTileState extends State<NewFriendTile> {
         onSelected: (selected) {
           setState(() {
             selectedIndex = (selected) ? optionIndex : 2;
-            selectedOption = optionIndex;
-            testMsg = selectedIndex.toString();
+            //selectedOption = optionIndex;
+            ResponseFriendItem.responseFriend[widget.index].talkDown = selectedIndex;
           });
         },
       ),
@@ -103,10 +103,10 @@ class NewFriendTileState extends State<NewFriendTile> {
           setState(() {
             if (selected) {
               selectedHashTag.add(hashTag[optionIndex]);
-              testMsg = 'add $optionIndex';
+              ResponseFriendItem.responseFriend[widget.index].tag = selectedHashTag;
             } else {
               selectedHashTag.remove(hashTag[optionIndex]);
-              testMsg = 'remove $optionIndex';
+              ResponseFriendItem.responseFriend[widget.index].tag = selectedHashTag;
             }
           });
         },
@@ -116,7 +116,7 @@ class NewFriendTileState extends State<NewFriendTile> {
 
   void enterBoxArea(PointerEvent details) {
     setState(() {
-      enterBox = true;
+      enterBox = true;  //영역안에 들어오면 true
     });
   }
 
@@ -138,12 +138,10 @@ class NewFriendTileState extends State<NewFriendTile> {
     await docRef.set({
       'document_id': docRef.id,
       'etc': '',
-      'kakao_id': 0,
-      'kakao_nickname': friends[index],
-      'kakao_uuid': 'mosaic',
+      'kakao_nickname': widget.friendList[index].kakaoNickname,
       'managed_count': 0,
       'managed_last_date': '',
-      'manager_id': UserData.userId,
+      'manager_email': UserData.userEmail,
       'name': '',
       'registered': false,
       'registered_date': DateFormat("yyyy년 MM월 dd일 hh시 mm분").format(now),
@@ -151,39 +149,7 @@ class NewFriendTileState extends State<NewFriendTile> {
       'talk_down': 2,
       'tier': 'normal'
     });
-  }
-
-  Future<void> registerFriends(int index) async{
-
-    final docRef = FirebaseFirestore.instance.collection('friends').doc();
-    await docRef.set({
-      'document_id': docRef.id,
-      'etc': '',
-      'kakao_id': 0,
-      'kakao_nickname': friends[index],
-      'kakao_uuid': 'mosaic',
-      'managed_count': 0,
-      'registered_date': DateFormat("yyyy년 MM월 dd일 hh시 mm분").format(now),
-      'managed_last_date': '',
-      'manager_id': UserData.userId,
-      'name': middleNickController.text,
-      'registered': true,
-      'tag': selectedHashTag,
-      'talk_down': selectedIndex,
-      'tier': 'normal'
-    });
-    widget.updateStateNewFriend();
-  }
-
-  void registerItem() {
-    if (middleNickController.text.isEmpty || selectedIndex == 2 || selectedHashTag.isEmpty) {
-      setState(() {
-        warnColor = Colors.red;
-        tryRegistered = true;
-      });
-    } else {
-      registerFriends(widget.index);
-    }
+    ResponseFriendItem.responseFriend.removeAt(widget.index);
   }
 
   @override
@@ -191,37 +157,24 @@ class NewFriendTileState extends State<NewFriendTile> {
 
     fIP = Provider.of<RegisteredFriendsItemProvider>(context);
 
-    if (tryRegistered) {
-      if (middleNickController.text.isNotEmpty && selectedIndex != 2 && selectedHashTag.isNotEmpty) {
-        warnColor = Colors.transparent;
-      } else {
-        warnColor = Colors.red;
-      }
-    } else {
+    if (middleNickController.text.isNotEmpty && selectedIndex != 2 && selectedHashTag.isNotEmpty) {
       warnColor = Colors.transparent;
+      ResponseFriendItem.responseFriend[widget.index].registered = true;
+    } else {
+      warnColor = Colors.red;
+      ResponseFriendItem.responseFriend[widget.index].registered = false;
     }
 
-    // if (!widget.registering || tryRegistered) {
-    //   if (!tryRegistered) {
+    // if (widget.registering) {
+    //   if (middleNickController.text.isNotEmpty && selectedIndex != 2 && selectedHashTag.isNotEmpty) {
     //     warnColor = Colors.transparent;
+    //     ResponseFriendItem.responseFriend[widget.index].registered = true;
     //   } else {
-    //     if (middleNickController.text.isNotEmpty && selectedIndex != 2 && selectedHashTag.isNotEmpty) {
-    //       warnColor = Colors.transparent;
-    //     } else {
-    //       warnColor = Colors.red;
-    //     }
+    //     warnColor = Colors.red;
+    //     ResponseFriendItem.responseFriend[widget.index].registered = false;
     //   }
-    // }
-
-    // if (widget.registering && !tryRegistered) {
-    //   if (middleNickController.text.isEmpty || selectedIndex == 2 || selectedHashTag.isEmpty) {
-    //     setState(() {
-    //       warnColor = Colors.red;
-    //       tryRegistered = true;
-    //     });
-    //   } else {
-    //     registerFriends(widget.index);
-    //   }
+    // } else {
+    //   warnColor = Colors.transparent;
     // }
 
     return Stack(
@@ -239,9 +192,9 @@ class NewFriendTileState extends State<NewFriendTile> {
               Expanded(
                 flex: 1,
                 child: MouseRegion(
-                  onEnter: enterBoxArea,
+                  // onEnter: enterBoxArea, //영역 감지
                   // onHover: updateLocation,
-                  onExit: exitBoxArea,
+                  // onExit: exitBoxArea,
                   child: Container(
                     height: 33,
                     alignment: Alignment.centerLeft,
@@ -262,7 +215,7 @@ class NewFriendTileState extends State<NewFriendTile> {
                             color: Color(0xffffffff),
                           ),
                           child: Text(
-                            friends[widget.index],
+                            nickname,
                             style: buttonTextStyle,
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -294,11 +247,9 @@ class NewFriendTileState extends State<NewFriendTile> {
                       ),
                       onChanged: (value) {
                         if (value.length < 11) {
-                          setState(() {
-                            testMsg = value;
-                          });
+                          ResponseFriendItem.responseFriend[widget.index].name = value;
                         } else {
-                          middleNickController.text = testMsg;
+                          middleNickController.text = ResponseFriendItem.responseFriend[widget.index].name;
                         }
                       },
                     ),
@@ -350,7 +301,7 @@ class NewFriendTileState extends State<NewFriendTile> {
 
         (enterBox) ? Positioned(
           left: 7,
-          child: TextMessageNormal(friends[widget.index], 12.0),
+          child: TextMessageNormal(widget.friendList[widget.index].kakaoNickname, 12.0),
         ) : const SizedBox()
       ],
     );

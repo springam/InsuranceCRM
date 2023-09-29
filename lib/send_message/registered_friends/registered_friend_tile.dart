@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:mosaicbluenco/etc_widget/text_message.dart';
 import 'package:provider/provider.dart';
-
 import '../../user_data/registered_friends_provider.dart';
 
 class RegisteredFriendTile extends StatefulWidget {

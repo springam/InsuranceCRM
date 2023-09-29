@@ -44,13 +44,14 @@ class SendMessageFriendsItemProvider with ChangeNotifier {
     notifyListeners();
   }
 }
-
+////////////////////////////////////////////////////////////////////////////////
+class ResponseFriendItem {
+  static List<RegisteredFriendsItem> responseFriend = [];
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 class RegisteredFriendsItem {
-  int kakaoId = 0;
-  String kakaoUuid = '';
-  int managerId = 0;
+  String managerEmail = '';
   String name = '';
   String kakaoNickname = '';
   int talkDown = 0; //0: 존대, 1: 반말, 2: 설정 되지 않음
@@ -63,7 +64,7 @@ class RegisteredFriendsItem {
   String documentId = '';
   String etc = '';
 
-  RegisteredFriendsItem({required this.kakaoId, required this.managerId, required this.name, required this.kakaoNickname,
-    required this.talkDown, required this.tag, required this.registered, required this.registeredDate, required this.managedLastDate,
-    required this.managedCount, required this.tier, required this.documentId, required this.etc, required this.kakaoUuid});
+  RegisteredFriendsItem({required this.managerEmail, required this.name, required this.kakaoNickname, required this.talkDown,
+    required this.tag, required this.registered, required this.registeredDate, required this.managedLastDate,
+    required this.managedCount, required this.tier, required this.documentId, required this.etc});
 }
