@@ -478,9 +478,9 @@ class SelectFriendsState extends State<SelectFriends> {
             width: double.infinity,
             height: 668,
             color: Colors.grey.withOpacity(0.7),
-            child: const Column(
+            child: Column(
               children: [
-                Expanded(
+                const Expanded(
                   flex: 8,
                   child: Center(
                     child: SelectableText(
@@ -492,7 +492,12 @@ class SelectFriendsState extends State<SelectFriends> {
                 ),
                 Expanded(
                   flex: 1,
-                  child: Text('주소 가져오기 멈추기'),
+                  child: ElevatedButton(
+                      onPressed: () {
+                        channel.sink.add('stop');
+                      },
+                      child: const Text('친구 불러오기 그만하기')
+                  ),
                 )
               ],
             )
