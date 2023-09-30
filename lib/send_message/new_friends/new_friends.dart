@@ -49,39 +49,68 @@ class _NewFriendsState extends State<NewFriends> {
     super.dispose();
   }
 
-  Future<void> registerFriends() async{
-    final docRef = FirebaseFirestore.instance.collection('friends').doc();
-    List<RegisteredFriendsItem> tempItem = [];
-    int count = ResponseFriendItem.responseFriend.length;
+  Future<void> registerFriends() async {
 
-    for (int i = 0; i < count + 1; i++) {
-      if (i < count) {
-        if (ResponseFriendItem.responseFriend[i].registered) {
-          await docRef.set({
-            'document_id': docRef.id,
-            'etc': '',
-            'kakao_nickname': ResponseFriendItem.responseFriend[i].kakaoNickname,
-            'managed_count': 0,
-            'registered_date': DateFormat("yyyy년 MM월 dd일 hh시 mm분").format(DateTime.now()),
-            'managed_last_date': '',
-            'manager_email': UserData.userEmail,
-            'name': ResponseFriendItem.responseFriend[i].name,
-            'registered': true,
-            'tag': ResponseFriendItem.responseFriend[i].tag,
-            'talk_down': ResponseFriendItem.responseFriend[i].talkDown,
-            'tier': 'normal'
-          });
-        } else {
-          tempItem.add(ResponseFriendItem.responseFriend[i]);
-        }
-      } else {
-        setState(() {
-          registerFriend = false;
-          ResponseFriendItem.responseFriend = tempItem;
+    List<RegisteredFriendsItem> tempItem = [];
+    // int count = ResponseFriendItem.responseFriend.length;
+
+    await Future.forEach(ResponseFriendItem.responseFriend, (item) async {
+      if (item.registered) {
+        final docRef = FirebaseFirestore.instance.collection('friends').doc();
+        await docRef.set({
+          'document_id': docRef.id,
+          'etc': '',
+          'kakao_nickname': item.kakaoNickname,
+          'managed_count': 0,
+          'registered_date': DateFormat("yyyy년 MM월 dd일 hh시 mm분").format(DateTime.now()),
+          'managed_last_date': '',
+          'manager_email': UserData.userEmail,
+          'name': item.name,
+          'registered': true,
+          'tag': item.tag,
+          'talk_down': item.talkDown,
+          'tier': 'normal'
         });
-        widget.updateStateSelect();
+      } else {
+        tempItem.add(item);
       }
-    }
+    });
+
+    setState(() {
+      registerFriend = false;
+      ResponseFriendItem.responseFriend = tempItem;
+    });
+    widget.updateStateSelect();
+
+    // for (int i = 0; i < count + 1; i++) {
+    //   if (i < count) {
+    //     if (ResponseFriendItem.responseFriend[i].registered) {
+    //       await docRef.set({
+    //         'document_id': docRef.id,
+    //         'etc': '',
+    //         'kakao_nickname': ResponseFriendItem.responseFriend[i].kakaoNickname,
+    //         'managed_count': 0,
+    //         'registered_date': DateFormat("yyyy년 MM월 dd일 hh시 mm분").format(DateTime.now()),
+    //         'managed_last_date': '',
+    //         'manager_email': UserData.userEmail,
+    //         'name': ResponseFriendItem.responseFriend[i].name,
+    //         'registered': true,
+    //         'tag': ResponseFriendItem.responseFriend[i].tag,
+    //         'talk_down': ResponseFriendItem.responseFriend[i].talkDown,
+    //         'tier': 'normal'
+    //       });
+    //     } else {
+    //       tempItem.add(ResponseFriendItem.responseFriend[i]);
+    //     }
+    //   } else {
+    //     setState(() {
+    //       registerFriend = false;
+    //       ResponseFriendItem.responseFriend = tempItem;
+    //     });
+    //     widget.updateStateSelect();
+    //   }
+    // }
+
   }
 
   @override
@@ -174,7 +203,7 @@ class _NewFriendsState extends State<NewFriends> {
                       setState(() {
                         registerFriend = true;
                       });
-                      registerFriends();
+                      await registerFriends();
                     },
                   ),
                 ),

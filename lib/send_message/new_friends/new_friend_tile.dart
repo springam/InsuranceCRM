@@ -160,6 +160,8 @@ class NewFriendTileState extends State<NewFriendTile> {
     if (middleNickController.text.isNotEmpty && selectedIndex != 2 && selectedHashTag.isNotEmpty) {
       warnColor = Colors.transparent;
       ResponseFriendItem.responseFriend[widget.index].registered = true;
+      print(ResponseFriendItem.responseFriend[widget.index].kakaoNickname);
+      print(ResponseFriendItem.responseFriend[widget.index].registered);
     } else {
       warnColor = Colors.red;
       ResponseFriendItem.responseFriend[widget.index].registered = false;
