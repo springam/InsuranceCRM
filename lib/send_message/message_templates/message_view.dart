@@ -86,10 +86,6 @@ class _MessageViewState extends State<MessageView> {
               maxLines: null,
               style: buttonTextStyle,
               decoration: const InputDecoration(
-                // hintText: '10자 이내로 입력해 주세요.',
-                // enabledBorder: OutlineInputBorder(
-                //     borderSide: BorderSide(color: Color(0xffd9d9d9), width: 1.0,)
-                // ),
                   border: InputBorder.none
               ),
               onChanged: (value) {
