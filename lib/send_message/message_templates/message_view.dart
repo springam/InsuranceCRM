@@ -39,14 +39,10 @@ class _MessageViewState extends State<MessageView> {
 
     talkDownCount = 0;
 
-    if (widget.reset) {
-      messagePresetController.text = '';
+    if (widget.talkDown) {
+      messagePresetController.text = tIP.getTextMessageTalkDown();
     } else {
-      if (widget.talkDown) {
-        messagePresetController.text = tIP.getTextMessageTalkDown();
-      } else {
-        messagePresetController.text = tIP.getTextMessage();
-      }
+      messagePresetController.text = tIP.getTextMessage();
     }
 
     for (RegisteredFriendsItem sendMessageFriend in sIP.getItem()) {
@@ -64,8 +60,6 @@ class _MessageViewState extends State<MessageView> {
         }
       }
     }
-
-
 
     return SizedBox(
       width: double.infinity,
@@ -89,7 +83,11 @@ class _MessageViewState extends State<MessageView> {
                   border: InputBorder.none
               ),
               onChanged: (value) {
-                tIP.setTextMessage(messagePresetController.text);
+                if (widget.talkDown) {
+                  tIP.setTextMessageTalkDown(messagePresetController.text);
+                } else {
+                  tIP.setTextMessage(messagePresetController.text);
+                }
               },
             ),
           ),

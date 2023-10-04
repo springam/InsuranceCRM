@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:mosaicbluenco/send_message/message_templates/message_theme_list.dart';
 import 'package:mosaicbluenco/user_data/user_data.dart';
@@ -178,7 +177,8 @@ class _SelectMessageState extends State<SelectMessage> {
                                     ),
                                     onTap: () {
                                       setState(() {
-                                        messageClear = true;
+                                        tIP.setTextMessage('');
+                                        tIP.setTextMessageTalkDown('');
                                       });
                                     },
                                   ),
