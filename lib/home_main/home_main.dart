@@ -283,23 +283,22 @@ class _HomeMainState extends State<HomeMain> {
                                 width: 188,
                                 child: Row(
                                   children: [
-                                    Container(
-                                      height: 36,
-                                      width: 36,
-                                      margin: const EdgeInsets.only(left: 20, right: 12),
-                                      decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          image: DecorationImage(
-                                              fit: BoxFit.fill,
-                                              image: NetworkImage(UserData.userImageUrl)
-                                          )
-                                      ),
-                                    ),
+                                    // Container(
+                                    //   height: 36,
+                                    //   width: 36,
+                                    //   margin: const EdgeInsets.only(left: 20, right: 12),
+                                    //   decoration: BoxDecoration(
+                                    //       shape: BoxShape.circle,
+                                    //       image: DecorationImage(
+                                    //           fit: BoxFit.fill,
+                                    //           image: NetworkImage(UserData.userImageUrl)
+                                    //       )
+                                    //   ),
+                                    // ),
                                     SelectableText(UserData.userNickname)
                                   ],
                                 ),
                               ),
-
                             ],
                           ),
                         ),

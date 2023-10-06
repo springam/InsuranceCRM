@@ -19,7 +19,6 @@ class TextMessage extends StatelessWidget {
             // fontFamily: "NotoSansCJKKR",
             fontStyle:  FontStyle.normal,
             fontSize: textSize,
-            height: 1
         ),
         textAlign: TextAlign.center
     );
@@ -42,7 +41,6 @@ class TextMessageNormal extends StatelessWidget {
             // fontFamily: "NotoSansCJKKR",
             fontStyle:  FontStyle.normal,
             fontSize: textSize,
-            height: 1
         ),
         textAlign: TextAlign.center
     );
@@ -65,7 +63,6 @@ class TitleNormal extends StatelessWidget {
             // fontFamily: "NotoSansCJKKR",
             fontStyle:  FontStyle.normal,
             fontSize: textSize,
-            height: 1
         ),
         textAlign: TextAlign.left
     );
@@ -78,6 +75,5 @@ TextStyle buttonTextStyle = const TextStyle(
     // fontFamily: "NotoSansCJKKR"
     fontStyle:  FontStyle.normal,
     fontSize: 12.0,
-    height: 1
 );
 
