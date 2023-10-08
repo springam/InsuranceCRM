@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:mosaicbluenco/kakao_login.dart';
 import 'package:mosaicbluenco/user_data/registered_friends_provider.dart';
+import 'package:mosaicbluenco/user_data/response_friend_provider.dart';
 import 'package:mosaicbluenco/user_data/status_provider.dart';
 import 'package:mosaicbluenco/user_data/message_provider.dart';
 import 'package:mosaicbluenco/user_data/user_provider.dart';
@@ -51,6 +52,8 @@ class MyApp extends StatelessWidget {
             create: (_) => MessageItemProvider()),
         ChangeNotifierProvider(
             create: (_) => TextMessageProvider()),
+        ChangeNotifierProvider(
+            create: (_) => ResponseFriendsItemProvider()),
       ],
       child: MaterialApp(
         title: 'Mosaic Blue&co',

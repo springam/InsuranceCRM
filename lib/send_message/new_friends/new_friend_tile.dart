@@ -5,11 +5,12 @@ import 'package:mosaicbluenco/etc_widget/text_message.dart';
 import 'package:mosaicbluenco/user_data/user_data.dart';
 import 'package:provider/provider.dart';
 import '../../user_data/registered_friends_provider.dart';
+import '../../user_data/response_friend_provider.dart';
 
 class NewFriendTile extends StatefulWidget {
-  const NewFriendTile({required this.friendList, required this.index, required this.registering, required this.updateStateNewFriend, super.key});
+  const NewFriendTile({required this.index, required this.registering, required this.updateStateNewFriend, super.key});
 
-  final List<RegisteredFriendsItem> friendList;
+  // final RegisteredFriendsItem resFriend;
   final int index;
   final bool registering;
   final Function() updateStateNewFriend;
@@ -21,6 +22,7 @@ class NewFriendTile extends StatefulWidget {
 class NewFriendTileState extends State<NewFriendTile> {
 
   late RegisteredFriendsItemProvider fIP;
+  late ResponseFriendsItemProvider resIP;
 
   final ScrollController controller = ScrollController();
   final TextEditingController middleNickController = TextEditingController();
@@ -50,10 +52,6 @@ class NewFriendTileState extends State<NewFriendTile> {
   @override
   void initState() {
     super.initState();
-    nickname = widget.friendList[widget.index].kakaoNickname;
-    middleNickController.text = widget.friendList[widget.index].name;
-    selectedIndex = widget.friendList[widget.index].talkDown;
-    selectedHashTag = widget.friendList[widget.index].tag;
   }
 
   @override
@@ -79,8 +77,7 @@ class NewFriendTileState extends State<NewFriendTile> {
         onSelected: (selected) {
           setState(() {
             selectedIndex = (selected) ? optionIndex : 2;
-            //selectedOption = optionIndex;
-            ResponseFriendItem.responseFriend[widget.index].talkDown = selectedIndex;
+            resIP.modifyTalkDown(selectedIndex, widget.index);
           });
         },
       ),
@@ -103,10 +100,11 @@ class NewFriendTileState extends State<NewFriendTile> {
           setState(() {
             if (selected) {
               selectedHashTag.add(hashTag[optionIndex]);
-              ResponseFriendItem.responseFriend[widget.index].tag = selectedHashTag;
+              resIP.modifyTag(selectedHashTag, widget.index);
+              resIP.modifyTag(selectedHashTag, widget.index);
             } else {
               selectedHashTag.remove(hashTag[optionIndex]);
-              ResponseFriendItem.responseFriend[widget.index].tag = selectedHashTag;
+              resIP.modifyTag(selectedHashTag, widget.index);
             }
           });
         },
@@ -133,12 +131,12 @@ class NewFriendTileState extends State<NewFriendTile> {
   //   });
   // }
 
-  Future<void> notRegisterFriends(int index) async{
+  Future<void> notRegisterFriends() async{
     final docRef = FirebaseFirestore.instance.collection('friends').doc();
     await docRef.set({
       'document_id': docRef.id,
       'etc': '',
-      'kakao_nickname': widget.friendList[index].kakaoNickname,
+      'kakao_nickname': resIP.getItem()[widget.index].kakaoNickname,
       'managed_count': 0,
       'managed_last_date': '',
       'manager_email': UserData.userEmail,
@@ -149,22 +147,27 @@ class NewFriendTileState extends State<NewFriendTile> {
       'talk_down': 2,
       'tier': 'normal'
     });
-    ResponseFriendItem.responseFriend.removeAt(widget.index);
+    resIP.removeItem(resIP.getItem()[widget.index]);
+    // widget.updateStateNewFriend();
   }
 
   @override
   Widget build(BuildContext context) {
 
     fIP = Provider.of<RegisteredFriendsItemProvider>(context);
+    resIP = Provider.of<ResponseFriendsItemProvider>(context, listen: true);
+
+    nickname = resIP.getItem()[widget.index].kakaoNickname?? '';
+    middleNickController.text = resIP.getItem()[widget.index].name?? '';
+    selectedIndex = resIP.getItem()[widget.index].talkDown?? 2;
+    selectedHashTag = resIP.getItem()[widget.index].tag?? '';
 
     if (middleNickController.text.isNotEmpty && selectedIndex != 2 && selectedHashTag.isNotEmpty) {
       warnColor = Colors.transparent;
-      ResponseFriendItem.responseFriend[widget.index].registered = true;
-      print(ResponseFriendItem.responseFriend[widget.index].kakaoNickname);
-      print(ResponseFriendItem.responseFriend[widget.index].registered);
+      resIP.modifyRegistered(true, widget.index);
     } else {
       warnColor = Colors.red;
-      ResponseFriendItem.responseFriend[widget.index].registered = false;
+      resIP.modifyRegistered(false, widget.index);
     }
 
     // if (widget.registering) {
@@ -249,9 +252,9 @@ class NewFriendTileState extends State<NewFriendTile> {
                       ),
                       onChanged: (value) {
                         if (value.length < 11) {
-                          ResponseFriendItem.responseFriend[widget.index].name = value;
+                          resIP.modifyName(value, widget.index);
                         } else {
-                          middleNickController.text = ResponseFriendItem.responseFriend[widget.index].name;
+                          middleNickController.text = resIP.getItem()[widget.index].name;
                         }
                       },
                     ),
@@ -292,8 +295,8 @@ class NewFriendTileState extends State<NewFriendTile> {
                       textAlign: TextAlign.center
                   ),
                   onTap: () async{
-                    await notRegisterFriends(widget.index);
-                    widget.updateStateNewFriend();
+                    await notRegisterFriends();
+                    // widget.updateStateNewFriend();
                   },
                 ),
               )
@@ -303,7 +306,7 @@ class NewFriendTileState extends State<NewFriendTile> {
 
         (enterBox) ? Positioned(
           left: 7,
-          child: TextMessageNormal(widget.friendList[widget.index].kakaoNickname, 12.0),
+          child: TextMessageNormal(resIP.getItem()[widget.index].kakaoNickname, 12.0),
         ) : const SizedBox()
       ],
     );

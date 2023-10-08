@@ -8,6 +8,7 @@ import 'package:mosaicbluenco/user_data/user_data.dart';
 import 'package:provider/provider.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import '../etc_widget/design_widget.dart';
+import '../user_data/response_friend_provider.dart';
 import 'registered_friends/tag_list_chip_add.dart';
 import '../etc_widget/text_message.dart';
 import '../user_data/registered_friends_provider.dart';
@@ -28,13 +29,14 @@ class SelectFriendsState extends State<SelectFriends> {
   late SendMessageFriendsItemProvider sIP;
   late CurrentPageProvider cIP;
   late RegisteredFriendsItemProvider fIP;
+  late ResponseFriendsItemProvider resIP;
 
   final ScrollController controller = ScrollController();
   final ScrollController sendMessageFriendController = ScrollController();
   final TextEditingController searchFriendController = TextEditingController();
 
   // late Friends friends;
-  int channelValue = 0;
+  int channelValue = 3;
   List<String> response = [];
   bool getFriends = false;
   bool gettingFriends = false; //카톡 친구 불러 오는 중
@@ -82,7 +84,11 @@ class SelectFriendsState extends State<SelectFriends> {
       case 2:
         return const Text('카카오톡을 실행해 주세요');
       case 3:
-        return NewFriends(friendList: ResponseFriendItem.responseFriend, updateStateSelect: updateStateSelect);
+        if (resIP.getItem().isEmpty) {
+          return const SizedBox();
+        } else {
+          return NewFriends(updateStateSelect: updateStateSelect);
+        }
       default:
         return const SizedBox();
     }
@@ -109,16 +115,17 @@ class SelectFriendsState extends State<SelectFriends> {
       } else {
         response = data.split(',');
         int count = fIP.getItem().length;
+        List<RegisteredFriendsItem> responseFriend = [];
         for (int i = 0; i < count + 1; i++) {
           if (i < count) {
             if (response.contains(fIP.getItem()[i].kakaoNickname)) { //등록 거부이든 수락이든 어차피 지워야함
               response.remove(fIP.getItem()[i].kakaoNickname);
             }
           } else {
-            ResponseFriendItem.responseFriend = [];
+            responseFriend = [];
 
             for (String name in response) {
-              ResponseFriendItem.responseFriend.add(RegisteredFriendsItem(
+              responseFriend.add(RegisteredFriendsItem(
                   managerEmail: UserData.userEmail,
                   name: '',
                   kakaoNickname: name,
@@ -132,13 +139,18 @@ class SelectFriendsState extends State<SelectFriends> {
                   documentId: '',
                   etc: ''
               ));
+
+              if (name == response.last) {
+                resIP.setItem(responseFriend);
+                setState(() {
+                  gettingFriends = false;
+                  channelValue = 3; //친구 목록 json 반환시
+                });
+              }
             }
           }
         }
-        setState(() {
-          gettingFriends = false;
-          channelValue = 3; //친구 목록 json 반환시
-        });
+
       }
     });
   }
@@ -149,6 +161,7 @@ class SelectFriendsState extends State<SelectFriends> {
     sIP = Provider.of<SendMessageFriendsItemProvider>(context, listen: true);
     cIP = Provider.of<CurrentPageProvider>(context, listen: true);
     fIP = Provider.of<RegisteredFriendsItemProvider>(context, listen: true);
+    resIP = Provider.of<ResponseFriendsItemProvider>(context, listen: true);
 
     return Stack(
       children: [

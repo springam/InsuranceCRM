@@ -5,12 +5,13 @@ import 'package:mosaicbluenco/user_data/user_data.dart';
 import 'package:provider/provider.dart';
 import '../../etc_widget/text_message.dart';
 import '../../user_data/registered_friends_provider.dart';
+import '../../user_data/response_friend_provider.dart';
 import 'new_friend_tile.dart';
 
 class NewFriends extends StatefulWidget {
-  const NewFriends({required this.friendList, required this.updateStateSelect, super.key});
+  const NewFriends({required this.updateStateSelect, super.key});
 
-  final List<RegisteredFriendsItem> friendList;
+  // final List<RegisteredFriendsItem> responseFriend;
   final Function() updateStateSelect;
 
   @override
@@ -20,6 +21,7 @@ class NewFriends extends StatefulWidget {
 class _NewFriendsState extends State<NewFriends> {
 
   late RegisteredFriendsItemProvider fIP;
+  late ResponseFriendsItemProvider resIP;
 
   bool registerFriend = false;
   bool refresh = false;
@@ -29,6 +31,7 @@ class _NewFriendsState extends State<NewFriends> {
 
   int selectedIndex = 0;
   List<String> options = ['존대', '반말'];
+  // List<RegisteredFriendsItem> friendList = [];
 
   void updateStateNewFriend() {
     // setState(() {});
@@ -54,7 +57,7 @@ class _NewFriendsState extends State<NewFriends> {
     List<RegisteredFriendsItem> tempItem = [];
     // int count = ResponseFriendItem.responseFriend.length;
 
-    await Future.forEach(ResponseFriendItem.responseFriend, (item) async {
+    await Future.forEach(resIP.getItem(), (RegisteredFriendsItem item) async {
       if (item.registered) {
         final docRef = FirebaseFirestore.instance.collection('friends').doc();
         await docRef.set({
@@ -76,48 +79,20 @@ class _NewFriendsState extends State<NewFriends> {
       }
     });
 
-    setState(() {
-      registerFriend = false;
-      ResponseFriendItem.responseFriend = tempItem;
-    });
-    widget.updateStateSelect();
-
-    // for (int i = 0; i < count + 1; i++) {
-    //   if (i < count) {
-    //     if (ResponseFriendItem.responseFriend[i].registered) {
-    //       await docRef.set({
-    //         'document_id': docRef.id,
-    //         'etc': '',
-    //         'kakao_nickname': ResponseFriendItem.responseFriend[i].kakaoNickname,
-    //         'managed_count': 0,
-    //         'registered_date': DateFormat("yyyy년 MM월 dd일 hh시 mm분").format(DateTime.now()),
-    //         'managed_last_date': '',
-    //         'manager_email': UserData.userEmail,
-    //         'name': ResponseFriendItem.responseFriend[i].name,
-    //         'registered': true,
-    //         'tag': ResponseFriendItem.responseFriend[i].tag,
-    //         'talk_down': ResponseFriendItem.responseFriend[i].talkDown,
-    //         'tier': 'normal'
-    //       });
-    //     } else {
-    //       tempItem.add(ResponseFriendItem.responseFriend[i]);
-    //     }
-    //   } else {
-    //     setState(() {
-    //       registerFriend = false;
-    //       ResponseFriendItem.responseFriend = tempItem;
-    //     });
-    //     widget.updateStateSelect();
-    //   }
-    // }
-
+    // setState(() {
+    //   registerFriend = false;
+    //   resIP.setItem(tempItem);
+    // });
+    resIP.setItem(tempItem);
+    // widget.updateStateSelect();
   }
 
   @override
   Widget build(BuildContext context) {
 
     fIP = Provider.of<RegisteredFriendsItemProvider>(context, listen: true);
-    int itemCount = widget.friendList.length;
+    resIP = Provider.of<ResponseFriendsItemProvider>(context, listen: true);
+    int itemCount = resIP.getItem().length;
 
     return Column(
       children: [
@@ -166,13 +141,13 @@ class _NewFriendsState extends State<NewFriends> {
               const Divider(height: 1),
 
               (registerFriend) ? const SizedBox() : SizedBox(
-                  height: (itemCount < 10) ? itemCount * 45 : 500,
+                  height: (itemCount < 8) ? itemCount * 45 : 360,
                   child: (itemCount == 0) ? const Center(child: TextMessageNormal('불러온 친구 목록이 없습니다.', 12.0)) :
                   ListView.builder(
                       itemCount: itemCount,
                       controller: controller,
                       itemBuilder: (BuildContext context, int index) {
-                        return NewFriendTile(friendList: widget.friendList, index: index, updateStateNewFriend: updateStateNewFriend, registering: registerFriend);
+                        return NewFriendTile(index: index, updateStateNewFriend: updateStateNewFriend, registering: registerFriend);
                       }
                   )
               ),
@@ -200,9 +175,9 @@ class _NewFriendsState extends State<NewFriends> {
                       ),
                     ),
                     onTap: () async {
-                      setState(() {
-                        registerFriend = true;
-                      });
+                      // setState(() {
+                      //   registerFriend = true;
+                      // });
                       await registerFriends();
                     },
                   ),
