@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:mosaicbluenco/etc_widget/toast_message.dart';
 import 'package:mosaicbluenco/user_data/user_data.dart';
 import 'package:provider/provider.dart';
+import '../../etc_widget/alert_dialog.dart';
 import '../../etc_widget/text_message.dart';
 import '../../user_data/registered_friends_provider.dart';
 import '../../user_data/response_friend_provider.dart';
@@ -23,6 +26,8 @@ class _NewFriendsState extends State<NewFriends> {
   late RegisteredFriendsItemProvider fIP;
   late ResponseFriendsItemProvider resIP;
 
+  late FToast fToast;
+
   bool registerFriend = false;
   bool refresh = false;
 
@@ -41,6 +46,8 @@ class _NewFriendsState extends State<NewFriends> {
   @override
   void initState() {
     super.initState();
+    fToast = FToast();
+    fToast.init(context);
     // SendMessageFriendsItemProvider().addListener(() { });
     // RegisteredFriendsItemProvider().addListener(() { });
   }
@@ -55,7 +62,6 @@ class _NewFriendsState extends State<NewFriends> {
   Future<void> registerFriends() async {
 
     List<RegisteredFriendsItem> tempItem = [];
-    // int count = ResponseFriendItem.responseFriend.length;
 
     await Future.forEach(resIP.getItem(), (RegisteredFriendsItem item) async {
       if (item.registered) {
@@ -83,7 +89,10 @@ class _NewFriendsState extends State<NewFriends> {
     //   registerFriend = false;
     //   resIP.setItem(tempItem);
     // });
+
+    showToast('필드를 채운 친구들의 등록을 완료 했습니다.');
     resIP.setItem(tempItem);
+
     // widget.updateStateSelect();
   }
 
@@ -175,10 +184,30 @@ class _NewFriendsState extends State<NewFriends> {
                       ),
                     ),
                     onTap: () async {
+                      bool nullCheck = true;
+                      for (int i = 0; i < resIP.getItem().length + 1; i++) {
+                        if (i < resIP.getItem().length) {
+                          if (resIP.getItem()[i].registered) {
+                            nullCheck = false;
+                          }
+                        } else {
+                          if (nullCheck) {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return const AlertMessage(title: '빈필드가 존재합니다.',
+                                      alertMessage: '호칭과 문구톤, 태그를 모두 선택해야 등록이 가능합니다.');
+                                }
+                            );
+                          } else {
+                            await registerFriends();
+                          }
+                        }
+                      }
                       // setState(() {
                       //   registerFriend = true;
                       // });
-                      await registerFriends();
+
                     },
                   ),
                 ),

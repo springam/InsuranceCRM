@@ -80,9 +80,17 @@ class SelectFriendsState extends State<SelectFriends> {
       case 0:
         return const SizedBox();
       case 1:
-        return const Text('새로운 버전이 출시 되었습니다.\n업그레이드 후 재 실행해 주시기 바랍니다.');
+        return Container(
+          color: Colors.red,
+          margin: const EdgeInsets.all(10),
+          child: const Text('새로운 버전이 출시 되었습니다.\n업그레이드 후 재 실행해 주시기 바랍니다.'),
+        );
       case 2:
-        return const Text('카카오톡을 실행해 주세요');
+        return Container(
+          color: Colors.red,
+          margin: const EdgeInsets.all(10),
+          child: const Text('카카오톡을 실행해 주세요'),
+        );
       case 3:
         if (resIP.getItem().isEmpty) {
           return const SizedBox();
@@ -110,47 +118,54 @@ class SelectFriendsState extends State<SelectFriends> {
         }
       } else if (data == 'kakaotalk not found') {
         setState(() {
+          gettingFriends = false;
           channelValue = 2; //카카오톡 실행
         });
       } else {
-        response = data.split(',');
-        int count = fIP.getItem().length;
-        List<RegisteredFriendsItem> responseFriend = [];
-        for (int i = 0; i < count + 1; i++) {
-          if (i < count) {
-            if (response.contains(fIP.getItem()[i].kakaoNickname)) { //등록 거부이든 수락이든 어차피 지워야함
-              response.remove(fIP.getItem()[i].kakaoNickname);
-            }
-          } else {
-            responseFriend = [];
+        if (data == '') {
+          setState(() {
+            gettingFriends = false;
+            channelValue = 2; //카카오톡 실행
+          });
+        } else {
+          response = data.split(',');
+          int count = fIP.getItem().length;
+          List<RegisteredFriendsItem> responseFriend = [];
+          for (int i = 0; i < count + 1; i++) {
+            if (i < count) {
+              if (response.contains(fIP.getItem()[i].kakaoNickname)) { //등록 거부이든 수락이든 어차피 지워야함
+                response.remove(fIP.getItem()[i].kakaoNickname);
+              }
+            } else {
+              responseFriend = [];
 
-            for (String name in response) {
-              responseFriend.add(RegisteredFriendsItem(
-                  managerEmail: UserData.userEmail,
-                  name: '',
-                  kakaoNickname: name,
-                  talkDown: 2,
-                  tag: [],
-                  registered: false,
-                  registeredDate: '',
-                  managedLastDate: '',
-                  managedCount: 0,
-                  tier: '',
-                  documentId: '',
-                  etc: ''
-              ));
+              for (String name in response) {
+                responseFriend.add(RegisteredFriendsItem(
+                    managerEmail: UserData.userEmail,
+                    name: '',
+                    kakaoNickname: name,
+                    talkDown: 2,
+                    tag: [],
+                    registered: false,
+                    registeredDate: '',
+                    managedLastDate: '',
+                    managedCount: 0,
+                    tier: '',
+                    documentId: '',
+                    etc: ''
+                ));
 
-              if (name == response.last) {
-                resIP.setItem(responseFriend);
-                setState(() {
-                  gettingFriends = false;
-                  channelValue = 3; //친구 목록 json 반환시
-                });
+                if (name == response.last) {
+                  resIP.setItem(responseFriend);
+                  setState(() {
+                    gettingFriends = false;
+                    channelValue = 3; //친구 목록 json 반환시
+                  });
+                }
               }
             }
           }
         }
-
       }
     });
   }

@@ -137,7 +137,7 @@ class RegisteredFriendsState extends State<RegisteredFriends> {
               const Divider(height: 1,),
 
               SizedBox(
-                  height: 357,
+                  height: 360,
                   child: (registeredCount == 0) ? Container(
                     margin: const EdgeInsets.only(top: 111),
                     child: const TextMessageNormal(
