@@ -311,6 +311,9 @@ class SelectFriendsState extends State<SelectFriends> {
                                         hintText: '카톡대화명 검색',
                                         border: InputBorder.none
                                     ),
+                                    onChanged: (value) {
+
+                                    },
                                   ),
                                 )
                               ],

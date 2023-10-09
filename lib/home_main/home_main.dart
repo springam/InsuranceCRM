@@ -295,6 +295,7 @@ class _HomeMainState extends State<HomeMain> {
                                     //       )
                                     //   ),
                                     // ),
+                                    const SizedBox(width: 36),
                                     SelectableText(UserData.userNickname)
                                   ],
                                 ),

@@ -398,8 +398,9 @@ class _SelectMessageState extends State<SelectMessage> {
                             ),
                           ),
                           onTap: () {
+                            sIP.initItem();
+                            cIP.setCurrentSubPage(0);
                             // sIP.initItem();
-                            convertData();
                             // _channel.sink.add('getFriend');
                           },
                         ),
@@ -424,8 +425,7 @@ class _SelectMessageState extends State<SelectMessage> {
                             ),
                           ),
                           onTap: () {
-                            sIP.initItem();
-                            cIP.setCurrentSubPage(0);
+                            convertData();
                           },
                         ),
                       ),
