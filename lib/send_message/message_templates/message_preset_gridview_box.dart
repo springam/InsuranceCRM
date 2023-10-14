@@ -7,7 +7,6 @@ class GridViewBox extends StatefulWidget {
   const GridViewBox({required this.presetMessage,  super.key});
 
   final PresetMessageItem presetMessage;
-  //['월초', '생일', '안부', '결혼', '계절', '연휴', '맨 처음', '계약후', '보상후', '내 메시지', '다른사람 메시지']
 
   @override
   State<GridViewBox> createState() => _GridViewBoxState();

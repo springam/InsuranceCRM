@@ -63,12 +63,11 @@ class _MessageThemeListChipState extends State<MessageThemeListChip> {
             ),
             child: Center(
               child: Text(
-                  (widget.themeIndex < ThemeList.themeList.length) ?
-                  '#${ThemeList.themeList[widget.themeIndex]}' : '더보기',
+                  ThemeList.themeList[widget.themeIndex],
                   style: const TextStyle(
                       color:  Color(0xff000000),
                       fontWeight: FontWeight.w400,
-                      fontFamily: "NotoSansCJKKR",
+                      // fontFamily: "NotoSansCJKKR",
                       fontStyle:  FontStyle.normal,
                       fontSize: 14.0
                   )

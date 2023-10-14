@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../etc_widget/text_message.dart';
 import '../../user_data/message_provider.dart';
 import '../../user_data/registered_friends_provider.dart';
+import '../../user_data/status_provider.dart';
 
 class MessageView extends StatefulWidget {
   const MessageView({required this.talkDown, required this.reset, super.key});
@@ -19,6 +20,7 @@ class _MessageViewState extends State<MessageView> {
 
   late SendMessageFriendsItemProvider sIP;
   late TextMessageProvider tIP;
+  late CurrentPageProvider cIP;
 
   final TextEditingController messagePresetController = TextEditingController();
 
@@ -36,6 +38,7 @@ class _MessageViewState extends State<MessageView> {
 
     sIP = Provider.of<SendMessageFriendsItemProvider>(context, listen: true);
     tIP = Provider.of<TextMessageProvider>(context, listen: true);
+    cIP = Provider.of<CurrentPageProvider>(context, listen: true);
 
     talkDownCount = 0;
 
@@ -85,8 +88,14 @@ class _MessageViewState extends State<MessageView> {
               onChanged: (value) {
                 if (widget.talkDown) {
                   tIP.setTextMessageTalkDown(messagePresetController.text);
+                  if (cIP.getTalkDown() == 0) {
+                    cIP.setTalkDown(1);
+                  }
                 } else {
                   tIP.setTextMessage(messagePresetController.text);
+                  if (cIP.getTalkDown() == 1) {
+                    cIP.setTalkDown(0);
+                  }
                 }
               },
             ),

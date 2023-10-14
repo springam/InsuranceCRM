@@ -5,6 +5,7 @@ class CurrentPageProvider with ChangeNotifier {
   int currentMainPage = 1;
   int currentSubPage = 0;
   int selectedThemeIndex = 20;
+  int talkDown = 0;
 
   // mainPage
   // 0: 메인
@@ -29,6 +30,10 @@ class CurrentPageProvider with ChangeNotifier {
     return selectedThemeIndex;
   }
 
+  getTalkDown() {
+    return talkDown;
+  }
+
   setCurrentMainPage(int mainPageIndex) {
     currentMainPage = mainPageIndex;
     notifyListeners();
@@ -41,6 +46,11 @@ class CurrentPageProvider with ChangeNotifier {
 
   setSelectedThemeIndex(int themeIndex) {
     selectedThemeIndex = themeIndex;
+    notifyListeners();
+  }
+
+  setTalkDown(int talkDownIndex) {
+    talkDown = talkDownIndex;
     notifyListeners();
   }
 

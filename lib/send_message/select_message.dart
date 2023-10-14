@@ -30,10 +30,12 @@ class _SelectMessageState extends State<SelectMessage> {
   late CurrentPageProvider cIP;
 
   double listHeight = 0.0;
-  String talkDownFalseName = '';
-  String talkDownTrueName = '';
+  String selectedMessage = '';
   int talkDownFalseCount = 0;
   int talkDownTrueCount = 0;
+  int selectedTalkDownIndex = 0;
+
+  List<String> options = ['존대', '반말'];
 
   bool messageClear = false;
 
@@ -52,7 +54,7 @@ class _SelectMessageState extends State<SelectMessage> {
 
   List<Widget> themeList() {
     return List<Widget>.generate(
-        ThemeList.themeList.length + 1, (themeIndex) => MessageThemeListChip(themeIndex: themeIndex,)).toList();
+        ThemeList.themeList.length, (themeIndex) => MessageThemeListChip(themeIndex: themeIndex,)).toList();
   }
 
   void convertData() async {
@@ -68,6 +70,36 @@ class _SelectMessageState extends State<SelectMessage> {
     _channel.sink.add(result);
   }
 
+  List<Widget> selectChip() {
+    return List<Widget>.generate(2, (optionIndex) => SizedBox(
+      height: 28,
+      child: FilterChip(
+        // padding: const EdgeInsets.all(5),
+        selectedColor: const Color(0xffd9d9d9),
+        visualDensity: const VisualDensity(vertical: -4, horizontal: -4),
+        selected: selectedTalkDownIndex == optionIndex,
+        showCheckmark: false,
+        label: Text(options[optionIndex], textAlign: TextAlign.center,),
+        shape: ContinuousRectangleBorder(
+          side: const BorderSide(color: Colors.black, width: 3.0), //이거 왜 선이 안 보이냐
+          borderRadius: BorderRadius.circular(0.0),
+        ),
+        labelStyle: buttonTextStyle,
+        avatar: null,
+        onSelected: (selected) {
+          setState(() {
+            if (selected) {
+              cIP.setTalkDown(optionIndex);
+            } else {
+              cIP.setTalkDown(0);
+            }
+            // selectedTalkDownIndex = (selected) ? optionIndex : 0;
+          });
+        },
+      ),
+    )).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -80,6 +112,20 @@ class _SelectMessageState extends State<SelectMessage> {
     } else {
       listHeight = 100; //140
     }
+
+    if (cIP.getTalkDown() == 0) {
+      selectedTalkDownIndex = 0;
+      selectedMessage = tIP.textMessage;
+    } else {
+      selectedTalkDownIndex = 1;
+      selectedMessage = tIP.textMessageTalkDown;
+    }
+
+    // if (selectedTalkDownIndex == 0) {
+    //   selectedMessage = tIP.textMessage;
+    // } else {
+    //   selectedMessage = tIP.textMessageTalkDown;
+    // }
 
     // if (MediaQuery.of(context).size.height >720) {
     //   screenHeight = MediaQuery.of(context).size.height * 2;
@@ -295,89 +341,102 @@ class _SelectMessageState extends State<SelectMessage> {
                   child: Column(
                     children: [
                       Container(
-                        alignment: Alignment.centerLeft,
-                        child: const TextMessageNormal('2. 카톡 보낼 사람을 확인하세요.', 16.0),
+                        alignment: Alignment.center,
+                        child: Wrap(
+                          spacing: 0,
+                          children: selectChip(),
+                        ),
                       ),
 
+                     const SizedBox(height: 10),
+
                       Container(
-                        margin: const EdgeInsets.only(top: 10, bottom: 7),
-                        alignment: Alignment.centerRight,
-                        child: Material(
-                          color: Colors.white,
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(10),
-                            splashColor: const Color(0xffffdf8e),
-                            hoverColor: Colors.grey,
-                            child: Ink(
-                              width: 87,
-                              height: 25,
+                        height: 570,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.all(Radius.circular(45)),
+                            border: Border.all(
+                                color: const Color(0xffd0d6df),
+                                width: 2
+                            ),
+                            color: const Color(0xffffffff)
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            const SizedBox(height: 40),
+                            Row(
+                              children: [
+                                Expanded(
+                                  flex: 1,
+                                  child: Container(
+                                    width: 20,
+                                    height: 20,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                          color: const Color(0xffd0d6df),
+                                          width: 2
+                                      ),
+                                    ),
+                                  ),
+                                ),
+
+                                Expanded(
+                                  flex: 1,
+                                  child: Container(
+                                    width: 60,
+                                    height: 10,
+                                    decoration: BoxDecoration(
+                                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                                      border: Border.all(
+                                          color: const Color(0xffd0d6df),
+                                          width: 2
+                                      ),
+                                    ),
+                                  ),
+                                ),
+
+                                const Expanded(
+                                  flex: 1,
+                                  child: SizedBox(),
+                                ),
+                              ],
+                            ),
+
+                            const SizedBox(height: 20),
+
+                            Container(
+                              height: 400,
+                              width: double.infinity,
+                              margin: const EdgeInsets.only(left: 15, right: 15),
+                              padding: const EdgeInsets.all(5),
                               decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.all(Radius.circular(10)),
-                                  border: Border.all(color: const Color(0xff525151), width: 1)
-                              ),
-                              child: Center(
-                                child: Text(
-                                  '명단 리셋',
-                                  style: buttonTextStyle,
+                                border: Border.all(
+                                    color: const Color(0xffd0d6df),
+                                    width: 2
                                 ),
                               ),
-                            ),
-                            onTap: () {},
-                          ),
-                        ),
-                      ),
-
-                      Container(
-                        height: 30,
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                                color: const Color(0xff000000),
-                                width: 1
-                            ),
-                            color: const Color(0xfff0f0f0)
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              margin: const EdgeInsets.only(left: 45),
-                              child: const TextMessageNormal('카톡대화명', 12.0),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(right: 54),
-                              child: const TextMessageNormal('호칭', 12.0),
-                            ),
+                              child: SingleChildScrollView(
+                                child: Text(selectedMessage),
+                              ),
+                            )
                           ],
                         ),
                       ),
 
-                      Container(
-                        height: 388,
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(10),
-                        decoration: const BoxDecoration(
-                          border: Border(
-                            left: BorderSide(color: Color(0xff000000), width: 1.0),
-                            right: BorderSide(color: Color(0xff000000), width: 1.0),
-                          ),
-                        ),
-                        child: Text(tIP.textMessage),
-                      ),
-
-                      Container(
-                        height: 34,
-                        alignment: Alignment.centerRight,
-                        padding: const EdgeInsets.only(right: 12),
-                        decoration: const BoxDecoration(
-                          color: Color(0xfff0f0f0),
-                          border: Border(
-                            left: BorderSide(color: Color(0xff000000), width: 1.0),
-                            right: BorderSide(color: Color(0xff000000), width: 1.0),
-                            bottom: BorderSide(color: Color(0xff000000), width: 1.0),
-                          ),
-                        ),
-                        child: TextMessageNormal('카톡 보내는 사람: ${sIP.getItem().length.toString()}명', 12.0),
-                      ),
+                      // Container(
+                      //   height: 388,
+                      //   width: double.infinity,
+                      //   padding: const EdgeInsets.all(10),
+                      //   decoration: const BoxDecoration(
+                      //     border: Border(
+                      //       left: BorderSide(color: Color(0xff000000), width: 1.0),
+                      //       right: BorderSide(color: Color(0xff000000), width: 1.0),
+                      //     ),
+                      //   ),
+                      //   child: Text(tIP.textMessage),
+                      // ),
 
                       const SizedBox(height: 13),
 
