@@ -118,6 +118,7 @@ class _NewFriendsState extends State<NewFriends> {
           ),
           child: Container(
             margin: const EdgeInsets.only(left: 18),
+            color: const Color(0xffc9ced9),
             child: const TextMessageNormal('신규 등록 명단', 12.0),
           ),
         ),

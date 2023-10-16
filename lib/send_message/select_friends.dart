@@ -291,42 +291,6 @@ class SelectFriendsState extends State<SelectFriends> {
                                       ),
                                     ),
                                   );
-
-                                  // return AlertDialog(
-                                  //   title: const TextMessage(
-                                  //       '카톡에서 주소를 가져오고 있습니다.',
-                                  //       Color(0xff000000),
-                                  //       FontWeight.w700,
-                                  //       20.0
-                                  //   ),
-                                  //   content: const TextMessageNormal('시간이 걸릴 수 있습니다. 조금만 기다려 주세요\n'
-                                  //       '아래의 \"그만하기\" 버튼을 누르면 불러오기가 중단되지만,\n'
-                                  //       '다시 "가져오기"를 하면 중단된 이후부터 다시 불러오기를\n'
-                                  //       '진행합니다.',
-                                  //       14.0
-                                  //   ),
-                                  //   actions: [
-                                  //     Center(
-                                  //       child: ElevatedButton(
-                                  //         style: ElevatedButton.styleFrom(
-                                  //             backgroundColor: const Color(0xfff0f0f0),
-                                  //             foregroundColor: const Color(0xff000000), //버튼 글씨 색
-                                  //             textStyle: const TextStyle(
-                                  //                 fontWeight: FontWeight.w700,
-                                  //                 fontSize: 14.0
-                                  //             ),
-                                  //             padding: const EdgeInsets.only(left: 90, top: 13, right: 90, bottom: 13)
-                                  //         ),
-                                  //         child: const Text('그만하기'),
-                                  //         onPressed: () {
-                                  //           gettingFriends = false; //추가함
-                                  //           channel.sink.add('stop');
-                                  //           Navigator.of(context).pop();
-                                  //         },
-                                  //       ),
-                                  //     )
-                                  //   ],
-                                  // );
                                 }
                             );
                           },
