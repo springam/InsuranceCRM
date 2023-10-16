@@ -196,7 +196,7 @@ class _NewFriendsState extends State<NewFriends> {
                                 context: context,
                                 builder: (BuildContext context) {
                                   return const AlertMessage(title: '빈필드가 존재합니다.',
-                                      alertMessage: '호칭과 문구톤, 태그를 모두 선택해야 등록이 가능합니다.');
+                                      message: '호칭과 문구톤, 태그를 모두 선택해야 등록이 가능합니다.');
                                 }
                             );
                           } else {

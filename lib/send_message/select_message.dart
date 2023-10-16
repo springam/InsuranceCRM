@@ -410,7 +410,7 @@ class _SelectMessageState extends State<SelectMessage> {
                               height: 400,
                               width: double.infinity,
                               margin: const EdgeInsets.only(left: 15, right: 15),
-                              padding: const EdgeInsets.all(5),
+                              padding: const EdgeInsets.all(10),
                               decoration: BoxDecoration(
                                 border: Border.all(
                                     color: const Color(0xffd0d6df),
@@ -418,25 +418,26 @@ class _SelectMessageState extends State<SelectMessage> {
                                 ),
                               ),
                               child: SingleChildScrollView(
-                                child: Text(selectedMessage),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+                                      alignment: Alignment.centerLeft,
+                                      child: SelectableText(UserData.userNickname),
+                                    ),
+                                    Container(
+                                      padding: const EdgeInsets.all(10),
+                                      alignment: Alignment.centerLeft,
+                                      color: (selectedMessage.isEmpty) ? Colors.transparent : const Color(0xffffdf8e),
+                                      child: Text(selectedMessage),
+                                    )
+                                  ],
+                                ),
                               ),
                             )
                           ],
                         ),
                       ),
-
-                      // Container(
-                      //   height: 388,
-                      //   width: double.infinity,
-                      //   padding: const EdgeInsets.all(10),
-                      //   decoration: const BoxDecoration(
-                      //     border: Border(
-                      //       left: BorderSide(color: Color(0xff000000), width: 1.0),
-                      //       right: BorderSide(color: Color(0xff000000), width: 1.0),
-                      //     ),
-                      //   ),
-                      //   child: Text(tIP.textMessage),
-                      // ),
 
                       const SizedBox(height: 13),
 
@@ -477,7 +478,7 @@ class _SelectMessageState extends State<SelectMessage> {
                             height: 38,
                             decoration: const BoxDecoration(
                               borderRadius: BorderRadius.all(Radius.circular(10)),
-                              color: Color(0xfff0f0f0),
+                              color: Color(0xffffdf8e),
                             ),
                             child: Center(
                               child: Text('카톡 발송 [${sIP.getItem().length}명]', style: buttonTextStyle,),
