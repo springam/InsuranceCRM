@@ -10,7 +10,6 @@ import '../../user_data/response_friend_provider.dart';
 class NewFriendTile extends StatefulWidget {
   const NewFriendTile({required this.index, required this.registering, required this.updateStateNewFriend, super.key});
 
-  // final RegisteredFriendsItem resFriend;
   final int index;
   final bool registering;
   final Function() updateStateNewFriend;
@@ -21,7 +20,7 @@ class NewFriendTile extends StatefulWidget {
 
 class NewFriendTileState extends State<NewFriendTile> {
 
-  late RegisteredFriendsItemProvider fIP;
+  // late RegisteredFriendsItemProvider regIP;
   late ResponseFriendsItemProvider resIP;
 
   final ScrollController controller = ScrollController();
@@ -44,7 +43,7 @@ class NewFriendTileState extends State<NewFriendTile> {
 
   Color warnColor = Colors.transparent;
 
-  String testMsg = '등록취소';
+  String testMsg = '등록안함';
   // int selectedOption = 5;
   List<String> hashTag =  TagList.tagList;
   List<dynamic> selectedHashTag = [];
@@ -133,8 +132,8 @@ class NewFriendTileState extends State<NewFriendTile> {
   // }
 
   Future<void> notRegisterFriends() async{
-    final docRef = FirebaseFirestore.instance.collection('friends').doc();
-    await docRef.set({
+    final docRef = FirebaseFirestore.instance.collection('friends').doc(resIP.getItem()[widget.index].documentId);
+    await docRef.update({
       'document_id': docRef.id,
       'etc': '',
       'kakao_nickname': resIP.getItem()[widget.index].kakaoNickname,
@@ -142,11 +141,11 @@ class NewFriendTileState extends State<NewFriendTile> {
       'managed_last_date': '',
       'manager_email': UserData.userEmail,
       'name': '',
-      'registered': false,
+      'registered': 0,
       'registered_date': DateFormat("yyyy년 MM월 dd일 hh시 mm분").format(now),
       'tag': [],
       'talk_down': 2,
-      'tier': 'normal'
+      'tier': 0
     });
     resIP.removeItem(resIP.getItem()[widget.index]);
     // widget.updateStateNewFriend();
@@ -155,20 +154,20 @@ class NewFriendTileState extends State<NewFriendTile> {
   @override
   Widget build(BuildContext context) {
 
-    fIP = Provider.of<RegisteredFriendsItemProvider>(context);
+    // regIP = Provider.of<RegisteredFriendsItemProvider>(context);
     resIP = Provider.of<ResponseFriendsItemProvider>(context, listen: true);
 
     nickname = resIP.getItem()[widget.index].kakaoNickname?? '';
     middleNickController.text = resIP.getItem()[widget.index].name?? '';
     selectedIndex = resIP.getItem()[widget.index].talkDown?? 2;
-    selectedHashTag = resIP.getItem()[widget.index].tag?? '';
+    selectedHashTag = resIP.getItem()[widget.index].tag?? [];
 
     if (middleNickController.text.isNotEmpty && selectedIndex != 2 && selectedHashTag.isNotEmpty) {
       warnColor = Colors.transparent;
-      resIP.modifyRegistered(true, widget.index);
+      resIP.modifyRegistered(1, widget.index);
     } else {
       warnColor = Colors.red;
-      resIP.modifyRegistered(false, widget.index);
+      resIP.modifyRegistered(0, widget.index);
     }
 
     // if (widget.registering) {
@@ -289,7 +288,6 @@ class NewFriendTileState extends State<NewFriendTile> {
                       style: const TextStyle(
                           color:  Color(0xff000000),
                           fontWeight: FontWeight.w400,
-                          fontFamily: "NotoSansCJKKR",
                           fontStyle:  FontStyle.normal,
                           fontSize: 12.0
                       ),

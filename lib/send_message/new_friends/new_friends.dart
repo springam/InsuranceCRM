@@ -23,7 +23,7 @@ class NewFriends extends StatefulWidget {
 
 class _NewFriendsState extends State<NewFriends> {
 
-  late RegisteredFriendsItemProvider fIP;
+  late RegisteredFriendsItemProvider regIP;
   late ResponseFriendsItemProvider resIP;
 
   late FToast fToast;
@@ -64,9 +64,9 @@ class _NewFriendsState extends State<NewFriends> {
     List<RegisteredFriendsItem> tempItem = [];
 
     await Future.forEach(resIP.getItem(), (RegisteredFriendsItem item) async {
-      if (item.registered) {
-        final docRef = FirebaseFirestore.instance.collection('friends').doc();
-        await docRef.set({
+      if (item.registered == 1) {
+        final docRef = FirebaseFirestore.instance.collection('friends').doc(item.documentId);
+        await docRef.update({
           'document_id': docRef.id,
           'etc': '',
           'kakao_nickname': item.kakaoNickname,
@@ -75,20 +75,20 @@ class _NewFriendsState extends State<NewFriends> {
           'managed_last_date': '',
           'manager_email': UserData.userEmail,
           'name': item.name,
-          'registered': true,
+          'registered': 1,
           'tag': item.tag,
           'talk_down': item.talkDown,
-          'tier': 'normal'
+          'tier': 0
         });
       } else {
         tempItem.add(item);
       }
     });
 
-    // setState(() {
-    //   registerFriend = false;
-    //   resIP.setItem(tempItem);
-    // });
+    setState(() {
+      registerFriend = false;
+      resIP.setItem(tempItem);
+    });
 
     showToast('필드를 채운 친구들의 등록을 완료 했습니다.');
     resIP.setItem(tempItem);
@@ -99,7 +99,7 @@ class _NewFriendsState extends State<NewFriends> {
   @override
   Widget build(BuildContext context) {
 
-    fIP = Provider.of<RegisteredFriendsItemProvider>(context, listen: true);
+    regIP = Provider.of<RegisteredFriendsItemProvider>(context, listen: true);
     resIP = Provider.of<ResponseFriendsItemProvider>(context, listen: true);
     int itemCount = resIP.getItem().length;
 
@@ -188,7 +188,7 @@ class _NewFriendsState extends State<NewFriends> {
                       bool nullCheck = true;
                       for (int i = 0; i < resIP.getItem().length + 1; i++) {
                         if (i < resIP.getItem().length) {
-                          if (resIP.getItem()[i].registered) {
+                          if (resIP.getItem()[i].registered == 1) {
                             nullCheck = false;
                           }
                         } else {

@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:mosaicbluenco/send_message/new_friends/new_friends.dart';
 import 'package:mosaicbluenco/send_message/registered_friends/registered_friends.dart';
 import 'package:mosaicbluenco/send_message/send_message_friends/send_message_friend_tile.dart';
@@ -31,8 +33,10 @@ class SelectFriendsState extends State<SelectFriends> {
 
   late SendMessageFriendsItemProvider sIP;
   late CurrentPageProvider cIP;
-  late RegisteredFriendsItemProvider fIP;
+  late FriendsItemProvider fIP;
+  late RegisteredFriendsItemProvider regIP;
   late ResponseFriendsItemProvider resIP;
+  late NotSetItemProvider nsIP;
 
   final ScrollController controller = ScrollController();
   final ScrollController sendMessageFriendController = ScrollController();
@@ -47,6 +51,7 @@ class SelectFriendsState extends State<SelectFriends> {
   bool testBool = false;
   double middleFrameWidth = 728;
   double endFrameWidth = 256;
+  List<RegisteredFriendsItem> friendsMap = [];
 
   @override
   void initState() {
@@ -87,6 +92,24 @@ class SelectFriendsState extends State<SelectFriends> {
   //     return NewFriends(updateStateSelect: updateStateSelect);
   //   }
   // }
+
+  Future<void> addFriends(String name) async{
+    final docRef = FirebaseFirestore.instance.collection('friends').doc();
+    await docRef.set({
+      'document_id': docRef.id,
+      'etc': '',
+      'kakao_nickname': name,
+      'managed_count': 0,
+      'managed_last_date': '',
+      'manager_email': UserData.userEmail,
+      'name': '',
+      'registered': 2,
+      'registered_date': DateFormat("yyyy년 MM월 dd일 hh시 mm분").format(DateTime.now()),
+      'tag': [],
+      'talk_down': 2,
+      'tier': 0
+    });
+  }
 
   void streamListen() {
 
@@ -134,23 +157,25 @@ class SelectFriendsState extends State<SelectFriends> {
               responseFriend = [];
 
               for (String name in response) {
+                addFriends(name); //동기화 필요한지 확인 해야 함
+
                 responseFriend.add(RegisteredFriendsItem(
                     managerEmail: UserData.userEmail,
                     name: '',
                     kakaoNickname: name,
                     talkDown: 2,
                     tag: [],
-                    registered: false,
+                    registered: 0,
                     registeredDate: '',
                     managedLastDate: '',
                     managedCount: 0,
-                    tier: '',
+                    tier: 0,
                     documentId: '',
                     etc: ''
                 ));
 
                 if (name == response.last) {
-                  resIP.setItem(responseFriend);
+                  resIP.addItems(responseFriend);
                   setState(() {
                     gettingFriends = false;
                     channelValue = true; //친구 목록 json 반환시
@@ -169,8 +194,33 @@ class SelectFriendsState extends State<SelectFriends> {
 
     sIP = Provider.of<SendMessageFriendsItemProvider>(context, listen: true);
     cIP = Provider.of<CurrentPageProvider>(context, listen: true);
-    fIP = Provider.of<RegisteredFriendsItemProvider>(context, listen: true);
+    fIP = Provider.of<FriendsItemProvider>(context, listen: true);
+    regIP = Provider.of<RegisteredFriendsItemProvider>(context, listen: true);
     resIP = Provider.of<ResponseFriendsItemProvider>(context, listen: true);
+    nsIP = Provider.of<NotSetItemProvider>(context, listen: true);
+
+    friendsMap = [];
+
+    for (RegisteredFriendsItem item in fIP.getItem()) {
+      bool exit = false;
+      if (item.registered == 2) {
+        for (int i = 0; i < resIP.getItem().length + 1; i++) {
+          if (i < resIP.getItem().length) {
+            if (resIP.getItem()[i].kakaoNickname == item.kakaoNickname) {
+              exit = true;
+            }
+          } else {
+            if (!exit) {
+              friendsMap.add(item);
+            }
+          }
+        }
+      }
+
+      if (item == fIP.getItem().last && friendsMap.isNotEmpty) {
+        resIP.addItems(friendsMap);
+      }
+    }
 
     return Container(
       height: MediaQuery.of(context).size.height * 1.3,
@@ -369,7 +419,9 @@ class SelectFriendsState extends State<SelectFriends> {
 
                   const SizedBox(height: 13),
 
-                  (channelValue) ? (resIP.getItem().isEmpty) ? const SizedBox() : NewFriends(updateStateSelect: updateStateSelect) : const SizedBox(),
+                  (resIP.getItem().isEmpty) ? const SizedBox() : NewFriends(updateStateSelect: updateStateSelect),
+
+                  // (channelValue) ? (resIP.getItem().isEmpty) ? const SizedBox() : NewFriends(updateStateSelect: updateStateSelect) : const SizedBox(),
 
                   RegisteredFriends(updateStateSelect: updateStateSelect, key: registeredFriendsStateKey),  //등록친구 widget
 

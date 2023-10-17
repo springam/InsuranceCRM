@@ -19,7 +19,7 @@ class RegisteredFriends extends StatefulWidget {
 class RegisteredFriendsState extends State<RegisteredFriends> {
 
   // late Friends friends;
-  late RegisteredFriendsItemProvider fIP;
+  late RegisteredFriendsItemProvider regIP;
 
   // bool registeredFriendBool = false;
   int registeredCount = 0;
@@ -34,21 +34,23 @@ class RegisteredFriendsState extends State<RegisteredFriends> {
   @override
   Widget build(BuildContext context) {
 
-    fIP = Provider.of<RegisteredFriendsItemProvider>(context);
+    regIP = Provider.of<RegisteredFriendsItemProvider>(context);
 
-    if (fIP.getItem().length != 0) {
-      int itemCount = 0;
-      int boolCount = 0;
-      for (RegisteredFriendsItem registeredFriend in fIP.getItem()) {
-        itemCount++;
-        if (registeredFriend.registered) {
-          boolCount++;
-          if (itemCount == fIP.getItem().length) {
-            registeredCount = boolCount;
-          }
-        }
-      }
-    }
+    registeredCount = regIP.getItem().length;
+
+    // if (regIP.getItem().length != 0) {
+    //   int itemCount = 0;
+    //   int boolCount = 0;
+    //   for (RegisteredFriendsItem registeredFriend in regIP.getItem()) {
+    //     itemCount++;
+    //     if (registeredFriend.registered == 1) {
+    //       boolCount++;
+    //       if (itemCount == regIP.getItem().length) {
+    //         registeredCount = boolCount;
+    //       }
+    //     }
+    //   }
+    // }
 
     return Column(
       children: [
@@ -130,6 +132,7 @@ class RegisteredFriendsState extends State<RegisteredFriends> {
                     Expanded(flex: 1, child: TextMessageNormal('호칭', 12.0)),
                     Expanded(flex: 1, child: TextMessageNormal('문구톤 ', 12.0)),
                     Expanded(flex: 2, child: TextMessageNormal('태그', 12.0)),
+                    Expanded(flex: 1, child: SizedBox()),
                   ],
                 ),
               ),
@@ -145,11 +148,11 @@ class RegisteredFriendsState extends State<RegisteredFriends> {
                         14.0
                     ),
                   ) : ListView.builder(
-                      itemCount: fIP.getItem().length + 1,
+                      itemCount: regIP.getItem().length + 1,
                       controller: controller,
                       itemBuilder: (BuildContext context, int index) {
                         //등록된 친구 목록 provider 에서 등록된 목록만 보여줌
-                        if (index == fIP.getItem().length) {
+                        if (index == regIP.getItem().length) {
                           if (registering) {
                             Future.delayed(const Duration(milliseconds: 500), () {
                               setState(() {
@@ -160,13 +163,14 @@ class RegisteredFriendsState extends State<RegisteredFriends> {
                           }
                         } else {
                           if (modifyRegisteredFriend) {
-                            return ModifyFriendTile(registeredFriend: fIP.getItem()[index], registering: registering);
+                            return ModifyFriendTile(registeredFriend: regIP.getItem()[index], registering: registering);
                           } else {
-                            if (fIP.getItem()[index].registered) {
-                              return RegisteredFriendTile(fIP.getItem()[index]);
-                            } else {
-                              return const SizedBox();
-                            }
+                            return RegisteredFriendTile(regIP.getItem()[index]);
+                            // if (regIP.getItem()[index].registered) {
+                            //   return RegisteredFriendTile(regIP.getItem()[index]);
+                            // } else {
+                            //   return const SizedBox();
+                            // }
                           }
                         }
 

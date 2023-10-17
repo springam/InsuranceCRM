@@ -15,6 +15,16 @@ class ResponseFriendsItemProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  // addItem(RegisteredFriendsItem responseFriend) {
+  //   responseFriendsMap.add(responseFriend);
+  //   notifyListeners();
+  // }
+
+  addItems(List<RegisteredFriendsItem> responseFriends) {
+    responseFriendsMap.addAll(responseFriends);
+    notifyListeners();
+  }
+
   removeItem(responseFriend) {
     responseFriendsMap.remove(responseFriend);
     notifyListeners();
@@ -24,7 +34,7 @@ class ResponseFriendsItemProvider with ChangeNotifier {
     responseFriendsMap[index].name = name;
   }
 
-  modifyRegistered(bool registered, int index) {
+  modifyRegistered(int registered, int index) {
     responseFriendsMap[index].registered = registered;
   }
 

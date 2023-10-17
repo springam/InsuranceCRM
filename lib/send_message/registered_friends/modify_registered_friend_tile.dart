@@ -41,7 +41,7 @@ class ModifyFriendTileState extends State<ModifyFriendTile> {
 
   Color warnColor = Colors.transparent;
 
-  String testMsg = '';
+  String testMsg = '등록안함';
   int selectedOption = 5;
   List<dynamic> hashTag =  TagList.tagList;
   List<dynamic> selectedHashTag = [];
@@ -100,10 +100,8 @@ class ModifyFriendTileState extends State<ModifyFriendTile> {
           setState(() {
             if (selected) {
               selectedHashTag.add(hashTag[optionIndex]);
-              testMsg = 'add $optionIndex';
             } else {
               selectedHashTag.remove(hashTag[optionIndex]);
-              testMsg = 'remove $optionIndex';
             }
             debugPrint(widget.registeredFriend.tag.toString());
           });
@@ -147,7 +145,7 @@ class ModifyFriendTileState extends State<ModifyFriendTile> {
       'name': middleNickController.text,
       'tag': selectedHashTag,
       'talk_down': selectedIndex,
-      'tier': 'normal'
+      // 'tier': 0
     });
 
     debugPrint('update ${middleNickController.text}');
@@ -248,12 +246,8 @@ class ModifyFriendTileState extends State<ModifyFriendTile> {
                           border: InputBorder.none
                       ),
                       onChanged: (value) {
-                        if (value.length < 11) {
-                          setState(() {
-                            testMsg = value;
-                          });
-                        } else {
-                          middleNickController.text = testMsg;
+                        if (value.length > 11) {
+                          middleNickController.text = value.substring(0, 10);
                         }
                       },
                     ),
@@ -287,7 +281,6 @@ class ModifyFriendTileState extends State<ModifyFriendTile> {
                       style: const TextStyle(
                           color:  Color(0xff000000),
                           fontWeight: FontWeight.w400,
-                          fontFamily: "NotoSansCJKKR",
                           fontStyle:  FontStyle.normal,
                           fontSize: 12.0
                       ),

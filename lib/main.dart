@@ -43,7 +43,11 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
             create: (_) => UserItemProvider()),
         ChangeNotifierProvider(
+            create: (_) => FriendsItemProvider()),
+        ChangeNotifierProvider(
             create: (_) => RegisteredFriendsItemProvider()),
+        ChangeNotifierProvider(
+            create: (_) => NotSetItemProvider()),
         ChangeNotifierProvider(
             create: (_) => SendMessageFriendsItemProvider()),
         ChangeNotifierProvider(
