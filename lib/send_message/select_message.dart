@@ -29,6 +29,8 @@ class _SelectMessageState extends State<SelectMessage> {
   late TextMessageProvider tIP;
   late CurrentPageProvider cIP;
 
+  final ScrollController controller = ScrollController();
+
   double listHeight = 0.0;
   String selectedMessage = '';
   int talkDownFalseCount = 0;
@@ -417,23 +419,30 @@ class _SelectMessageState extends State<SelectMessage> {
                                     width: 2
                                 ),
                               ),
-                              child: SingleChildScrollView(
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
-                                      alignment: Alignment.centerLeft,
-                                      child: SelectableText(UserData.userNickname),
-                                    ),
-                                    Container(
-                                      padding: const EdgeInsets.all(10),
-                                      alignment: Alignment.centerLeft,
-                                      color: (selectedMessage.isEmpty) ? Colors.transparent : const Color(0xffffdf8e),
-                                      child: Text(selectedMessage),
-                                    )
-                                  ],
+                              child: Scrollbar(
+                                  controller: controller,
+                                  thumbVisibility: true,
+                                  trackVisibility: true,
+                                  thickness: 12.0,
+                                child: SingleChildScrollView(
+                                  controller: controller,
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+                                        alignment: Alignment.centerLeft,
+                                        child: SelectableText(UserData.userNickname),
+                                      ),
+                                      Container(
+                                        padding: const EdgeInsets.all(10),
+                                        alignment: Alignment.centerLeft,
+                                        color: (selectedMessage.isEmpty) ? Colors.transparent : const Color(0xffffdf8e),
+                                        child: Text(selectedMessage),
+                                      )
+                                    ],
+                                  ),
                                 ),
-                              ),
+                              )
                             )
                           ],
                         ),

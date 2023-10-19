@@ -68,28 +68,30 @@ class _LoginState extends State<Login> {
       return;
     }
 
-    // 사용자의 추가 동의가 필요한 사용자 정보 동의 항목 확인
-    List<String> scopes = ['friends', 'talk_message' ,'account_email'];
+    //////////////////////////////////////////////////////////////////////////
 
-    try {
-      token = await UserApi.instance.loginWithNewScopes(scopes);
-    } catch (error) {
-      debugPrint('추가 동의 요청 실패 $error');
-      return;
-    }
-
-    try { //추가 동의 항목 후 토큰 재 발급
-      User user = await UserApi.instance.me();
-
-      UserData.userId = user.id;
-      UserData.userNickname = '${user.kakaoAccount?.profile?.nickname}';
-      UserData.userEmail = '${user.kakaoAccount?.email}';
-      UserData.userImageUrl = '${user.kakaoAccount?.profile?.profileImageUrl}';
-
-    } catch (error) {
-      debugPrint('사용자 정보 요청 실패 $error');
-      return;
-    }
+    // // 사용자의 추가 동의가 필요한 사용자 정보 동의 항목 확인
+    // List<String> scopes = ['friends', 'talk_message' ,'account_email'];
+    //
+    // try {
+    //   token = await UserApi.instance.loginWithNewScopes(scopes);
+    // } catch (error) {
+    //   debugPrint('추가 동의 요청 실패 $error');
+    //   return;
+    // }
+    //
+    // try { //추가 동의 항목 후 토큰 재 발급
+    //   User user = await UserApi.instance.me();
+    //
+    //   UserData.userId = user.id;
+    //   UserData.userNickname = '${user.kakaoAccount?.profile?.nickname}';
+    //   UserData.userEmail = '${user.kakaoAccount?.email}';
+    //   UserData.userImageUrl = '${user.kakaoAccount?.profile?.profileImageUrl}';
+    //
+    // } catch (error) {
+    //   debugPrint('사용자 정보 요청 실패 $error');
+    //   return;
+    // }
   }
 
   Future<dynamic> kakaoTalkLogin() async{  //카카오 로그인
@@ -103,9 +105,9 @@ class _LoginState extends State<Login> {
     //     : await UserApi.instance.loginWithKakaoAccount();
 
     if (await isKakaoTalkInstalled()) {
+      User user;
       try {
-        // OAuthToken token =
-        await UserApi.instance.loginWithKakaoTalk();  //인가 코드 받기
+        OAuthToken token = await UserApi.instance.loginWithKakaoTalk();  //인가 코드 받기
         await loginWithAuthorize(); //추가 항목 동의
       } catch (error) {
         debugPrint(error.toString());
@@ -117,8 +119,7 @@ class _LoginState extends State<Login> {
       }
     } else {  //카카오톡 미 설치시
       try {
-        // OAuthToken token =
-        await UserApi.instance.loginWithKakaoAccount(); //재 로그인 해야 한다네
+        OAuthToken token = await UserApi.instance.loginWithKakaoAccount(); //재 로그인 해야 한다네
         await loginWithAuthorize();  //기본 구현 방식? 이거 앱방식 아냐?
       } catch (error) {
         debugPrint(error.toString());

@@ -153,12 +153,18 @@ class _NewFriendsState extends State<NewFriends> {
               (registerFriend) ? const SizedBox() : SizedBox(
                   height: (itemCount < 8) ? itemCount * 45 : 360,
                   child: (itemCount == 0) ? const Center(child: TextMessageNormal('불러온 친구 목록이 없습니다.', 12.0)) :
-                  ListView.builder(
-                      itemCount: itemCount,
-                      controller: controller,
-                      itemBuilder: (BuildContext context, int index) {
-                        return NewFriendTile(index: index, updateStateNewFriend: updateStateNewFriend, registering: registerFriend);
-                      }
+                  Scrollbar(
+                    controller: controller,
+                    thumbVisibility: true,
+                    trackVisibility: true,
+                    thickness: 12.0,
+                    child: ListView.builder(
+                        itemCount: itemCount,
+                        controller: controller,
+                        itemBuilder: (BuildContext context, int index) {
+                          return NewFriendTile(index: index, updateStateNewFriend: updateStateNewFriend, registering: registerFriend);
+                        }
+                    ),
                   )
               ),
 

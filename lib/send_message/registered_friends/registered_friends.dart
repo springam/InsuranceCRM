@@ -147,35 +147,41 @@ class RegisteredFriendsState extends State<RegisteredFriends> {
                         '등록한 사람이 없습니다.\n\"카톡주소 가져오기\"\n버튼을 눌러서 카톡 주소를 가져오세요.',
                         14.0
                     ),
-                  ) : ListView.builder(
-                      itemCount: regIP.getItem().length + 1,
+                  ) : Scrollbar(
                       controller: controller,
-                      itemBuilder: (BuildContext context, int index) {
-                        //등록된 친구 목록 provider 에서 등록된 목록만 보여줌
-                        if (index == regIP.getItem().length) {
-                          if (registering) {
-                            Future.delayed(const Duration(milliseconds: 500), () {
-                              setState(() {
-                                modifyRegisteredFriend = false;
-                                registering = false;
-                              });
-                            });
-                          }
-                        } else {
-                          if (modifyRegisteredFriend) {
-                            return ModifyFriendTile(registeredFriend: regIP.getItem()[index], registering: registering);
-                          } else {
-                            return RegisteredFriendTile(regIP.getItem()[index]);
-                            // if (regIP.getItem()[index].registered) {
-                            //   return RegisteredFriendTile(regIP.getItem()[index]);
-                            // } else {
-                            //   return const SizedBox();
-                            // }
-                          }
-                        }
+                      thumbVisibility: true,
+                      trackVisibility: true,
+                      thickness: 12.0,
+                      child: ListView.builder(
+                          itemCount: regIP.getItem().length + 1,
+                          controller: controller,
+                          itemBuilder: (BuildContext context, int index) {
+                            //등록된 친구 목록 provider 에서 등록된 목록만 보여줌
+                            if (index == regIP.getItem().length) {
+                              if (registering) {
+                                Future.delayed(const Duration(milliseconds: 500), () {
+                                  setState(() {
+                                    modifyRegisteredFriend = false;
+                                    registering = false;
+                                  });
+                                });
+                              }
+                            } else {
+                              if (modifyRegisteredFriend) {
+                                return ModifyFriendTile(registeredFriend: regIP.getItem()[index], registering: registering);
+                              } else {
+                                return RegisteredFriendTile(regIP.getItem()[index]);
+                                // if (regIP.getItem()[index].registered) {
+                                //   return RegisteredFriendTile(regIP.getItem()[index]);
+                                // } else {
+                                //   return const SizedBox();
+                                // }
+                              }
+                            }
 
-                      }
-                    )
+                          }
+                      )
+                  )
               )
             ],
           ),

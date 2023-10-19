@@ -20,6 +20,8 @@ class _MessagePresetState extends State<MessagePreset> {
   late MessageItemProvider mIP;
   late CurrentPageProvider cIP;
 
+  final ScrollController controller = ScrollController();
+
   List<PresetMessageItem> messageList = [];
 
   Color selectedColor = const Color(0xffc9ced9);
@@ -142,7 +144,7 @@ class _MessagePresetState extends State<MessagePreset> {
                                   style: TextStyle(
                                       color:  Color(0xff000000),
                                       fontWeight: FontWeight.w400,
-                                      fontFamily: "NotoSansCJKKR",
+                                      // fontFamily: "NotoSansCJKKR",
                                       fontStyle:  FontStyle.normal,
                                       fontSize: 14
                                   ),
@@ -210,17 +212,24 @@ class _MessagePresetState extends State<MessagePreset> {
                 color: normalColor,
                 margin: const EdgeInsets.only(right: 36),
                 padding: const EdgeInsets.only(left: 40, top: 30, right: 40, bottom: 30),
-                child: GridView.builder(
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount (
-                      crossAxisCount: 3,
-                      mainAxisSpacing: 15,
-                      crossAxisSpacing: 20,
-                      childAspectRatio: 1.5
-                    ),
-                    itemCount: messageList.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return GridViewBox(presetMessage: messageList[index]);
-                    }
+                child: Scrollbar(
+                  controller: controller,
+                  thumbVisibility: true,
+                  trackVisibility: true,
+                  thickness: 12.0,
+                  child: GridView.builder(
+                      controller: controller,
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount (
+                          crossAxisCount: 3,
+                          mainAxisSpacing: 15,
+                          crossAxisSpacing: 20,
+                          childAspectRatio: 1.5
+                      ),
+                      itemCount: messageList.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return GridViewBox(presetMessage: messageList[index]);
+                      }
+                  ),
                 )
               ),
 
