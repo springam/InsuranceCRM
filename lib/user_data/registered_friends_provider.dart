@@ -55,7 +55,9 @@ class SendMessageFriendsItemProvider with ChangeNotifier {
   }
 
   addItem(RegisteredFriendsItem sendMessageFriend) {
-    sendMessageFriendsMap.add(sendMessageFriend);
+    if (!sendMessageFriendsMap.contains(sendMessageFriend)) {
+      sendMessageFriendsMap.add(sendMessageFriend);
+    }
     notifyListeners();
   }
 

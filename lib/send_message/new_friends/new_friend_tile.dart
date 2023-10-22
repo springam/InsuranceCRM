@@ -59,11 +59,14 @@ class NewFriendTileState extends State<NewFriendTile> {
   }
 
   List<Widget> selectChip() {
+    var selectChipBackgroundColorWarn = (selectedIndex == 2) ? const Color(0xffff5232) : Colors.transparent;
     return List<Widget>.generate(2, (optionIndex) => SizedBox(
       height: 28,
       child: FilterChip(
         // padding: const EdgeInsets.all(5),
         selectedColor: const Color(0xffd7e3f7),
+        side: BorderSide(color: selectChipBackgroundColorWarn, width: 1.0,),
+        // backgroundColor: selectChipBackgroundColorWarn,
         visualDensity: const VisualDensity(vertical: -4, horizontal: -4),
         selected: selectedIndex == optionIndex,
         showCheckmark: false,
@@ -84,11 +87,13 @@ class NewFriendTileState extends State<NewFriendTile> {
   }
 
   List<Widget> filterChip() {
+    var filterChipBackgroundColorWarn = (selectedHashTag.isEmpty) ? const Color(0xffff5232) : Colors.transparent;
     return List<Widget>.generate(hashTag.length, (optionIndex) => SizedBox(
       height: 26,
       child: FilterChip(
         label: Text('#${hashTag[optionIndex]}', style: const TextStyle(fontSize: 12.0)),
         padding: const EdgeInsets.symmetric(vertical: -3, horizontal: -3),
+        backgroundColor: filterChipBackgroundColorWarn,
         shape: const StadiumBorder(
           side: BorderSide(color: Color(0xff000000), width: 1.0)
         ),
@@ -186,12 +191,12 @@ class NewFriendTileState extends State<NewFriendTile> {
       children: [
         Container(
           margin: const EdgeInsets.only(top: 8),
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: warnColor,
-              width: 1
-            )
-          ),
+          // decoration: BoxDecoration(
+          //   border: Border.all(
+          //     color: warnColor,
+          //     width: 1
+          //   )
+          // ),
           child: Row(
             children: [
               Expanded(

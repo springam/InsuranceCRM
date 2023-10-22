@@ -78,6 +78,7 @@ class _SelectMessageState extends State<SelectMessage> {
       child: FilterChip(
         // padding: const EdgeInsets.all(5),
         selectedColor: const Color(0xffd9d9d9),
+        side: const BorderSide(color: Colors.black54, width: 0.5,),
         visualDensity: const VisualDensity(vertical: -4, horizontal: -4),
         selected: selectedTalkDownIndex == optionIndex,
         showCheckmark: false,
@@ -433,6 +434,20 @@ class _SelectMessageState extends State<SelectMessage> {
                                         alignment: Alignment.centerLeft,
                                         child: SelectableText(UserData.userNickname),
                                       ),
+                                      (selectedMessage.isNotEmpty) ? Container(
+                                        // width: 19,
+                                        alignment: Alignment.centerLeft,
+                                        margin: const EdgeInsets.only(left: 22),
+                                        child: ClipPath(
+                                          clipper: MessageTriangle(),
+                                          child: Container(
+                                            width: 19,
+                                            height: 15,
+                                            // alignment: Alignment.centerLeft,
+                                            color: const Color(0xffffdf8e),
+                                          ),
+                                        ),
+                                      ) : const SizedBox(),
                                       Container(
                                         padding: const EdgeInsets.all(10),
                                         alignment: Alignment.centerLeft,
