@@ -151,7 +151,7 @@ class _HomeMainState extends State<HomeMain> {
         } else if (cIP.getSubPage() == 1) {
           return const SelectMessage();
         } else {
-          return const MessagePreset();
+          // return const MessagePreset();
         }
       case 2:
         break;
@@ -181,145 +181,151 @@ class _HomeMainState extends State<HomeMain> {
     }
 
     return Scaffold(
-        body: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: SizedBox(
-              width: screenWidth,
-              height: MediaQuery.of(context).size.height * 1.5,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    flex: 15,
-                    child: Container( //left menu
-                      width: 192,
-                      // height: screenHeight,
-                      decoration: const BoxDecoration(
-                          color: Color(0xffbcc0c7)
-                      ),
-                      child: Column(
-                        children: [
-                          Container(
-                            width: 109,
-                            height: 89,
-                            margin: const EdgeInsets.only(top: 16, bottom: 37),
-                            child: Image.asset('assets/images/mosaic_logo.png', scale: 1.0),
-                          ),
-
-                          leftMenu(1),
-                          leftMenu(2),
-                          leftMenu(3),
-                          leftMenu(4),
-                          leftMenu(5),
-                        ],
-                      ),
-                    ),
-                  ),
-
-                  Expanded(
-                    flex: 85,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
+        body: Stack(
+          children: [
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: SizedBox(
+                    width: screenWidth,
+                    height: MediaQuery.of(context).size.height * 1.5,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SizedBox(
-                          height: 50,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Material(
-                                color: Colors.white,
-                                child: InkWell(
-                                  borderRadius: BorderRadius.circular(10),
-                                  splashColor: const Color(0xffffdf8e),
-                                  hoverColor: Colors.grey,
-                                  onTap: () async{
-                                    try {
-                                      await UserApi.instance.logout();
-                                      debugPrint('로그아웃 성공, SDK에서 토큰 삭제');
-                                      setState(() {
-                                        UserToken.hasToken = false;
-                                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const Login()));
-                                      });
-                                    } catch (error) {
-                                      debugPrint('로그아웃 실패, SDK에서 토큰 삭제 $error');
-                                    }
-                                  },
-                                  child: Ink(
-                                    width: 81,
-                                    height: 30,
-                                    decoration: BoxDecoration(
-                                        borderRadius: const BorderRadius.all(Radius.circular(10)),
-                                        border: Border.all(color: const Color(0xff525151), width: 1)
-                                    ),
-                                    child: const Center(
-                                      child: Text(
-                                        '로그아웃',
-                                        style: TextStyle(
-                                            color:  Color(0xff000000),
-                                            fontWeight: FontWeight.w400,
-                                            fontFamily: "NotoSansCJKKR",
-                                            fontStyle:  FontStyle.normal,
-                                            fontSize: 12.0
+                        Expanded(
+                          flex: 15,
+                          child: Container( //left menu
+                            width: 192,
+                            // height: screenHeight,
+                            decoration: const BoxDecoration(
+                                color: Color(0xffbcc0c7)
+                            ),
+                            child: Column(
+                              children: [
+                                Container(
+                                  width: 109,
+                                  height: 89,
+                                  margin: const EdgeInsets.only(top: 16, bottom: 37),
+                                  child: Image.asset('assets/images/mosaic_logo.png', scale: 1.0),
+                                ),
+
+                                leftMenu(1),
+                                leftMenu(2),
+                                leftMenu(3),
+                                leftMenu(4),
+                                leftMenu(5),
+                              ],
+                            ),
+                          ),
+                        ),
+
+                        Expanded(
+                            flex: 85,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  height: 50,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Material(
+                                        color: Colors.white,
+                                        child: InkWell(
+                                          borderRadius: BorderRadius.circular(10),
+                                          splashColor: const Color(0xffffdf8e),
+                                          hoverColor: Colors.grey,
+                                          onTap: () async{
+                                            try {
+                                              await UserApi.instance.logout();
+                                              debugPrint('로그아웃 성공, SDK에서 토큰 삭제');
+                                              setState(() {
+                                                UserToken.hasToken = false;
+                                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const Login()));
+                                              });
+                                            } catch (error) {
+                                              debugPrint('로그아웃 실패, SDK에서 토큰 삭제 $error');
+                                            }
+                                          },
+                                          child: Ink(
+                                            width: 81,
+                                            height: 30,
+                                            decoration: BoxDecoration(
+                                                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                                                border: Border.all(color: const Color(0xff525151), width: 1)
+                                            ),
+                                            child: const Center(
+                                              child: Text(
+                                                '로그아웃',
+                                                style: TextStyle(
+                                                    color:  Color(0xff000000),
+                                                    fontWeight: FontWeight.w400,
+                                                    fontFamily: "NotoSansCJKKR",
+                                                    fontStyle:  FontStyle.normal,
+                                                    fontSize: 12.0
+                                                ),
+                                              ),
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                    ),
+
+                                      const SizedBox(width: 23),
+
+                                      Container(
+                                          width: 1,
+                                          height: 50,
+                                          decoration: const BoxDecoration(
+                                              color: Color(0xfff0f0f0)
+                                          )
+                                      ),
+
+                                      SizedBox(
+                                        width: 188,
+                                        child: Row(
+                                          children: [
+                                            // Container(
+                                            //   height: 36,
+                                            //   width: 36,
+                                            //   margin: const EdgeInsets.only(left: 20, right: 12),
+                                            //   decoration: BoxDecoration(
+                                            //       shape: BoxShape.circle,
+                                            //       image: DecorationImage(
+                                            //           fit: BoxFit.fill,
+                                            //           image: NetworkImage(UserData.userImageUrl)
+                                            //       )
+                                            //   ),
+                                            // ),
+                                            const SizedBox(width: 36),
+                                            SelectableText(UserData.userNickname)
+                                          ],
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ),
 
-                              const SizedBox(width: 23),
-
-                              Container(
-                                  width: 1,
-                                  height: 50,
-                                  decoration: const BoxDecoration(
-                                      color: Color(0xfff0f0f0)
-                                  )
-                              ),
-
-                              SizedBox(
-                                width: 188,
-                                child: Row(
-                                  children: [
-                                    // Container(
-                                    //   height: 36,
-                                    //   width: 36,
-                                    //   margin: const EdgeInsets.only(left: 20, right: 12),
-                                    //   decoration: BoxDecoration(
-                                    //       shape: BoxShape.circle,
-                                    //       image: DecorationImage(
-                                    //           fit: BoxFit.fill,
-                                    //           image: NetworkImage(UserData.userImageUrl)
-                                    //       )
-                                    //   ),
-                                    // ),
-                                    const SizedBox(width: 36),
-                                    SelectableText(UserData.userNickname)
-                                  ],
+                                const Divider(
+                                  height: 1,
+                                  color: Color(0xfff0f0f0),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ),
 
-                        const Divider(
-                          height: 1,
-                          color: Color(0xfff0f0f0),
-                        ),
+                                currentPage(), //보여줄 페이지 선택
 
-                        currentPage() //보여줄 페이지 선택
+                                // const SelectFriends(),  //메시지 보내기, 선택된 메뉴에 따라 페이지 변경
 
-                        // const SelectFriends(),  //메시지 보내기, 선택된 메뉴에 따라 페이지 변경
-
+                              ],
+                            )
+                        )
                       ],
-                    )
+                    ),
                   )
-                ],
               ),
-            )
-          ),
+            ),
+
+            (cIP.getSubPage() == 2) ? const MessagePreset() : const SizedBox()
+          ],
         ),
     );
   }

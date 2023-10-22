@@ -69,29 +69,13 @@ class _MessagePresetState extends State<MessagePreset> {
       }
 
       return Container(
-        height: MediaQuery.of(context).size.height * 1.3,
-        margin: const EdgeInsets.only(top: 19),
+        height: MediaQuery.of(context).size.height,
+        color: const Color.fromRGBO(107, 107, 107, 0.5),
+        padding: const EdgeInsets.only(left: 140, top: 70, right: 140, bottom: 70),
         child: Container(
-          margin: const EdgeInsets.only(left: 36),
+          // margin: const EdgeInsets.only(left: 36),
           child: Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  const TextMessage(
-                      "카톡 보낼사람 선택하기",
-                      Color(0xffd9d9d9),
-                      FontWeight.w400,
-                      22.0
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(left: 13.5, right: 13.5),
-                    child: const Icon(Icons.play_arrow, color: Color(0xffdde1e1),),
-                  ),
-                  const TextMessageNormal("메시지 작성하기", 22.0),
-                ],
-              ),
-              
               Container(
                 margin: const EdgeInsets.only(top: 15, right: 36),
                 child: Column(
@@ -109,11 +93,11 @@ class _MessagePresetState extends State<MessagePreset> {
                                 alignment: Alignment.center,
                                 color: messageColor,
                                 child: const Text(
-                                    '메시지',
+                                  '메시지',
                                   style: TextStyle(
                                       color:  Color(0xff000000),
                                       fontWeight: FontWeight.w400,
-                                      fontFamily: "NotoSansCJKKR",
+                                      // fontFamily: "NotoSansCJKKR",
                                       fontStyle:  FontStyle.normal,
                                       fontSize: 14
                                   ),
@@ -158,7 +142,6 @@ class _MessagePresetState extends State<MessagePreset> {
                                     messageColor = normalColor;
                                     imageColor = selectedColor;
                                   });
-
                                 }
                               },
                             ),
@@ -208,29 +191,29 @@ class _MessagePresetState extends State<MessagePreset> {
               ),
 
               Container(
-                height: MediaQuery.of(context).size.height * 0.8,
-                color: normalColor,
-                margin: const EdgeInsets.only(right: 36),
-                padding: const EdgeInsets.only(left: 40, top: 30, right: 40, bottom: 30),
-                child: Scrollbar(
-                  controller: controller,
-                  thumbVisibility: true,
-                  trackVisibility: true,
-                  thickness: 12.0,
-                  child: GridView.builder(
-                      controller: controller,
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount (
-                          crossAxisCount: 3,
-                          mainAxisSpacing: 15,
-                          crossAxisSpacing: 20,
-                          childAspectRatio: 1.5
-                      ),
-                      itemCount: messageList.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return GridViewBox(presetMessage: messageList[index]);
-                      }
-                  ),
-                )
+                height: MediaQuery.of(context).size.height * 0.7,
+                  color: normalColor,
+                  margin: const EdgeInsets.only(right: 36),
+                  padding: const EdgeInsets.only(left: 40, top: 30, right: 40, bottom: 30),
+                  child: Scrollbar(
+                    controller: controller,
+                    thumbVisibility: true,
+                    trackVisibility: true,
+                    thickness: 12.0,
+                    child: GridView.builder(
+                        controller: controller,
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount (
+                            crossAxisCount: 3,
+                            mainAxisSpacing: 15,
+                            crossAxisSpacing: 20,
+                            childAspectRatio: 1.5
+                        ),
+                        itemCount: messageList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return GridViewBox(presetMessage: messageList[index]);
+                        }
+                    ),
+                  )
               ),
 
             ],
