@@ -70,154 +70,151 @@ class _MessagePresetState extends State<MessagePreset> {
 
       return Container(
         height: MediaQuery.of(context).size.height,
-        color: const Color.fromRGBO(107, 107, 107, 0.5),
+        color: const Color.fromRGBO(0, 0, 0, 0.5),
         padding: const EdgeInsets.only(left: 140, top: 70, right: 140, bottom: 70),
-        child: Container(
-          // margin: const EdgeInsets.only(left: 36),
-          child: Column(
-            children: [
-              Container(
-                margin: const EdgeInsets.only(top: 15, right: 36),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
+        child: Column(
+          children: [
+            Container(
+              margin: const EdgeInsets.only(top: 15, right: 36),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
 
-                            InkWell(
-                              child: Container(
-                                width: 100,
-                                height: 40,
-                                alignment: Alignment.center,
-                                color: messageColor,
-                                child: const Text(
-                                  '메시지',
-                                  style: TextStyle(
-                                      color:  Color(0xff000000),
-                                      fontWeight: FontWeight.w400,
-                                      // fontFamily: "NotoSansCJKKR",
-                                      fontStyle:  FontStyle.normal,
-                                      fontSize: 14
-                                  ),
-                                  textAlign: TextAlign.center,
+                          InkWell(
+                            child: Container(
+                              width: 100,
+                              height: 40,
+                              alignment: Alignment.center,
+                              color: messageColor,
+                              child: const Text(
+                                '메시지',
+                                style: TextStyle(
+                                    color:  Color(0xff000000),
+                                    fontWeight: FontWeight.w400,
+                                    // fontFamily: "NotoSansCJKKR",
+                                    fontStyle:  FontStyle.normal,
+                                    fontSize: 14
                                 ),
+                                textAlign: TextAlign.center,
                               ),
-                              onTap: () {
-                                if (!titleIsMessage) {
-                                  setState(() {
-                                    titleIsMessage = true;
-                                    messageColor = selectedColor;
-                                    imageColor = normalColor;
-                                  });
-                                }
-                              },
                             ),
+                            onTap: () {
+                              if (!titleIsMessage) {
+                                setState(() {
+                                  titleIsMessage = true;
+                                  messageColor = selectedColor;
+                                  imageColor = normalColor;
+                                });
+                              }
+                            },
+                          ),
 
-                            const SizedBox(width: 5),
+                          const SizedBox(width: 5),
 
-                            InkWell(
-                              child: Container(
-                                width: 100,
-                                height: 40,
-                                alignment: Alignment.center,
-                                color: imageColor,
-                                child: const Text(
-                                  '이미지',
-                                  style: TextStyle(
-                                      color:  Color(0xff000000),
-                                      fontWeight: FontWeight.w400,
-                                      // fontFamily: "NotoSansCJKKR",
-                                      fontStyle:  FontStyle.normal,
-                                      fontSize: 14
-                                  ),
-                                  textAlign: TextAlign.center,
+                          InkWell(
+                            child: Container(
+                              width: 100,
+                              height: 40,
+                              alignment: Alignment.center,
+                              color: imageColor,
+                              child: const Text(
+                                '이미지',
+                                style: TextStyle(
+                                    color:  Color(0xff000000),
+                                    fontWeight: FontWeight.w400,
+                                    // fontFamily: "NotoSansCJKKR",
+                                    fontStyle:  FontStyle.normal,
+                                    fontSize: 14
                                 ),
+                                textAlign: TextAlign.center,
                               ),
-                              onTap: () {
-                                if (titleIsMessage) {
-                                  setState(() {
-                                    titleIsMessage = false;
-                                    messageColor = normalColor;
-                                    imageColor = selectedColor;
-                                  });
-                                }
-                              },
                             ),
+                            onTap: () {
+                              if (titleIsMessage) {
+                                setState(() {
+                                  titleIsMessage = false;
+                                  messageColor = normalColor;
+                                  imageColor = selectedColor;
+                                });
+                              }
+                            },
+                          ),
 
-                          ],
-                        ),
+                        ],
+                      ),
 
-                        IconButton(
-                          icon: const Icon(Icons.cancel_rounded),
-                          color: Colors.grey,
-                          iconSize: 20,
-                          onPressed: () {
-                            cIP.setCurrentSubPage(1);
-                          },
-                        )
-                      ],
-                    )
-                  ],
-                ),
-              ),
-
-              Container(
-                height: 40,
-                color: selectedColor,
-                margin: const EdgeInsets.only(right: 36),
-                child: Row(
-                  children: [
-                    const SizedBox(width: 25),
-
-                    Wrap(spacing: 10, children: themeListTitle(0)),
-
-                    Container(
-                      margin: const EdgeInsets.only(left: 25, top:10, right: 25, bottom: 10),
-                      child: const VerticalDivider(width: 1, thickness: 1, color: Colors.white),
-                    ),
-
-                    Wrap(spacing: 10, children: themeListTitle(1)),
-
-                    Container(
-                      margin: const EdgeInsets.only(left: 25, top: 5, right: 25, bottom: 5),
-                      child: const VerticalDivider(width: 1, thickness: 1, color: Colors.white),
-                    ),
-
-                    Wrap(spacing: 10, children: themeListTitle(2)),
-                  ],
-                ),
-              ),
-
-              Container(
-                height: MediaQuery.of(context).size.height * 0.7,
-                  color: normalColor,
-                  margin: const EdgeInsets.only(right: 36),
-                  padding: const EdgeInsets.only(left: 40, top: 30, right: 40, bottom: 30),
-                  child: Scrollbar(
-                    controller: controller,
-                    thumbVisibility: true,
-                    trackVisibility: true,
-                    thickness: 12.0,
-                    child: GridView.builder(
-                        controller: controller,
-                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount (
-                            crossAxisCount: 3,
-                            mainAxisSpacing: 15,
-                            crossAxisSpacing: 20,
-                            childAspectRatio: 1.5
-                        ),
-                        itemCount: messageList.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return GridViewBox(presetMessage: messageList[index]);
-                        }
-                    ),
+                      IconButton(
+                        icon: const Icon(Icons.cancel_rounded),
+                        color: Colors.grey,
+                        iconSize: 20,
+                        onPressed: () {
+                          cIP.setCurrentSubPage(1);
+                        },
+                      )
+                    ],
                   )
+                ],
               ),
+            ),
 
-            ],
-          ),
+            Container(
+              height: 40,
+              color: selectedColor,
+              margin: const EdgeInsets.only(right: 36),
+              child: Row(
+                children: [
+                  const SizedBox(width: 25),
+
+                  Wrap(spacing: 10, children: themeListTitle(0)),
+
+                  Container(
+                    margin: const EdgeInsets.only(left: 25, top:10, right: 25, bottom: 10),
+                    child: const VerticalDivider(width: 1, thickness: 1, color: Colors.white),
+                  ),
+
+                  Wrap(spacing: 10, children: themeListTitle(1)),
+
+                  Container(
+                    margin: const EdgeInsets.only(left: 25, top: 5, right: 25, bottom: 5),
+                    child: const VerticalDivider(width: 1, thickness: 1, color: Colors.white),
+                  ),
+
+                  Wrap(spacing: 10, children: themeListTitle(2)),
+                ],
+              ),
+            ),
+
+            Container(
+              height: MediaQuery.of(context).size.height * 0.7,
+                color: normalColor,
+                margin: const EdgeInsets.only(right: 36),
+                padding: const EdgeInsets.only(left: 40, top: 30, right: 40, bottom: 30),
+                child: Scrollbar(
+                  controller: controller,
+                  thumbVisibility: true,
+                  trackVisibility: true,
+                  thickness: 12.0,
+                  child: GridView.builder(
+                      controller: controller,
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount (
+                          crossAxisCount: 3,
+                          mainAxisSpacing: 15,
+                          crossAxisSpacing: 20,
+                          childAspectRatio: 1.5
+                      ),
+                      itemCount: messageList.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return GridViewBox(presetMessage: messageList[index]);
+                      }
+                  ),
+                )
+            ),
+
+          ],
         ),
       );
     }
