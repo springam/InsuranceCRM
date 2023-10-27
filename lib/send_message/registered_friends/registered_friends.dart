@@ -25,7 +25,7 @@ class RegisteredFriendsState extends State<RegisteredFriends> {
   int registeredCount = 0;
   bool modifyRegisteredFriend = false;
   bool registering = false;
-  List<String> buttonTitleList = ['완료', '수정'];
+  List<String> buttonTitleList = ['수정', '완료'];
   int buttonIndex = 0;
 
   final ScrollController controller = ScrollController();

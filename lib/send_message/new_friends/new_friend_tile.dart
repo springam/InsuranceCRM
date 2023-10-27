@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 import 'package:mosaicbluenco/etc_widget/text_message.dart';
 import 'package:mosaicbluenco/user_data/user_data.dart';
 import 'package:provider/provider.dart';
-import '../../user_data/registered_friends_provider.dart';
 import '../../user_data/response_friend_provider.dart';
 
 class NewFriendTile extends StatefulWidget {
@@ -99,6 +98,7 @@ class NewFriendTileState extends State<NewFriendTile> {
         ),
         selected: selectedHashTag.contains(hashTag[optionIndex]),
         selectedColor: const Color(0xffd7e3f7),
+        side: const BorderSide(color: Colors.black54, width: 0.5,),
         visualDensity: const VisualDensity(vertical: -4, horizontal: -4),
         showCheckmark: false,
         onSelected: (bool selected) {

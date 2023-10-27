@@ -69,6 +69,28 @@ class TitleNormal extends StatelessWidget {
   }
 }
 
+class TitleHeavy extends StatelessWidget {
+  const TitleHeavy(this.textContent, this.textSize, {super.key});
+
+  final String textContent;
+  final double textSize;
+
+  @override
+  Widget build(BuildContext context) {
+    return SelectableText(
+        textContent,
+        style: TextStyle(
+          color:  const Color(0xff000000),
+          fontWeight: FontWeight.w600,
+          // fontFamily: "NotoSansCJKKR",
+          fontStyle:  FontStyle.normal,
+          fontSize: textSize,
+        ),
+        textAlign: TextAlign.left
+    );
+  }
+}
+
 TextStyle buttonTextStyle = const TextStyle(
     color:  Color(0xff000000),
     fontWeight: FontWeight.w400,

@@ -19,7 +19,7 @@ class _ThemePopupDialogState extends State<ThemePopupDialog> {
   TextStyle buttonTextStyle = const TextStyle(
       color:  Color(0xff000000),
       fontWeight: FontWeight.w400,
-      fontFamily: "NotoSansCJKKR",
+      // fontFamily: "NotoSansCJKKR",
       fontStyle:  FontStyle.normal,
       fontSize: 14.0
   );

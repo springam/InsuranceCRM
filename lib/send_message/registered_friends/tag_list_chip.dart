@@ -64,7 +64,7 @@ class _TagListChipState extends State<TagListChip> {
                 style: const TextStyle(
                     color:  Color(0xff000000),
                     fontWeight: FontWeight.w400,
-                    fontFamily: "NotoSansCJKKR",
+                    // fontFamily: "NotoSansCJKKR",
                     fontStyle:  FontStyle.normal,
                     fontSize: 14.0
                 )
@@ -96,7 +96,7 @@ class _TagListChipState extends State<TagListChip> {
                 }
               }
               setState(() {
-                selectedColor = const Color(0xffbcc0c7);
+                selectedColor = const Color(0xffd7e3f7);
                 selectedTile = true;
               });
             }

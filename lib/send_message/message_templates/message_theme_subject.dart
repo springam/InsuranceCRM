@@ -16,7 +16,7 @@ class _MessageThemeSubjectState extends State<MessageThemeSubject> {
 
   late CurrentPageProvider cIP;
 
-  Color selectedTextColor = const Color(0xffffdf8e);
+  Color selectedTextColor = const Color(0xffED6A40);
   Color normalTextColor = const Color(0xff000000);
   Color textColor = const Color(0xff000000);
 
@@ -70,7 +70,7 @@ class _MessageThemeSubjectState extends State<MessageThemeSubject> {
               style: TextStyle(
                   color: textColor,
                   fontWeight: FontWeight.w400,
-                  fontFamily: "NotoSansCJKKR",
+                  // fontFamily: "NotoSansCJKKR",
                   fontStyle:  FontStyle.normal,
                   fontSize: 14.0
               )

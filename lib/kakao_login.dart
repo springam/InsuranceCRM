@@ -50,7 +50,6 @@ class _LoginState extends State<Login> {
 
   Future<dynamic> loginWithAuthorize() async{  //안드로이드 사용자 정보와 추가 동의 동시 진행
     User user;
-    OAuthToken token;
     try {
       user = await UserApi.instance.me();
 
@@ -105,9 +104,9 @@ class _LoginState extends State<Login> {
     //     : await UserApi.instance.loginWithKakaoAccount();
 
     if (await isKakaoTalkInstalled()) {
-      User user;
       try {
-        OAuthToken token = await UserApi.instance.loginWithKakaoTalk();  //인가 코드 받기
+        // OAuthToken token = await UserApi.instance.loginWithKakaoTalk();  //인가 코드 받기
+        await UserApi.instance.loginWithKakaoTalk();
         await loginWithAuthorize(); //추가 항목 동의
       } catch (error) {
         debugPrint(error.toString());
@@ -119,7 +118,8 @@ class _LoginState extends State<Login> {
       }
     } else {  //카카오톡 미 설치시
       try {
-        OAuthToken token = await UserApi.instance.loginWithKakaoAccount(); //재 로그인 해야 한다네
+        // OAuthToken token = await UserApi.instance.loginWithKakaoAccount(); //재 로그인 해야 한다네
+        await UserApi.instance.loginWithKakaoAccount();
         await loginWithAuthorize();  //기본 구현 방식? 이거 앱방식 아냐?
       } catch (error) {
         debugPrint(error.toString());

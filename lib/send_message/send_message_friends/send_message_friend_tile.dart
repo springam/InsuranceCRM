@@ -44,9 +44,9 @@ class _SendMessageFriendTileState extends State<SendMessageFriendTile> {
                     width: double.infinity,
                     height: 34,
                     decoration: BoxDecoration(
-                      border: Border.all(color: const Color(0xffbcc0c7), width: 1.0),
+                      border: Border.all(color: const Color(0xffd7e3f7), width: 1.0),
                       borderRadius: const BorderRadius.all(Radius.circular(15)),
-                      color: const Color(0xffbcc0c7),
+                      color: const Color(0xffd7e3f7),
                     ),
                     child: Container(
                       color: Colors.transparent,

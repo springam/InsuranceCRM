@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../etc_widget/text_message.dart';
 import '../../user_data/registered_friends_provider.dart';
 import '../../user_data/status_provider.dart';
 import '../../user_data/message_provider.dart';
@@ -23,6 +22,7 @@ class _MessagePresetState extends State<MessagePreset> {
   final ScrollController controller = ScrollController();
 
   List<PresetMessageItem> messageList = [];
+  int crossCountGrid = 3;
 
   Color selectedColor = const Color(0xffc9ced9);
   Color normalColor = const Color(0xfff0f0f0);
@@ -68,6 +68,12 @@ class _MessagePresetState extends State<MessagePreset> {
         }
       }
 
+      if (MediaQuery.of(context).size.width > 1500) {
+        crossCountGrid = 4;
+      } else {
+        crossCountGrid = 3;
+      }
+
       return Container(
         height: MediaQuery.of(context).size.height,
         color: const Color.fromRGBO(0, 0, 0, 0.5),
@@ -86,7 +92,7 @@ class _MessagePresetState extends State<MessagePreset> {
 
                           InkWell(
                             child: Container(
-                              width: 100,
+                              width: 130,
                               height: 40,
                               alignment: Alignment.center,
                               color: messageColor,
@@ -117,7 +123,7 @@ class _MessagePresetState extends State<MessagePreset> {
 
                           InkWell(
                             child: Container(
-                              width: 100,
+                              width: 130,
                               height: 40,
                               alignment: Alignment.center,
                               color: imageColor,
@@ -166,30 +172,31 @@ class _MessagePresetState extends State<MessagePreset> {
               color: selectedColor,
               margin: const EdgeInsets.only(right: 36),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const SizedBox(width: 25),
+                  const SizedBox(width: 80),
 
-                  Wrap(spacing: 10, children: themeListTitle(0)),
+                  Wrap(spacing: 20, children: themeListTitle(0)),
 
                   Container(
                     margin: const EdgeInsets.only(left: 25, top:10, right: 25, bottom: 10),
                     child: const VerticalDivider(width: 1, thickness: 1, color: Colors.white),
                   ),
 
-                  Wrap(spacing: 10, children: themeListTitle(1)),
+                  Wrap(spacing: 20, children: themeListTitle(1)),
 
                   Container(
                     margin: const EdgeInsets.only(left: 25, top: 5, right: 25, bottom: 5),
                     child: const VerticalDivider(width: 1, thickness: 1, color: Colors.white),
                   ),
 
-                  Wrap(spacing: 10, children: themeListTitle(2)),
+                  Wrap(spacing: 20, children: themeListTitle(2)),
                 ],
               ),
             ),
 
             Container(
-              height: MediaQuery.of(context).size.height * 0.7,
+                height: MediaQuery.of(context).size.height * 0.7,
                 color: normalColor,
                 margin: const EdgeInsets.only(right: 36),
                 padding: const EdgeInsets.only(left: 40, top: 30, right: 40, bottom: 30),
@@ -200,8 +207,8 @@ class _MessagePresetState extends State<MessagePreset> {
                   thickness: 12.0,
                   child: GridView.builder(
                       controller: controller,
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount (
-                          crossAxisCount: 3,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount (
+                          crossAxisCount: crossCountGrid,
                           mainAxisSpacing: 15,
                           crossAxisSpacing: 20,
                           childAspectRatio: 1.5

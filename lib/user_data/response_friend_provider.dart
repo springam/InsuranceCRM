@@ -22,7 +22,7 @@ class ResponseFriendsItemProvider with ChangeNotifier {
 
   addItems(List<RegisteredFriendsItem> responseFriends) {
     responseFriendsMap.addAll(responseFriends);
-    notifyListeners();
+    // notifyListeners();
   }
 
   removeItem(responseFriend) {

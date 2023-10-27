@@ -59,6 +59,12 @@ class _SelectMessageState extends State<SelectMessage> {
         ThemeList.themeList.length, (themeIndex) => MessageThemeListChip(themeIndex: themeIndex,)).toList();
   }
 
+  void sendMe() async {
+    String result = json.encode({'request':'sendMe', 'body':tIP.getTextMessageTalkDown(), 'name':UserData.userNickname});
+    print(result);
+    _channel.sink.add(result);
+  }
+
   void convertData() async {
     List<dynamic> messageItem = [];
     for (RegisteredFriendsItem value in sIP.getItem()) {
@@ -77,7 +83,7 @@ class _SelectMessageState extends State<SelectMessage> {
       height: 28,
       child: FilterChip(
         // padding: const EdgeInsets.all(5),
-        selectedColor: const Color(0xffd9d9d9),
+        selectedColor: const Color(0xffd7e3f7),
         side: const BorderSide(color: Colors.black54, width: 0.5,),
         visualDensity: const VisualDensity(vertical: -4, horizontal: -4),
         selected: selectedTalkDownIndex == optionIndex,
@@ -175,7 +181,7 @@ class _SelectMessageState extends State<SelectMessage> {
                       Container(
                         alignment: Alignment.centerLeft,
                         margin: const EdgeInsets.only(top: 17, bottom: 10),
-                        child: const TitleNormal('1. 아래에 원하는 주제 버튼을 눌러서 보낼 문구나 이미지를 선택 하세요. 문구와 이미지를 둘다 보낼 수도 있습니다.', 12.0),
+                        child: const TitleNormal('1. 아래에 원하는 주제 버튼을 눌러서 보낼 문구나 이미지를 선택 하세요. 문구와 이미지를 둘다 보낼 수도 있습니다.', 14.0),
                       ),
 
                       Container(
@@ -191,14 +197,15 @@ class _SelectMessageState extends State<SelectMessage> {
                       Container(
                         alignment: Alignment.centerLeft,
                         margin: const EdgeInsets.only(top: 10, bottom: 10),
-                        child: const TitleNormal('2. 선택한 문구를 나에게 맞게 변경해서 보내세요. 물론 그냥 보내셔도 됩니다.', 12.0),
+                        child: const TitleNormal('2. 선택한 문구를 나에게 맞게 변경해서 보내세요. 물론 그냥 보내셔도 됩니다.', 14.0),
                       ),
 
                       Container(
                         width: double.infinity,
                         height: 400,
-                        decoration: const BoxDecoration(
-                            color: Color(0xfff0f0f0)
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black),
+                            color: const Color(0xfff0f0f0)
                         ),
                         padding: const EdgeInsets.only(left: 20, top: 7, right: 20, bottom: 15),
                        child: Column(
@@ -218,7 +225,7 @@ class _SelectMessageState extends State<SelectMessage> {
                                       height: 25,
                                       decoration: BoxDecoration(
                                           borderRadius: const BorderRadius.all(Radius.circular(10)),
-                                          border: Border.all(color: const Color(0xffffffff), width: 1),
+                                          border: Border.all(color: Colors.black, width: 1),
                                           color: const Color(0xffffffff)
                                       ),
                                       child: Center(child: Text('내용 지우기', style: buttonTextStyle),
@@ -256,7 +263,7 @@ class _SelectMessageState extends State<SelectMessage> {
                       Container(
                         alignment: Alignment.centerLeft,
                         margin: const EdgeInsets.only(top: 10, bottom: 10),
-                        child: const TitleNormal('3. 보내고 싶은 이미지나 링크가 있으면 아래에서 선택하거나 입력하세요.', 12.0),
+                        child: const TitleNormal('3. 보내고 싶은 이미지나 링크가 있으면 아래에서 선택하거나 입력하세요.', 14.0),
                       ),
 
                       Container(
@@ -429,11 +436,29 @@ class _SelectMessageState extends State<SelectMessage> {
                                   controller: controller,
                                   child: Column(
                                     children: [
-                                      Container(
-                                        margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
-                                        alignment: Alignment.centerLeft,
-                                        child: SelectableText(UserData.userNickname),
+                                      Row(
+                                        children: [
+                                          Container(
+                                            height: 25,
+                                            width: 25,
+                                            margin: const EdgeInsets.only(left: 0, bottom: 5),
+                                            decoration: const BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                image: DecorationImage(
+                                                    fit: BoxFit.fill,
+                                                    image: AssetImage('assets/images/kakao_person.png')
+                                                  // image: NetworkImage(UserData.userImageUrl)
+                                                )
+                                            ),
+                                          ),
+                                          Container(
+                                            margin: const EdgeInsets.only(left: 10, right: 10, bottom: 5),
+                                            alignment: Alignment.centerLeft,
+                                            child: SelectableText(UserData.userNickname),
+                                          ),
+                                        ],
                                       ),
+
                                       (selectedMessage.isNotEmpty) ? Container(
                                         // width: 19,
                                         alignment: Alignment.centerLeft,
@@ -452,7 +477,10 @@ class _SelectMessageState extends State<SelectMessage> {
                                         padding: const EdgeInsets.all(10),
                                         alignment: Alignment.centerLeft,
                                         color: (selectedMessage.isEmpty) ? Colors.transparent : const Color(0xffffdf8e),
-                                        child: Text(selectedMessage),
+                                        child: Text(
+                                            selectedMessage,
+                                            style: buttonTextStyle,
+                                        ),
                                       )
                                     ],
                                   ),
@@ -475,7 +503,7 @@ class _SelectMessageState extends State<SelectMessage> {
                             height: 38,
                             decoration: const BoxDecoration(
                               borderRadius: BorderRadius.all(Radius.circular(10)),
-                              color: Color(0xfff0f0f0),
+                              color: Color(0xffd7e3f7),
                             ),
                             child: Center(
                               child: Text('나에게 테스트', style: buttonTextStyle,),
@@ -484,8 +512,7 @@ class _SelectMessageState extends State<SelectMessage> {
                           onTap: () {
                             sIP.initItem();
                             cIP.setCurrentSubPage(0);
-                            // sIP.initItem();
-                            // _channel.sink.add('getFriend');
+                            // sendMe();
                           },
                         ),
                       ),

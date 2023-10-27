@@ -3,7 +3,6 @@ import 'package:mosaicbluenco/user_data/user_data.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../user_data/registered_friends_provider.dart';
-import '../user_data/response_friend_provider.dart';
 import 'gate_message.dart';
 
 
@@ -17,12 +16,10 @@ class RegisteredFriendsItemList extends StatelessWidget {
     FriendsItemProvider fIP;
     RegisteredFriendsItemProvider regIP;
     NotSetItemProvider nsIP;
-    ResponseFriendsItemProvider resIP;
 
     fIP = Provider.of<FriendsItemProvider>(context, listen: true);
     regIP = Provider.of<RegisteredFriendsItemProvider>(context, listen: true);
     nsIP = Provider.of<NotSetItemProvider>(context, listen: true);
-    resIP = Provider.of<ResponseFriendsItemProvider>(context, listen: true);
 
     return StreamBuilder(
       stream: FirebaseFirestore.instance.collection('friends')

@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mosaicbluenco/user_data/user_data.dart';
 import 'package:provider/provider.dart';
-import '../../etc_widget/alert_dialog.dart';
 import '../../user_data/registered_friends_provider.dart';
 import '../../user_data/status_provider.dart';
-import 'message_preset.dart';
 
 class MessageThemeListChip extends StatefulWidget {
   const MessageThemeListChip({required this.themeIndex, super.key});
@@ -43,6 +41,12 @@ class _MessageThemeListChipState extends State<MessageThemeListChip> {
     fIP = Provider.of<RegisteredFriendsItemProvider>(context);
     sIP = Provider.of<SendMessageFriendsItemProvider>(context, listen: true);
     cIP = Provider.of<CurrentPageProvider>(context);
+
+    if (cIP.selectedThemeIndex == widget.themeIndex) {
+      selectedColor = const Color(0xffd7e3f7);
+    } else {
+      selectedColor = const Color(0xffffffff);
+    }
 
     return Container(
       width: 105,

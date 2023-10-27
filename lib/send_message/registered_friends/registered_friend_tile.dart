@@ -44,7 +44,7 @@ class _RegisteredFriendTileState extends State<RegisteredFriendTile> {
     sIP = Provider.of<SendMessageFriendsItemProvider>(context, listen: true);
 
     if (sIP.getItem().length != 0 && sIP.getItem().contains(widget.registeredFriend)) {
-      selectedColor = const Color(0xffbcc0c7);
+      selectedColor = const Color(0xffd7e3f7);
       selectedBorderColor = const Color(0xffbcc0c7);
       selectedTile = true;
     } else if (sIP.getItem().length == 0 || !sIP.getItem().contains(widget.registeredFriend)) {
@@ -101,8 +101,8 @@ class _RegisteredFriendTileState extends State<RegisteredFriendTile> {
                       if (!sIP.getItem().contains(widget.registeredFriend)) {
                         sIP.addItem(widget.registeredFriend);
                         setState(() {
-                          selectedColor = const Color(0xffbcc0c7);
-                          selectedBorderColor = const Color(0xffbcc0c7);
+                          selectedColor = const Color(0xffd7e3f7);
+                          selectedBorderColor = const Color(0xff000000); //변화 안 줄거면 지워
                           selectedTile = true;
                         });
                       }
@@ -115,13 +115,14 @@ class _RegisteredFriendTileState extends State<RegisteredFriendTile> {
           Expanded(
             flex: 1,
             child: Container(
-              alignment: Alignment.center,
+              alignment: Alignment.centerLeft,
+              padding: const EdgeInsets.only(left: 20),
               child: Text(
                 widget.registeredFriend.name,
                 style: const TextStyle(
                     color:  Color(0xff000000),
                     fontWeight: FontWeight.w400,
-                    fontFamily: "Inter",
+                    // fontFamily: "Inter",
                     fontStyle:  FontStyle.normal,
                     fontSize: 12.0
                 ),
@@ -137,7 +138,7 @@ class _RegisteredFriendTileState extends State<RegisteredFriendTile> {
                 style: const TextStyle(
                     color:  Color(0xff000000),
                     fontWeight: FontWeight.w400,
-                    fontFamily: "Inter",
+                    // fontFamily: "Inter",
                     fontStyle:  FontStyle.normal,
                     fontSize: 12.0
                 ),
@@ -153,6 +154,10 @@ class _RegisteredFriendTileState extends State<RegisteredFriendTile> {
                 children: tagItem(),
               ),
             ),
+          ),
+          const Expanded(
+            flex: 1,
+            child: SizedBox(),
           ),
         ],
       ),

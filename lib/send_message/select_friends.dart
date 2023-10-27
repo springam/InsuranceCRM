@@ -223,9 +223,10 @@ class SelectFriendsState extends State<SelectFriends> {
     }
 
     return Container(
-      height: MediaQuery.of(context).size.height * 1.3,
+      // height: MediaQuery.of(context).size.height * 1.3,
       margin: const EdgeInsets.only(top: 19),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
             flex: 14,
@@ -424,6 +425,8 @@ class SelectFriendsState extends State<SelectFriends> {
                   // (channelValue) ? (resIP.getItem().isEmpty) ? const SizedBox() : NewFriends(updateStateSelect: updateStateSelect) : const SizedBox(),
 
                   RegisteredFriends(updateStateSelect: updateStateSelect, key: registeredFriendsStateKey),  //등록친구 widget
+
+                  const SizedBox(height: 30),
 
                 ],
               ),

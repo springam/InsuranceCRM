@@ -53,13 +53,13 @@ class _MessageViewState extends State<MessageView> {
         talkDown = '반말';
         if (sendMessageFriend.talkDown == 0) {
           talkDownCount++;
-          talkDownName = '${sendMessageFriend.name}외';
+          talkDownName = '${sendMessageFriend.name}포함';
         }
       } else {
         talkDown = '존대';
         if (sendMessageFriend.talkDown == 1) {
           talkDownCount++;
-          talkDownName = '${sendMessageFriend.name}외';
+          talkDownName = '${sendMessageFriend.name}포함';
         }
       }
     }
@@ -70,13 +70,17 @@ class _MessageViewState extends State<MessageView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          const SizedBox(height: 10),
           TitleNormal('$talkDown 스타일 [$talkDownName $talkDownCount명]', 12),
           const SizedBox(height: 15),
           Container(
-            height: 310,
+            height: 300,
             width: double.infinity,
-            color: const Color(0xffffffff),
             padding: const EdgeInsets.all(5),
+            decoration: BoxDecoration(
+                border: Border.all(color: Colors.black),
+                color: const Color(0xffffffff)
+            ),
             child: TextField(
               controller: messagePresetController,
               keyboardType: TextInputType.multiline,

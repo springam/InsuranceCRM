@@ -64,7 +64,8 @@ class ModifyFriendTileState extends State<ModifyFriendTile> {
       height: 28,
       child: FilterChip(
         // padding: const EdgeInsets.all(5),
-        selectedColor: const Color(0xffd9d9d9),
+        selectedColor: const Color(0xffd7e3f7),
+        side: const BorderSide(color: Colors.black54, width: 0.5,),
         visualDensity: const VisualDensity(vertical: -4, horizontal: -4),
         selected: selectedIndex == optionIndex,
         showCheckmark: false,
@@ -94,6 +95,8 @@ class ModifyFriendTileState extends State<ModifyFriendTile> {
             side: BorderSide(color: Color(0xff000000), width: 1.0)
         ),
         selected: selectedHashTag.contains(hashTag[optionIndex]),
+        selectedColor: const Color(0xffd7e3f7),
+        side: const BorderSide(color: Colors.black54, width: 0.5,),
         visualDensity: const VisualDensity(vertical: -4, horizontal: -4),
         showCheckmark: false,
         onSelected: (bool selected) {
