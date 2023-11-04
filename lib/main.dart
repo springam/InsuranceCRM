@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:mosaicbluenco/kakao_login.dart';
+import 'package:mosaicbluenco/user_data/image_provider.dart';
 import 'package:mosaicbluenco/user_data/registered_friends_provider.dart';
 import 'package:mosaicbluenco/user_data/response_friend_provider.dart';
 import 'package:mosaicbluenco/user_data/status_provider.dart';
@@ -58,12 +59,17 @@ class MyApp extends StatelessWidget {
             create: (_) => TextMessageProvider()),
         ChangeNotifierProvider(
             create: (_) => ResponseFriendsItemProvider()),
+        ChangeNotifierProvider(
+            create: (_) => ImageCardItemProvider()),
+        ChangeNotifierProvider(
+            create: (_) => ImageCardProvider()),
       ],
       child: MaterialApp(
         title: 'Mosaic Blue&co',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
           useMaterial3: true,
+          fontFamily: "NotoSansCJKKR",
         ),
         // home: const Login(title: 'Mosaic Blue&co'),
         home: const Scaffold(

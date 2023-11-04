@@ -272,7 +272,7 @@ class _HomeMainState extends State<HomeMain> {
                                               style: TextStyle(
                                                   color:  Color(0xff000000),
                                                   fontWeight: FontWeight.w400,
-                                                  fontFamily: "NotoSansCJKKR",
+                                                  // fontFamily: "NotoSansCJKKR",
                                                   fontStyle:  FontStyle.normal,
                                                   fontSize: 12.0
                                               ),
@@ -300,12 +300,12 @@ class _HomeMainState extends State<HomeMain> {
                                             height: 36,
                                             width: 36,
                                             margin: const EdgeInsets.only(left: 20, right: 12),
-                                            decoration: const BoxDecoration(
+                                            decoration: BoxDecoration(
                                                 shape: BoxShape.circle,
                                                 image: DecorationImage(
                                                     fit: BoxFit.fill,
-                                                    image: AssetImage('assets/images/kakao_person.png')
-                                                  // image: NetworkImage(UserData.userImageUrl)
+                                                    // image: AssetImage('assets/images/kakao_person.png')
+                                                  image: NetworkImage(UserData.userImageUrl)
                                                 )
                                             ),
                                           ),

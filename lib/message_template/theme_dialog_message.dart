@@ -16,13 +16,13 @@ class _ThemePopupDialogState extends State<ThemePopupDialog> {
   String themeErrorMessage = '';
   String newTheme = '';
 
-  TextStyle buttonTextStyle = const TextStyle(
-      color:  Color(0xff000000),
-      fontWeight: FontWeight.w400,
-      // fontFamily: "NotoSansCJKKR",
-      fontStyle:  FontStyle.normal,
-      fontSize: 14.0
-  );
+  // TextStyle buttonTextStyle = const TextStyle(
+  //     color:  Color(0xff000000),
+  //     fontWeight: FontWeight.w400,
+  //     fontFamily: "NotoSansCJKKR",
+  //     fontStyle:  FontStyle.normal,
+  //     fontSize: 14.0
+  // );
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +33,7 @@ class _ThemePopupDialogState extends State<ThemePopupDialog> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+
             TextMessageNormal(themeErrorMessage, 14.0),
             const SizedBox(height: 20),
             Container(

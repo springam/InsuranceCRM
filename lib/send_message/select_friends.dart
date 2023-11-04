@@ -577,16 +577,9 @@ class SelectFriendsState extends State<SelectFriends> {
                           showDialog(
                               context: context,
                               builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: const Text('친구를 선택해 주세요.'),
-                                  actions: [
-                                    ElevatedButton(
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: const Text('확인')
-                                    )
-                                  ],
+                                return const AlertMessage(
+                                  title: '선택된 친구가 없습니다',
+                                  message: '왼쪽 친구목록에서 메시지 보낼 친구를 선택해 주세요.',
                                 );
                               }
                           );

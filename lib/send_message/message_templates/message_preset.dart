@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../user_data/image_provider.dart';
 import '../../user_data/registered_friends_provider.dart';
 import '../../user_data/status_provider.dart';
 import '../../user_data/message_provider.dart';
-import 'message_preset_gridview_box.dart';
+import 'image_gridview_box.dart';
+import 'message_gridview_box.dart';
 import 'message_theme_subject.dart';
 
 class MessagePreset extends StatefulWidget {
@@ -18,11 +20,14 @@ class _MessagePresetState extends State<MessagePreset> {
   late SendMessageFriendsItemProvider sIP;
   late MessageItemProvider mIP;
   late CurrentPageProvider cIP;
+  late ImageCardItemProvider iIP;
 
   final ScrollController controller = ScrollController();
 
   List<PresetMessageItem> messageList = [];
-  int crossCountGrid = 3;
+  List<ImageCardItem> imageList = [];
+  int gridCount = 0;
+  int crossCountGrid = 4;
 
   Color selectedColor = const Color(0xffc9ced9);
   Color normalColor = const Color(0xfff0f0f0);
@@ -59,8 +64,10 @@ class _MessagePresetState extends State<MessagePreset> {
       sIP = Provider.of<SendMessageFriendsItemProvider>(context, listen: true);
       mIP = Provider.of<MessageItemProvider>(context, listen: true);
       cIP = Provider.of<CurrentPageProvider>(context, listen: true);
+      iIP = Provider.of<ImageCardItemProvider>(context, listen: true);
 
       messageList = [];
+      imageList = [];
 
       for (var message in mIP.getItem()) {
         if (message.subjectIndex.contains(cIP.getSelectedThemeIndex())) {
@@ -68,11 +75,19 @@ class _MessagePresetState extends State<MessagePreset> {
         }
       }
 
-      if (MediaQuery.of(context).size.width > 1500) {
-        crossCountGrid = 4;
-      } else {
-        crossCountGrid = 3;
+      for (var image in iIP.getItem()) {
+        if (image.subjectIndex.contains(cIP.getSelectedThemeIndex())) {
+          imageList.add(image);
+        }
       }
+
+      (titleIsMessage) ? gridCount = messageList.length : gridCount = imageList.length;
+
+      // if (MediaQuery.of(context).size.width > 1500) {
+      //   crossCountGrid = 4;
+      // } else {
+      //   crossCountGrid = 3;
+      // }
 
       return Container(
         height: MediaQuery.of(context).size.height,
@@ -155,7 +170,7 @@ class _MessagePresetState extends State<MessagePreset> {
 
                       IconButton(
                         icon: const Icon(Icons.cancel_rounded),
-                        color: Colors.grey,
+                        color: Colors.white,
                         iconSize: 20,
                         onPressed: () {
                           cIP.setCurrentSubPage(1);
@@ -213,9 +228,10 @@ class _MessagePresetState extends State<MessagePreset> {
                           crossAxisSpacing: 20,
                           childAspectRatio: 1.5
                       ),
-                      itemCount: messageList.length,
+                      itemCount: gridCount,
                       itemBuilder: (BuildContext context, int index) {
-                        return GridViewBox(presetMessage: messageList[index]);
+                        return (titleIsMessage) ? GridViewBox(presetMessage: messageList[index]) :
+                        ImageGridViewBox(imageCard: imageList[index]);
                       }
                   ),
                 )

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../etc_widget/text_message.dart';
+import '../../user_data/image_provider.dart';
 import '../../user_data/message_provider.dart';
 import '../../user_data/registered_friends_provider.dart';
 import '../../user_data/status_provider.dart';
@@ -21,6 +22,7 @@ class _MessageViewState extends State<MessageView> {
   late SendMessageFriendsItemProvider sIP;
   late TextMessageProvider tIP;
   late CurrentPageProvider cIP;
+  late ImageCardProvider icIP;
 
   final TextEditingController messagePresetController = TextEditingController();
 
@@ -39,6 +41,7 @@ class _MessageViewState extends State<MessageView> {
     sIP = Provider.of<SendMessageFriendsItemProvider>(context, listen: true);
     tIP = Provider.of<TextMessageProvider>(context, listen: true);
     cIP = Provider.of<CurrentPageProvider>(context, listen: true);
+    icIP = Provider.of<ImageCardProvider>(context, listen: true); //현재 보여질 이미지 프로바이더
 
     talkDownCount = 0;
 
@@ -81,27 +84,44 @@ class _MessageViewState extends State<MessageView> {
                 border: Border.all(color: Colors.black),
                 color: const Color(0xffffffff)
             ),
-            child: TextField(
-              controller: messagePresetController,
-              keyboardType: TextInputType.multiline,
-              maxLines: null,
-              style: buttonTextStyle,
-              decoration: const InputDecoration(
-                  border: InputBorder.none
-              ),
-              onChanged: (value) {
-                if (widget.talkDown) {
-                  tIP.setTextMessageTalkDown(messagePresetController.text);
-                  if (cIP.getTalkDown() == 0) {
-                    cIP.setTalkDown(1);
-                  }
-                } else {
-                  tIP.setTextMessage(messagePresetController.text);
-                  if (cIP.getTalkDown() == 1) {
-                    cIP.setTalkDown(0);
-                  }
-                }
-              },
+            child: ListView(
+              children: [
+                // (icIP.getImagePath().length > 100) ? const SizedBox() : Container(
+                //   height: 250,
+                //   // width: double.infinity,
+                //   // margin: const EdgeInsets.only(left: 20, right: 12),
+                //   decoration: const BoxDecoration(
+                //     // shape: BoxShape.rectangle,
+                //       image: DecorationImage(
+                //           fit: BoxFit.fitHeight,
+                //           // image: AssetImage('assets/images/kakao_person.png')
+                //           image: NetworkImage(icIP.getImagePath())
+                //       )
+                //   ),
+                // ),
+                TextField(
+                  controller: messagePresetController,
+                  keyboardType: TextInputType.multiline,
+                  maxLines: null,
+                  style: buttonTextStyle,
+                  decoration: const InputDecoration(
+                      border: InputBorder.none
+                  ),
+                  onChanged: (value) {
+                    if (widget.talkDown) {
+                      tIP.setTextMessageTalkDown(messagePresetController.text);
+                      if (cIP.getTalkDown() == 0) {
+                        cIP.setTalkDown(1);
+                      }
+                    } else {
+                      tIP.setTextMessage(messagePresetController.text);
+                      if (cIP.getTalkDown() == 1) {
+                        cIP.setTalkDown(0);
+                      }
+                    }
+                  },
+                )
+              ],
             ),
           ),
         ],

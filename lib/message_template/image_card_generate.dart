@@ -81,6 +81,7 @@ class _ImageCardGenerateState extends State<ImageCardGenerate> {
         Container(
           width: double.infinity,
           height: listHeight,
+          alignment: Alignment.center,
           decoration: const BoxDecoration(
               color: Color(0xfff0f0f0)
           ),

@@ -245,23 +245,25 @@ class NewFriendTileState extends State<NewFriendTile> {
                     padding: const EdgeInsets.only(bottom: 5, left: 5),
                     margin: const EdgeInsets.only(left: 10, right: 10),
                     decoration: BoxDecoration(border: Border.all(width: 1, color: const Color(0xffd9d9d9))),
-                    child: TextField(
-                      controller: middleNickController,
-                      style: buttonTextStyle,
-                      decoration: const InputDecoration(
-                        // hintText: '10자 이내로 입력해 주세요.',
-                        // enabledBorder: OutlineInputBorder(
-                        //     borderSide: BorderSide(color: Color(0xffd9d9d9), width: 1.0,)
-                        // ),
-                          border: InputBorder.none
+                    child: Form(
+                      child: TextFormField(
+                        controller: middleNickController,
+                        style: buttonTextStyle,
+                        decoration: const InputDecoration(
+                          // hintText: '10자 이내로 입력해 주세요.',
+                          // enabledBorder: OutlineInputBorder(
+                          //     borderSide: BorderSide(color: Color(0xffd9d9d9), width: 1.0,)
+                          // ),
+                            border: InputBorder.none
+                        ),
+                        onChanged: (value) {
+                          if (value.length < 11) {
+                            resIP.modifyName(value, widget.index);
+                          } else {
+                            middleNickController.text = resIP.getItem()[widget.index].name;
+                          }
+                        },
                       ),
-                      onChanged: (value) {
-                        if (value.length < 11) {
-                          resIP.modifyName(value, widget.index);
-                        } else {
-                          middleNickController.text = resIP.getItem()[widget.index].name;
-                        }
-                      },
                     ),
                   )
               ),

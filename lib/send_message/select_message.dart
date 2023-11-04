@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import '../etc_widget/design_widget.dart';
 import '../etc_widget/text_message.dart';
+import '../user_data/image_provider.dart';
 import '../user_data/message_provider.dart';
 import '../user_data/registered_friends_provider.dart';
 import '../user_data/status_provider.dart';
@@ -28,6 +29,7 @@ class _SelectMessageState extends State<SelectMessage> {
   late SendMessageFriendsItemProvider sIP;
   late TextMessageProvider tIP;
   late CurrentPageProvider cIP;
+  late ImageCardProvider icIP;
 
   final ScrollController controller = ScrollController();
 
@@ -60,7 +62,8 @@ class _SelectMessageState extends State<SelectMessage> {
   }
 
   void sendMe() async {
-    String result = json.encode({'request':'sendMe', 'body':tIP.getTextMessageTalkDown(), 'name':UserData.userNickname});
+    // String result = json.encode({'request':'sendMe', 'body': '${icIP.getImagePath()}\n${tIP.getTextMessageTalkDown()}', 'name':UserData.userNickname});
+    String result = json.encode({'request':'sendMe', 'body': tIP.getTextMessageTalkDown(), 'name':UserData.userNickname});
     print(result);
     _channel.sink.add(result);
   }
@@ -115,6 +118,7 @@ class _SelectMessageState extends State<SelectMessage> {
     sIP = Provider.of<SendMessageFriendsItemProvider>(context, listen: true);
     tIP = Provider.of<TextMessageProvider>(context, listen: true);
     cIP = Provider.of<CurrentPageProvider>(context, listen: true);
+    icIP = Provider.of<ImageCardProvider>(context, listen: true);
 
     if (MediaQuery.of(context).size.width >1280) {
       listHeight = 100;
@@ -442,12 +446,12 @@ class _SelectMessageState extends State<SelectMessage> {
                                             height: 25,
                                             width: 25,
                                             margin: const EdgeInsets.only(left: 0, bottom: 5),
-                                            decoration: const BoxDecoration(
+                                            decoration: BoxDecoration(
                                                 shape: BoxShape.circle,
                                                 image: DecorationImage(
                                                     fit: BoxFit.fill,
-                                                    image: AssetImage('assets/images/kakao_person.png')
-                                                  // image: NetworkImage(UserData.userImageUrl)
+                                                    // image: AssetImage('assets/images/kakao_person.png')
+                                                  image: NetworkImage(UserData.userImageUrl)
                                                 )
                                             ),
                                           ),
@@ -473,15 +477,38 @@ class _SelectMessageState extends State<SelectMessage> {
                                           ),
                                         ),
                                       ) : const SizedBox(),
-                                      Container(
-                                        padding: const EdgeInsets.all(10),
-                                        alignment: Alignment.centerLeft,
-                                        color: (selectedMessage.isEmpty) ? Colors.transparent : const Color(0xffffdf8e),
-                                        child: Text(
-                                            selectedMessage,
-                                            style: buttonTextStyle,
-                                        ),
-                                      )
+
+                                      Column(
+                                        children: [
+                                          // (icIP.getImagePath().length > 100) ? const SizedBox() : Container(
+                                          //   height: 250,
+                                          //   // width: double.infinity,
+                                          //   padding: const EdgeInsets.all(10),
+                                          //   color: const Color(0xffffdf8e),
+                                          //   child: Container(
+                                          //     decoration: const BoxDecoration(
+                                          //       // shape: BoxShape.circle,
+                                          //         color: Color(0xffffdf8e),
+                                          //         borderRadius: BorderRadius.all(Radius.circular(10)),
+                                          //         image: DecorationImage(
+                                          //             fit: BoxFit.fitHeight,
+                                          //             image: AssetImage('assets/images/kakao_person.png')
+                                          //           // image: NetworkImage(icIP.getImagePath())
+                                          //         )
+                                          //     ),
+                                          //   ),
+                                          // ),
+                                          Container(
+                                            padding: const EdgeInsets.all(10),
+                                            alignment: Alignment.centerLeft,
+                                            color: (selectedMessage.isEmpty) ? Colors.transparent : const Color(0xffffdf8e),
+                                            child: Text(
+                                              selectedMessage,
+                                              style: buttonTextStyle,
+                                            ),
+                                          )
+                                        ],
+                                      ),
                                     ],
                                   ),
                                 ),

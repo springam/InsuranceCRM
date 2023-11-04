@@ -16,14 +16,6 @@ class _TagPopupDialogState extends State<TagPopupDialog> {
   String tagErrorMessage = '';
   String newTag = '';
 
-  // TextStyle buttonTextStyle = const TextStyle(
-  //     color:  Color(0xff000000),
-  //     fontWeight: FontWeight.w400,
-  //     // fontFamily: "NotoSansCJKKR",
-  //     fontStyle:  FontStyle.normal,
-  //     fontSize: 14.0,
-  // );
-
   @override
   Widget build(BuildContext context) {
     return AlertDialog(

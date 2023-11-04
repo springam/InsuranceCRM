@@ -2,31 +2,32 @@ import 'package:flutter/material.dart';
 
 class ImageCardProvider with ChangeNotifier { //실제 보내질 메시지 내용
 
-  String textMessage = '';
-  String textMessageTalkDown = '';
+  String imagePath = '';
 
-  getTextMessage() {
-    return textMessage;
+  getImagePath() {
+    return imagePath;
   }
 
-  getTextMessageTalkDown() {
-    return textMessageTalkDown;
-  }
+  // getTextMessageTalkDown() {
+  //   return textMessageTalkDown;
+  // }
 
-  setTextMessage(String message) {
-    textMessage = message;
+  setImagePath(String path) {
+    imagePath = path;
     notifyListeners();
   }
 
-  setTextMessageTalkDown(String message) {
-    textMessageTalkDown = message;
-    notifyListeners();
-  }
+
+
+  // setTextMessageTalkDown(String message) {
+  //   textMessageTalkDown = message;
+  //   notifyListeners();
+  // }
 
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-class ImageCardItemItemProvider with ChangeNotifier {
+class ImageCardItemProvider with ChangeNotifier {
 
   List<ImageCardItem> imageCardItems = [];
 

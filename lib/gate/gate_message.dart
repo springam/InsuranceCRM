@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../home_main/home_main.dart';
 import '../user_data/message_provider.dart';
+import 'gate_image.dart';
 
 class PreSetItemList extends StatefulWidget {
   const PreSetItemList({super.key});
@@ -37,7 +38,7 @@ class _PreSetItemListState extends State<PreSetItemList> {
             ));
           }).toList();
           mIP.setItem(presetMessageMap);
-          return const HomeMain();
+          return const PreSetImageItemList();
         } else
         if (snapshot.hasError) {
           Text('${snapshot.error}');

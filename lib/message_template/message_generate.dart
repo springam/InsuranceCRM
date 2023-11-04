@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mosaicbluenco/message_template/theme_list.dart';
 
+import '../etc_widget/alert_dialog.dart';
 import '../etc_widget/tag_dialog_message.dart';
 import '../etc_widget/text_message.dart';
 import '../user_data/user_data.dart';
@@ -19,6 +20,12 @@ class _MessageGenerateState extends State<MessageGenerate> {
 
   final TextEditingController messageController = TextEditingController();
   final TextEditingController messageTalkDownController = TextEditingController();
+
+  final leftFormKey = GlobalKey<FormState>();
+  final rightFormKey = GlobalKey<FormState>();
+
+  String leftText = '';
+  String rightText = '';
 
   double listHeight = 0.0;
 
@@ -64,126 +71,154 @@ class _MessageGenerateState extends State<MessageGenerate> {
         Container(
           width: double.infinity,
           height: listHeight,
+          alignment: Alignment.center,
           decoration: const BoxDecoration(
               color: Color(0xfff0f0f0)
           ),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Wrap(
                 spacing: 3,
                 children: themeList(),
               ),
 
-              Container(
-                width: 33,
-                height: 33,
-                margin: const EdgeInsets.only(left: 7),
-                alignment: Alignment.center,
-                child: Material(
-                  color: const Color(0xfff0f0f0),
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(33),
-                    splashColor: const Color(0xffffdf8e),
-                    hoverColor: Colors.grey,
-                    child: Ink(
-                      width: 33,
-                      height: 33,
-                      decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(33)),
-                        color: Color(0xffffffff),
-                      ),
-                      child: const CircleAvatar(
-                        backgroundColor: Colors.transparent,
-                        child: Text('+', style: TextStyle(color: Colors.black, fontSize: 14.0)),
-                      ),
-                    ),
-                    onTap: () {
-                      if (TagList.tagList.length < 20) {
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return const TagPopupDialog();
-                            }
-                        ).then((value) {
-                          setState(() {});
-                        });
-                      } else {
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: const Text('더이상 태그를 추가할 수 없습니다.'),
-                                actions: [
-                                  ElevatedButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: const Text('확인')
-                                  )
-                                ],
-                              );
-                            }
-                        );
-                      }
-                    },
-                  ),
-                ),
-              ),
+              // Container(
+              //   width: 33,
+              //   height: 33,
+              //   margin: const EdgeInsets.only(left: 7),
+              //   alignment: Alignment.center,
+              //   child: Material(
+              //     color: const Color(0xfff0f0f0),
+              //     child: InkWell(
+              //       borderRadius: BorderRadius.circular(33),
+              //       splashColor: const Color(0xffffdf8e),
+              //       hoverColor: Colors.grey,
+              //       child: Ink(
+              //         width: 33,
+              //         height: 33,
+              //         decoration: const BoxDecoration(
+              //           borderRadius: BorderRadius.all(Radius.circular(33)),
+              //           color: Color(0xffffffff),
+              //         ),
+              //         child: const CircleAvatar(
+              //           backgroundColor: Colors.transparent,
+              //           child: Text('+', style: TextStyle(color: Colors.black, fontSize: 14.0)),
+              //         ),
+              //       ),
+              //       onTap: () {
+              //         if (TagList.tagList.length < 20) {
+              //           showDialog(
+              //               context: context,
+              //               builder: (BuildContext context) {
+              //                 return const TagPopupDialog();
+              //               }
+              //           ).then((value) {
+              //             setState(() {});
+              //           });
+              //         } else {
+              //           showDialog(
+              //               context: context,
+              //               builder: (BuildContext context) {
+              //                 return AlertDialog(
+              //                   title: const Text('더이상 태그를 추가할 수 없습니다.'),
+              //                   actions: [
+              //                     ElevatedButton(
+              //                         onPressed: () {
+              //                           Navigator.of(context).pop();
+              //                         },
+              //                         child: const Text('확인')
+              //                     )
+              //                   ],
+              //                 );
+              //               }
+              //           );
+              //         }
+              //       },
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ),
         Container(
-          height: 310,
+          height: 280,
           width: double.infinity,
           color: const Color(0xffffffff),
           padding: const EdgeInsets.all(5),
-          child: TextField(
-            controller: messageController,
-            keyboardType: TextInputType.multiline,
-            maxLines: null,
-            style: buttonTextStyle,
-            decoration: const InputDecoration(
-                hintText: '내용을 입력해 주세요',
-                labelText: '존대 메시지',
-                // enabledBorder: OutlineInputBorder(
-                //     borderSide: BorderSide(color: Color(0xffd9d9d9), width: 1.0,)
-                // ),
-                border: InputBorder.none
+          child: Form(
+            key: leftFormKey,
+            child: TextFormField(
+              controller: messageController,
+              keyboardType: TextInputType.multiline,
+              maxLines: null,
+              style: buttonTextStyle,
+              decoration: const InputDecoration(
+                  hintText: '내용을 입력해 주세요',
+                  labelText: '존대 메시지',
+                  // enabledBorder: OutlineInputBorder(
+                  //     borderSide: BorderSide(color: Color(0xffd9d9d9), width: 1.0,)
+                  // ),
+                  border: InputBorder.none
+              ),
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return '내용을 입력해 주세요.';
+                }
+              },
+              onSaved: (value) {},
+              onChanged: (value) {},
             ),
-            onChanged: (value) {
-
-            },
-          ),
+          )
         ),
         Container(
-          height: 310,
+          height: 280,
           width: double.infinity,
           color: const Color(0xffffffff),
           padding: const EdgeInsets.all(5),
-          child: TextField(
-            controller: messageTalkDownController,
-            keyboardType: TextInputType.multiline,
-            maxLines: null,
-            style: buttonTextStyle,
-            decoration: const InputDecoration(
-                hintText: '내용을 입력해 주세요',
-                labelText: '반말 메시지',
-                // enabledBorder: OutlineInputBorder(
-                //     borderSide: BorderSide(color: Color(0xffd9d9d9), width: 1.0,)
-                // ),
-                border: InputBorder.none
+          child: Form(
+            key: rightFormKey,
+            child: TextFormField(
+              controller: messageTalkDownController,
+              keyboardType: TextInputType.multiline,
+              maxLines: null,
+              style: buttonTextStyle,
+              decoration: const InputDecoration(
+                  hintText: '내용을 입력해 주세요',
+                  labelText: '반말 메시지',
+                  // enabledBorder: OutlineInputBorder(
+                  //     borderSide: BorderSide(color: Color(0xffd9d9d9), width: 1.0,)
+                  // ),
+                  border: InputBorder.none
+              ),
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return '내용을 입력해 주세요.';
+                }
+              },
+              onSaved: (value) {},
+              onChanged: (value) {},
             ),
-            onChanged: (value) {
-
-            },
           ),
         ),
 
         ElevatedButton(
             onPressed: () {
-              saveData();
+              if (messageController.text.isEmpty || messageTalkDownController.text.isEmpty) {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return const AlertMessage(
+                        title: '빈 필드가 존재 합니다.',
+                        message: '존대 메시지와 반말 메시지를 모두 입력해야 저장이 가능합니다.',
+                      );
+                    }
+                );
+              } else {
+                saveData();
+              }
             },
-            child: const Text('확인 작업 없습니다. 한 번 더 보고 저장해 주세요.')
+            child: const Text('저장하기')
         )
       ],
     );
