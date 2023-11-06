@@ -58,7 +58,7 @@ class NewFriendTileState extends State<NewFriendTile> {
   }
 
   List<Widget> selectChip() {
-    var selectChipBackgroundColorWarn = (selectedIndex == 2) ? const Color(0xffff5232) : Colors.transparent;
+    var selectChipBackgroundColorWarn = (selectedIndex == 2) ? Colors.black : Colors.black;
     return List<Widget>.generate(2, (optionIndex) => SizedBox(
       height: 28,
       child: FilterChip(
@@ -86,7 +86,7 @@ class NewFriendTileState extends State<NewFriendTile> {
   }
 
   List<Widget> filterChip() {
-    var filterChipBackgroundColorWarn = (selectedHashTag.isEmpty) ? const Color(0xffff5232) : Colors.transparent;
+    var filterChipBackgroundColorWarn = (selectedHashTag.isEmpty) ? Colors.transparent : Colors.transparent;
     return List<Widget>.generate(hashTag.length, (optionIndex) => SizedBox(
       height: 26,
       child: FilterChip(

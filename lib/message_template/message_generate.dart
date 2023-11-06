@@ -141,65 +141,84 @@ class _MessageGenerateState extends State<MessageGenerate> {
             ],
           ),
         ),
-        Container(
-          height: 280,
-          width: double.infinity,
-          color: const Color(0xffffffff),
-          padding: const EdgeInsets.all(5),
-          child: Form(
-            key: leftFormKey,
-            child: TextFormField(
-              controller: messageController,
-              keyboardType: TextInputType.multiline,
-              maxLines: null,
-              style: buttonTextStyle,
-              decoration: const InputDecoration(
-                  hintText: '내용을 입력해 주세요',
-                  labelText: '존대 메시지',
-                  // enabledBorder: OutlineInputBorder(
-                  //     borderSide: BorderSide(color: Color(0xffd9d9d9), width: 1.0,)
-                  // ),
-                  border: InputBorder.none
+        const SizedBox(height: 30),
+        Row(
+          children: [
+            Expanded(
+              child: Container(
+                  height: 280,
+                  // width: double.infinity,
+                  // color: const Color(0xffffffff),
+                  padding: const EdgeInsets.all(10),
+                  margin: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black, width: 1.0),
+                  ),
+                  child: Form(
+                    key: leftFormKey,
+                    child: TextFormField(
+                      controller: messageController,
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null,
+                      style: buttonTextStyle,
+                      decoration: const InputDecoration(
+                          hintText: '내용을 입력해 주세요',
+                          labelText: '존대 메시지',
+                          // enabledBorder: OutlineInputBorder(
+                          //     borderSide: BorderSide(color: Color(0xffd9d9d9), width: 1.0,)
+                          // ),
+                          border: InputBorder.none
+                      ),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return '내용을 입력해 주세요.';
+                        }
+                      },
+                      onSaved: (value) {},
+                      onChanged: (value) {},
+                    ),
+                  )
               ),
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return '내용을 입력해 주세요.';
-                }
-              },
-              onSaved: (value) {},
-              onChanged: (value) {},
             ),
-          )
-        ),
-        Container(
-          height: 280,
-          width: double.infinity,
-          color: const Color(0xffffffff),
-          padding: const EdgeInsets.all(5),
-          child: Form(
-            key: rightFormKey,
-            child: TextFormField(
-              controller: messageTalkDownController,
-              keyboardType: TextInputType.multiline,
-              maxLines: null,
-              style: buttonTextStyle,
-              decoration: const InputDecoration(
-                  hintText: '내용을 입력해 주세요',
-                  labelText: '반말 메시지',
-                  // enabledBorder: OutlineInputBorder(
-                  //     borderSide: BorderSide(color: Color(0xffd9d9d9), width: 1.0,)
-                  // ),
-                  border: InputBorder.none
-              ),
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return '내용을 입력해 주세요.';
-                }
-              },
-              onSaved: (value) {},
-              onChanged: (value) {},
+
+            Expanded(
+              child: Container(
+                height: 280,
+                width: double.infinity,
+                // color: const Color(0xffffffff),
+                padding: const EdgeInsets.all(10),
+                margin: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black, width: 1.0),
+                ),
+                child: Form(
+                  key: rightFormKey,
+                  child: TextFormField(
+                    controller: messageTalkDownController,
+                    keyboardType: TextInputType.multiline,
+                    maxLines: null,
+                    style: buttonTextStyle,
+                    decoration: const InputDecoration(
+                        hintText: '내용을 입력해 주세요',
+                        labelText: '반말 메시지',
+                        // enabledBorder: OutlineInputBorder(
+                        //     borderSide: BorderSide(color: Color(0xffd9d9d9), width: 1.0,)
+                        // ),
+                        border: InputBorder.none
+                    ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return '내용을 입력해 주세요.';
+                      }
+                    },
+                    onSaved: (value) {},
+                    onChanged: (value) {},
+                  ),
+                ),
+
             ),
-          ),
+            ),
+          ],
         ),
 
         ElevatedButton(

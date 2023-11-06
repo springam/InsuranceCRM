@@ -62,7 +62,7 @@ class _SelectMessageState extends State<SelectMessage> {
   }
 
   void sendMe() async {
-    // String result = json.encode({'request':'sendMe', 'body': '${icIP.getImagePath()}\n${tIP.getTextMessageTalkDown()}', 'name':UserData.userNickname});
+    // String result = json.encode({'request':'sendMe', 'body': '${icIP.getImagePath()}', 'name':UserData.userNickname});
     String result = json.encode({'request':'sendMe', 'body': tIP.getTextMessageTalkDown(), 'name':UserData.userNickname});
     print(result);
     _channel.sink.add(result);

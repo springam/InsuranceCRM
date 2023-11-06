@@ -70,7 +70,7 @@ class _MessageThemeSubjectState extends State<MessageThemeSubject> {
               style: TextStyle(
                   color: textColor,
                   fontWeight: FontWeight.w400,
-                  // fontFamily: "NotoSansCJKKR",
+                  fontFamily: "NotoSansCJKKR",
                   fontStyle:  FontStyle.normal,
                   fontSize: 14.0
               )

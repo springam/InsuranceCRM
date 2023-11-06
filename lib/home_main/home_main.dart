@@ -119,7 +119,7 @@ class _HomeMainState extends State<HomeMain> {
                   style: TextStyle(
                       color: const Color(0xff000000),
                       fontWeight: fontWeight,
-                      // fontFamily: "NotoSansCJKKR",
+                      fontFamily: "NotoSansCJKKR",
                       fontStyle:  FontStyle.normal,
                       fontSize: 14.0
                   ),
@@ -272,7 +272,7 @@ class _HomeMainState extends State<HomeMain> {
                                               style: TextStyle(
                                                   color:  Color(0xff000000),
                                                   fontWeight: FontWeight.w400,
-                                                  // fontFamily: "NotoSansCJKKR",
+                                                  fontFamily: "NotoSansCJKKR",
                                                   fontStyle:  FontStyle.normal,
                                                   fontSize: 12.0
                                               ),
