@@ -4,12 +4,15 @@ import 'package:intl/intl.dart';
 import 'package:mosaicbluenco/etc_widget/text_message.dart';
 import 'package:mosaicbluenco/user_data/user_data.dart';
 import 'package:provider/provider.dart';
+import '../../etc_widget/toast_message.dart';
 import '../../user_data/registered_friends_provider.dart';
+import '../../user_data/response_friend_provider.dart';
 
 class ModifyFriendTile extends StatefulWidget {
-  const ModifyFriendTile({required this.registeredFriend, required this.registering, super.key});
+  const ModifyFriendTile({required this.registeredFriend, required this.index, required this.registering, super.key});
 
   final RegisteredFriendsItem registeredFriend;
+  final int index;
   final bool registering;
 
   @override
@@ -18,7 +21,7 @@ class ModifyFriendTile extends StatefulWidget {
 
 class ModifyFriendTileState extends State<ModifyFriendTile> {
 
-  late RegisteredFriendsItemProvider fIP;
+  late RegisteredFriendsItemProvider regIP;
 
   final ScrollController controller = ScrollController();
   final TextEditingController middleNickController = TextEditingController();
@@ -52,10 +55,12 @@ class ModifyFriendTileState extends State<ModifyFriendTile> {
     middleNickController.text = widget.registeredFriend.name;
     selectedIndex = widget.registeredFriend.talkDown;
     selectedHashTag = widget.registeredFriend.tag;
+    ResponseFriendsItemProvider().addListener(() { });
   }
 
   @override
   void dispose() {
+    ResponseFriendsItemProvider().removeListener(() { });
     super.dispose();
   }
 
@@ -136,28 +141,28 @@ class ModifyFriendTileState extends State<ModifyFriendTile> {
     final docRef = FirebaseFirestore.instance.collection('friends').doc(widget.registeredFriend.documentId);
     await docRef.update({
       'registered_date': DateFormat("yyyy년 MM월 dd일 hh시 mm분").format(now),
-      'registered': false,
+      'registered': 0,
     });
+    regIP.removeItem(widget.registeredFriend);
   }
 
   Future<void> registerFriends() async{
 
     final docRef = FirebaseFirestore.instance.collection('friends').doc(widget.registeredFriend.documentId);
     await docRef.update({
-      'registered_date': DateFormat("yyyy년 MM월 dd일 hh시 mm분").format(now),
+      // 'registered_date': DateFormat("yyyy년 MM월 dd일 hh시 mm분").format(now),
       'name': middleNickController.text,
       'tag': selectedHashTag,
       'talk_down': selectedIndex,
       // 'tier': 0
     });
-
-    debugPrint('update ${middleNickController.text}');
+    regIP.modifyItem(middleNickController.text, selectedHashTag, selectedIndex, widget.index);
   }
 
   @override
   Widget build(BuildContext context) {
 
-    fIP = Provider.of<RegisteredFriendsItemProvider>(context);
+    regIP = Provider.of<RegisteredFriendsItemProvider>(context);
 
     if (middleNickController.text.isNotEmpty && selectedIndex != 2 && selectedHashTag.isNotEmpty) {
       warnColor = Colors.transparent;
@@ -290,7 +295,8 @@ class ModifyFriendTileState extends State<ModifyFriendTile> {
                       textAlign: TextAlign.center
                   ),
                   onTap: () async{
-                    // await notRegisterFriends();
+                    showToast('${widget.registeredFriend.kakaoNickname} 님을 등록안함으로 변경합니다. 잠시만 기다려 주세요');
+                    await notRegisterFriends();
                     // widget.updateStateNewFriend();
                   },
                 ),

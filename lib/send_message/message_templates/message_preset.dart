@@ -35,6 +35,25 @@ class _MessagePresetState extends State<MessagePreset> {
   Color imageColor = const Color(0xfff0f0f0);
   bool titleIsMessage = true;
 
+  @override
+  void initState() {
+    super.initState();
+    SendMessageFriendsItemProvider().addListener(() { });
+    MessageItemProvider().addListener(() { });
+    CurrentPageProvider().addListener(() { });
+    ImageCardItemProvider().addListener(() { });
+
+  }
+
+  @override
+  void dispose() {
+    SendMessageFriendsItemProvider().removeListener(() { });
+    MessageItemProvider().removeListener(() { });
+    CurrentPageProvider().removeListener(() { });
+    ImageCardItemProvider().removeListener(() { });
+    super.dispose();
+  }
+
   List<Widget> themeListTitle(int sectionIndex) {
 
     int listCount = 0;

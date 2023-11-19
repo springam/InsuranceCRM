@@ -11,7 +11,24 @@ class RegisteredFriendsItemProvider with ChangeNotifier {
 
   setItem(List<RegisteredFriendsItem> registeredFriends) {
     registeredFriendsMap = registeredFriends;
+    notifyListeners();
+  }
+
+  addItems(List<RegisteredFriendsItem> responseFriends) {
+    registeredFriendsMap.addAll(responseFriends);
     // notifyListeners();
+  }
+
+  removeItem(responseFriend) {
+    registeredFriendsMap.remove(responseFriend);
+    notifyListeners();
+  }
+
+  modifyItem(String name, List<dynamic> selectedHashTag, int talkDown, int index) {
+    registeredFriendsMap[index].name = name;
+    registeredFriendsMap[index].tag = selectedHashTag;
+    registeredFriendsMap[index].talkDown = talkDown;
+    notifyListeners();
   }
 }
 

@@ -8,9 +8,7 @@ import '../../user_data/registered_friends_provider.dart';
 GlobalKey<RegisteredFriendsState> registeredFriendsStateKey = GlobalKey();
 
 class RegisteredFriends extends StatefulWidget {
-  const RegisteredFriends({required this.updateStateSelect, Key? key}) : super(key: key);
-
-  final Function() updateStateSelect;
+  const RegisteredFriends({Key? key}) : super(key: key);
 
   @override
   State<RegisteredFriends> createState() => RegisteredFriendsState();
@@ -32,9 +30,21 @@ class RegisteredFriendsState extends State<RegisteredFriends> {
   final TextEditingController searchFriendController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    RegisteredFriendsItemProvider().addListener(() { });
+  }
+
+  @override
+  void dispose() {
+    RegisteredFriendsItemProvider().removeListener(() { });
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
 
-    regIP = Provider.of<RegisteredFriendsItemProvider>(context);
+    regIP = Provider.of<RegisteredFriendsItemProvider>(context, listen: true);
 
     registeredCount = regIP.getItem().length;
 
@@ -153,10 +163,9 @@ class RegisteredFriendsState extends State<RegisteredFriends> {
                       trackVisibility: true,
                       thickness: 12.0,
                       child: ListView.builder(
-                          itemCount: regIP.getItem().length + 1,
+                          itemCount: registeredCount + 1,
                           controller: controller,
                           itemBuilder: (BuildContext context, int index) {
-                            //등록된 친구 목록 provider 에서 등록된 목록만 보여줌
                             if (index == regIP.getItem().length) {
                               if (registering) {
                                 Future.delayed(const Duration(milliseconds: 500), () {
@@ -167,15 +176,11 @@ class RegisteredFriendsState extends State<RegisteredFriends> {
                                 });
                               }
                             } else {
+
                               if (modifyRegisteredFriend) {
-                                return ModifyFriendTile(registeredFriend: regIP.getItem()[index], registering: registering);
+                                return ModifyFriendTile(registeredFriend: regIP.getItem()[index], index: index, registering: registering);
                               } else {
                                 return RegisteredFriendTile(regIP.getItem()[index]);
-                                // if (regIP.getItem()[index].registered) {
-                                //   return RegisteredFriendTile(regIP.getItem()[index]);
-                                // } else {
-                                //   return const SizedBox();
-                                // }
                               }
                             }
 

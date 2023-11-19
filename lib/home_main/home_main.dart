@@ -171,7 +171,6 @@ class _HomeMainState extends State<HomeMain> {
 
     screenWidth = MediaQuery.of(context).size.width;
 
-
     if (MediaQuery.of(context).size.width < 1500 || MediaQuery.of(context).size.height < 720) {
       return const Scaffold(
         body: Center(

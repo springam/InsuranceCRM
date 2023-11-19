@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 import 'package:mosaicbluenco/message_template/theme_list.dart';
 
 import '../etc_widget/alert_dialog.dart';
-import '../etc_widget/tag_dialog_message.dart';
 import '../etc_widget/text_message.dart';
 import '../user_data/user_data.dart';
 

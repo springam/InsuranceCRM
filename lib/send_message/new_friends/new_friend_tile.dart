@@ -7,11 +7,10 @@ import 'package:provider/provider.dart';
 import '../../user_data/response_friend_provider.dart';
 
 class NewFriendTile extends StatefulWidget {
-  const NewFriendTile({required this.index, required this.registering, required this.updateStateNewFriend, super.key});
+  const NewFriendTile({required this.index, required this.registering, super.key});
 
   final int index;
   final bool registering;
-  final Function() updateStateNewFriend;
 
   @override
   State<NewFriendTile> createState() => NewFriendTileState();
@@ -19,7 +18,6 @@ class NewFriendTile extends StatefulWidget {
 
 class NewFriendTileState extends State<NewFriendTile> {
 
-  // late RegisteredFriendsItemProvider regIP;
   late ResponseFriendsItemProvider resIP;
 
   final ScrollController controller = ScrollController();
@@ -50,10 +48,12 @@ class NewFriendTileState extends State<NewFriendTile> {
   @override
   void initState() {
     super.initState();
+    ResponseFriendsItemProvider().addListener(() { });
   }
 
   @override
   void dispose() {
+    ResponseFriendsItemProvider().removeListener(() { });
     super.dispose();
   }
 
@@ -153,13 +153,11 @@ class NewFriendTileState extends State<NewFriendTile> {
       'tier': 0
     });
     resIP.removeItem(resIP.getItem()[widget.index]);
-    // widget.updateStateNewFriend();
   }
 
   @override
   Widget build(BuildContext context) {
 
-    // regIP = Provider.of<RegisteredFriendsItemProvider>(context);
     resIP = Provider.of<ResponseFriendsItemProvider>(context, listen: true);
 
     nickname = resIP.getItem()[widget.index].kakaoNickname?? '';
@@ -302,7 +300,6 @@ class NewFriendTileState extends State<NewFriendTile> {
                   ),
                   onTap: () async{
                     await notRegisterFriends();
-                    // widget.updateStateNewFriend();
                   },
                 ),
               )

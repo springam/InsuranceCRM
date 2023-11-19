@@ -20,6 +20,20 @@ class _GridViewBoxState extends State<GridViewBox> {
   final ScrollController controller = ScrollController();
 
   @override
+  void initState() {
+    super.initState();
+    TextMessageProvider().addListener(() { });
+    CurrentPageProvider().addListener(() { });
+  }
+
+  @override
+  void dispose() {
+    TextMessageProvider().removeListener(() { });
+    CurrentPageProvider().removeListener(() { });
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
 
     tIP = Provider.of<TextMessageProvider>(context, listen: true);

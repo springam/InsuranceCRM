@@ -26,11 +26,15 @@ class _TagListChipState extends State<TagListChip> {
   @override
   void initState() {
     super.initState();
+    RegisteredFriendsItemProvider().addListener(() { });
+    SendMessageFriendsItemProvider().addListener(() { });
     selectedTag = TagList.tagList[widget.tagIndex];
   }
 
   @override
   void dispose() {
+    RegisteredFriendsItemProvider().removeListener(() { });
+    SendMessageFriendsItemProvider().removeListener(() { });
     super.dispose();
   }
 

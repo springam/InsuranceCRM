@@ -27,17 +27,21 @@ class _ThemeListChipState extends State<ThemeListChip> {
   @override
   void initState() {
     super.initState();
+    SendMessageFriendsItemProvider().addListener(() { });
+    RegisteredFriendsItemProvider().addListener(() { });
   }
 
   @override
   void dispose() {
+    SendMessageFriendsItemProvider().removeListener(() { });
+    RegisteredFriendsItemProvider().removeListener(() { });
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
 
-    fIP = Provider.of<RegisteredFriendsItemProvider>(context);
+    fIP = Provider.of<RegisteredFriendsItemProvider>(context, listen: true);
     sIP = Provider.of<SendMessageFriendsItemProvider>(context, listen: true);
 
     if (SelectedTheme.selectedTheme.contains(widget.themeIndex)) {

@@ -17,16 +17,30 @@ class ImageGridViewBox extends StatefulWidget {
 
 class _ImageGridViewBoxState extends State<ImageGridViewBox> {
 
-  late TextMessageProvider tIP;
+  // late TextMessageProvider tIP;
   late CurrentPageProvider cIP;
   late ImageCardProvider icIP;
 
   final ScrollController controller = ScrollController();
 
   @override
+  void initState() {
+    super.initState();
+    TextMessageProvider().addListener(() { });
+    CurrentPageProvider().addListener(() { });
+  }
+
+  @override
+  void dispose() {
+    TextMessageProvider().removeListener(() { });
+    CurrentPageProvider().removeListener(() { });
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
 
-    tIP = Provider.of<TextMessageProvider>(context, listen: true);
+    // tIP = Provider.of<TextMessageProvider>(context, listen: true);
     cIP = Provider.of<CurrentPageProvider>(context, listen: true);
     icIP = Provider.of<ImageCardProvider>(context, listen: true); //현재 보여질 이미지 프로바이더
 

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mosaicbluenco/user_data/user_data.dart';
 import 'package:provider/provider.dart';
-import '../../user_data/registered_friends_provider.dart';
 import '../../user_data/status_provider.dart';
 
 class MessageThemeListChip extends StatefulWidget {
@@ -15,8 +14,6 @@ class MessageThemeListChip extends StatefulWidget {
 
 class _MessageThemeListChipState extends State<MessageThemeListChip> {
 
-  late RegisteredFriendsItemProvider fIP;
-  late SendMessageFriendsItemProvider sIP;
   late CurrentPageProvider cIP;
 
   Color selectedColor = const Color(0xffffffff);
@@ -27,19 +24,18 @@ class _MessageThemeListChipState extends State<MessageThemeListChip> {
   @override
   void initState() {
     super.initState();
-    // selectedTag = TagList.tagList[widget.tagIndex];
+    CurrentPageProvider().addListener(() { });
   }
 
   @override
   void dispose() {
+    CurrentPageProvider().removeListener(() { });
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
 
-    fIP = Provider.of<RegisteredFriendsItemProvider>(context);
-    sIP = Provider.of<SendMessageFriendsItemProvider>(context, listen: true);
     cIP = Provider.of<CurrentPageProvider>(context);
 
     if (cIP.selectedThemeIndex == widget.themeIndex) {
@@ -49,8 +45,8 @@ class _MessageThemeListChipState extends State<MessageThemeListChip> {
     }
 
     return Container(
-      width: 105,
-      height: 33,
+      width: 90,
+      height: 25,
       alignment: Alignment.center,
       margin: const EdgeInsets.only(top: 5, bottom: 5),
       child: Material(
@@ -74,7 +70,7 @@ class _MessageThemeListChipState extends State<MessageThemeListChip> {
                       fontWeight: FontWeight.w400,
                       fontFamily: "NotoSansCJKKR",
                       fontStyle:  FontStyle.normal,
-                      fontSize: 14.0
+                      fontSize: 12.0
                   )
               ),
             ),

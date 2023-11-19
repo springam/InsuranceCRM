@@ -36,7 +36,7 @@ class SelectFriendsState extends State<SelectFriends> {
   late FriendsItemProvider fIP;
   late RegisteredFriendsItemProvider regIP;
   late ResponseFriendsItemProvider resIP;
-  late NotSetItemProvider nsIP;
+  // late NotSetItemProvider nsIP;
 
   final ScrollController controller = ScrollController();
   final ScrollController sendMessageFriendController = ScrollController();
@@ -51,7 +51,8 @@ class SelectFriendsState extends State<SelectFriends> {
   bool testBool = false;
   double middleFrameWidth = 728;
   double endFrameWidth = 256;
-  List<RegisteredFriendsItem> friendsMap = [];
+  List<RegisteredFriendsItem> registerFriendsMap = [];
+  List<RegisteredFriendsItem> responseFriendsMap = [];
 
   @override
   void initState() {
@@ -61,7 +62,10 @@ class SelectFriendsState extends State<SelectFriends> {
     streamListen();
     SendMessageFriendsItemProvider().addListener(() { });
     CurrentPageProvider().addListener(() { });
+    FriendsItemProvider().addListener(() { });
     RegisteredFriendsItemProvider().addListener(() { });
+    ResponseFriendsItemProvider().addListener(() { });
+    // NotSetItemProvider().addListener(() { });
     channel.sink.add('version');
   }
 
@@ -69,16 +73,19 @@ class SelectFriendsState extends State<SelectFriends> {
   void dispose() {
     SendMessageFriendsItemProvider().removeListener(() { });
     CurrentPageProvider().removeListener(() { });
+    FriendsItemProvider().removeListener(() { });
     RegisteredFriendsItemProvider().removeListener(() { });
+    ResponseFriendsItemProvider().removeListener(() { });
+    // NotSetItemProvider().removeListener(() { });
     channel.sink.close();
     super.dispose();
   }
 
-  void updateStateSelect() { //상태 update callback 함수
-    setState(() {
-      registeredFriendsStateKey.currentState?.setState(() {});
-    });
-  }
+  // void updateStateSelect() { //상태 update callback 함수
+  //   setState(() {
+  //     registeredFriendsStateKey.currentState?.setState(() {});
+  //   });
+  // }
 
   List<Widget> tagList() {  //등록된 친구
     return List<Widget>.generate(
@@ -116,7 +123,7 @@ class SelectFriendsState extends State<SelectFriends> {
     channel.stream.listen((data) {
       if (data.contains('version')) {
         var version = int.parse(data.substring(8));
-        if (version < 2) { //version check
+        if (version < 3) { //version check
           showDialog(
               context: context,
               builder: (BuildContext context) {
@@ -197,28 +204,47 @@ class SelectFriendsState extends State<SelectFriends> {
     fIP = Provider.of<FriendsItemProvider>(context, listen: true);
     regIP = Provider.of<RegisteredFriendsItemProvider>(context, listen: true);
     resIP = Provider.of<ResponseFriendsItemProvider>(context, listen: true);
-    nsIP = Provider.of<NotSetItemProvider>(context, listen: true);
+    // nsIP = Provider.of<NotSetItemProvider>(context, listen: true);
 
-    friendsMap = [];
+    registerFriendsMap = [];
+    responseFriendsMap = [];
 
     for (RegisteredFriendsItem item in fIP.getItem()) {
-      bool exit = false;
-      if (item.registered == 2) {
-        for (int i = 0; i < resIP.getItem().length + 1; i++) {
-          if (i < resIP.getItem().length) {
-            if (resIP.getItem()[i].kakaoNickname == item.kakaoNickname) {
-              exit = true;
+      bool exitResponse = false;
+      bool exitRegister = false;
+      if (item.registered == 1) {
+        for (int i = 0; i < regIP.getItem().length + 1; i++) {
+          if (i < regIP.getItem().length) {
+            if (regIP.getItem()[i].kakaoNickname == item.kakaoNickname) {
+              exitRegister = true;
             }
           } else {
-            if (!exit) {
-              friendsMap.add(item);
+            if (!exitRegister) {
+              registerFriendsMap.add(item);
             }
           }
         }
       }
 
-      if (item == fIP.getItem().last && friendsMap.isNotEmpty) {
-        resIP.addItems(friendsMap);
+      if (item.registered == 2) {
+        for (int i = 0; i < resIP.getItem().length + 1; i++) {
+          if (i < resIP.getItem().length) {
+            if (resIP.getItem()[i].kakaoNickname == item.kakaoNickname) {
+              exitResponse = true;
+            }
+          } else {
+            if (!exitResponse) {
+              responseFriendsMap.add(item);
+            }
+          }
+        }
+      }
+
+      if (item == fIP.getItem().last && registerFriendsMap.isNotEmpty) {
+        regIP.addItems(registerFriendsMap);
+      }
+      if (item == fIP.getItem().last && responseFriendsMap.isNotEmpty) {
+        resIP.addItems(responseFriendsMap);
       }
     }
 
@@ -420,11 +446,11 @@ class SelectFriendsState extends State<SelectFriends> {
 
                   const SizedBox(height: 13),
 
-                  (resIP.getItem().isEmpty) ? const SizedBox() : NewFriends(updateStateSelect: updateStateSelect),
+                  (resIP.getItem().isEmpty) ? const SizedBox() : const NewFriends(),
 
-                  // (channelValue) ? (resIP.getItem().isEmpty) ? const SizedBox() : NewFriends(updateStateSelect: updateStateSelect) : const SizedBox(),
+                  // (channelValue) ? (resIP.getItem().isEmpty) ? const SizedBox() : NewFriends() : const SizedBox(),
 
-                  RegisteredFriends(updateStateSelect: updateStateSelect, key: registeredFriendsStateKey),  //등록친구 widget
+                  RegisteredFriends(key: registeredFriendsStateKey),  //등록친구 widget
 
                   const SizedBox(height: 30),
 

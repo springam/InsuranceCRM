@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../home_main/home_main.dart';
 import '../user_data/message_provider.dart';
 import 'gate_image.dart';
 

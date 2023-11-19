@@ -4,6 +4,7 @@ import 'package:mosaicbluenco/send_message/message_templates/message_theme_list.
 import 'package:mosaicbluenco/user_data/user_data.dart';
 import 'package:provider/provider.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
+import '../etc_widget/alert_dialog.dart';
 import '../etc_widget/design_widget.dart';
 import '../etc_widget/text_message.dart';
 import '../user_data/image_provider.dart';
@@ -39,7 +40,7 @@ class _SelectMessageState extends State<SelectMessage> {
   int talkDownTrueCount = 0;
   int selectedTalkDownIndex = 0;
 
-  List<String> options = ['존대', '반말'];
+  List<String> talkOption = ['존대', '반말'];
 
   bool messageClear = false;
 
@@ -47,11 +48,17 @@ class _SelectMessageState extends State<SelectMessage> {
   void initState() {
     super.initState();
     SendMessageFriendsItemProvider().addListener(() { });
+    TextMessageProvider().addListener(() { });
+    CurrentPageProvider().addListener(() { });
+    ImageCardProvider().addListener(() { });
   }
 
   @override
   void dispose() {
     SendMessageFriendsItemProvider().removeListener(() { });
+    TextMessageProvider().removeListener(() { });
+    CurrentPageProvider().removeListener(() { });
+    ImageCardProvider().removeListener(() { });
     _channel.sink.close();
     super.dispose();
   }
@@ -62,19 +69,29 @@ class _SelectMessageState extends State<SelectMessage> {
   }
 
   void sendMe() async {
-    // String result = json.encode({'request':'sendMe', 'body': '${icIP.getImagePath()}', 'name':UserData.userNickname});
-    String result = json.encode({'request':'sendMe', 'body': tIP.getTextMessageTalkDown(), 'name':UserData.userNickname});
-    print(result);
+    String result = json.encode({
+      'request':'sendMe',
+      'imageMessage': '${icIP.getImagePath()}',
+      'textMessage':tIP.getTextMessageTalkDown(),
+      'name':UserData.userNickname});
     _channel.sink.add(result);
   }
 
-  void convertData() async {
+  void sendFriends() async {
     List<dynamic> messageItem = [];
     for (RegisteredFriendsItem value in sIP.getItem()) {
       if (value.talkDown == 0) {
-        messageItem.add({'request':'message', 'body':tIP.getTextMessage(), 'name':value.kakaoNickname});
+        messageItem.add({
+          'request':'sendFriends',
+          'imageMessage':'${icIP.getImagePath()}',
+          'textMessage':tIP.getTextMessage(),
+          'name':value.kakaoNickname});
       } else {
-        messageItem.add({'request':'message', 'body':tIP.getTextMessageTalkDown(), 'name':value.kakaoNickname});
+        messageItem.add({
+          'request':'sendFriends',
+          'imageMessage':'${icIP.getImagePath()}',
+          'textMessage':tIP.getTextMessageTalkDown(),
+          'name':value.kakaoNickname});
       }
     }
     String result = json.encode(messageItem);
@@ -91,7 +108,7 @@ class _SelectMessageState extends State<SelectMessage> {
         visualDensity: const VisualDensity(vertical: -4, horizontal: -4),
         selected: selectedTalkDownIndex == optionIndex,
         showCheckmark: false,
-        label: Text(options[optionIndex], textAlign: TextAlign.center,),
+        label: Text(talkOption[optionIndex], textAlign: TextAlign.center,),
         shape: ContinuousRectangleBorder(
           side: const BorderSide(color: Colors.black, width: 3.0), //이거 왜 선이 안 보이냐
           borderRadius: BorderRadius.circular(0.0),
@@ -112,6 +129,46 @@ class _SelectMessageState extends State<SelectMessage> {
     )).toList();
   }
 
+  Widget fileOptionWidget(String title) {
+    return Container(
+      width: 110,
+      height: 25,
+      alignment: Alignment.center,
+      margin: const EdgeInsets.only(left: 15, top: 5, right: 0, bottom: 5),
+      child: Material(
+        color: const Color(0xfff0f0f0),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(20),
+          splashColor: const Color(0xffffdf8e),
+          hoverColor: const Color(0xffbcc0c7),
+          child: Ink(
+            // width: 88,
+            // height: 21,
+            decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+                color: Color(0xffffffff)
+            ),
+            child: Center(
+              child: Text(
+                  title,
+                  style: const TextStyle(
+                      color:  Color(0xff000000),
+                      fontWeight: FontWeight.w400,
+                      fontFamily: "NotoSansCJKKR",
+                      fontStyle:  FontStyle.normal,
+                      fontSize: 12.0
+                  )
+              ),
+            ),
+          ),
+          onTap: () {
+
+          },
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -121,7 +178,7 @@ class _SelectMessageState extends State<SelectMessage> {
     icIP = Provider.of<ImageCardProvider>(context, listen: true);
 
     if (MediaQuery.of(context).size.width >1280) {
-      listHeight = 100;
+      listHeight = 80;
     } else {
       listHeight = 100; //140
     }
@@ -133,18 +190,6 @@ class _SelectMessageState extends State<SelectMessage> {
       selectedTalkDownIndex = 1;
       selectedMessage = tIP.textMessageTalkDown;
     }
-
-    // if (selectedTalkDownIndex == 0) {
-    //   selectedMessage = tIP.textMessage;
-    // } else {
-    //   selectedMessage = tIP.textMessageTalkDown;
-    // }
-
-    // if (MediaQuery.of(context).size.height >720) {
-    //   screenHeight = MediaQuery.of(context).size.height * 2;
-    // } else {
-    //   screenHeight = 720;
-    // }
 
     return Stack(
       children: [
@@ -239,6 +284,7 @@ class _SelectMessageState extends State<SelectMessage> {
                                       setState(() {
                                         tIP.setTextMessage('');
                                         tIP.setTextMessageTalkDown('');
+                                        icIP.setImagePath('');
                                       });
                                     },
                                   ),
@@ -272,7 +318,7 @@ class _SelectMessageState extends State<SelectMessage> {
 
                       Container(
                         width: double.infinity,
-                        height: 60,
+                        height: 50,
                         decoration: const BoxDecoration(
                             color: Color(0xfff0f0f0)
                         ),
@@ -280,47 +326,26 @@ class _SelectMessageState extends State<SelectMessage> {
                         child: Row(
                           children: [
                             Container(
-                              margin: const EdgeInsets.only(left: 20, right: 20),
-                              child: const Text('첨부'),
-                            ),
-
-                            Container(
-                              width: 105,
+                              width: 80,
                               height: 33,
                               alignment: Alignment.center,
                               margin: const EdgeInsets.only(top: 5, bottom: 5),
-                              child: Material(
-                                color: const Color(0xfff0f0f0),
-                                child: InkWell(
-                                  // borderRadius: BorderRadius.circular(20),
-                                  splashColor: const Color(0xffffdf8e),
-                                  hoverColor: const Color(0xffbcc0c7),
-                                  child: Ink(
-                                    // width: 88,
-                                    // height: 21,
-                                    decoration: const BoxDecoration(
-                                        // borderRadius: BorderRadius.all(Radius.circular(20)),
-                                        color: Color(0xffffffff)
-                                    ),
-                                    child: const Center(
-                                      child: Text(
-                                          '이미지',
-                                          style: TextStyle(
-                                              color:  Color(0xff000000),
-                                              fontWeight: FontWeight.w400,
-                                              fontFamily: "NotoSansCJKKR",
-                                              fontStyle:  FontStyle.normal,
-                                              fontSize: 14.0
-                                          )
-                                      ),
-                                    ),
-                                  ),
-                                  onTap: () {
-
-                                  },
-                                ),
+                              child: const Text(
+                                  '첨부',
+                                  style: TextStyle(
+                                      color:  Color(0xff000000),
+                                      fontWeight: FontWeight.w400,
+                                      fontFamily: "NotoSansCJKKR",
+                                      fontStyle:  FontStyle.normal,
+                                      fontSize: 12.0
+                                  )
                               ),
                             ),
+
+                            fileOptionWidget('이미지'),
+                            fileOptionWidget('링크'),
+                            fileOptionWidget('파일'),
+
                           ],
                         ),
                       ),
@@ -463,7 +488,7 @@ class _SelectMessageState extends State<SelectMessage> {
                                         ],
                                       ),
 
-                                      (selectedMessage.isNotEmpty) ? Container(
+                                      (selectedMessage.isNotEmpty || icIP.getImagePath().length != 0) ? Container(
                                         // width: 19,
                                         alignment: Alignment.centerLeft,
                                         margin: const EdgeInsets.only(left: 22),
@@ -480,24 +505,24 @@ class _SelectMessageState extends State<SelectMessage> {
 
                                       Column(
                                         children: [
-                                          // (icIP.getImagePath().length > 100) ? const SizedBox() : Container(
-                                          //   height: 250,
-                                          //   // width: double.infinity,
-                                          //   padding: const EdgeInsets.all(10),
-                                          //   color: const Color(0xffffdf8e),
-                                          //   child: Container(
-                                          //     decoration: const BoxDecoration(
-                                          //       // shape: BoxShape.circle,
-                                          //         color: Color(0xffffdf8e),
-                                          //         borderRadius: BorderRadius.all(Radius.circular(10)),
-                                          //         image: DecorationImage(
-                                          //             fit: BoxFit.fitHeight,
-                                          //             image: AssetImage('assets/images/kakao_person.png')
-                                          //           // image: NetworkImage(icIP.getImagePath())
-                                          //         )
-                                          //     ),
-                                          //   ),
-                                          // ),
+                                          (icIP.getImagePath().length == 0) ? const SizedBox() : Container(
+                                            height: 250,
+                                            // width: double.infinity,
+                                            padding: const EdgeInsets.all(10),
+                                            color: const Color(0xffffdf8e),
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                // shape: BoxShape.circle,
+                                                  color: const Color(0xffffdf8e),
+                                                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                                                  image: DecorationImage(
+                                                      fit: BoxFit.fitWidth,
+                                                      // image: AssetImage('assets/images/kakao_person.png')
+                                                    image: NetworkImage(icIP.getImagePath())
+                                                  )
+                                              ),
+                                            ),
+                                          ),
                                           Container(
                                             padding: const EdgeInsets.all(10),
                                             alignment: Alignment.centerLeft,
@@ -537,9 +562,19 @@ class _SelectMessageState extends State<SelectMessage> {
                             ),
                           ),
                           onTap: () {
-                            // sIP.initItem();
-                            // cIP.setCurrentSubPage(0);
-                            sendMe();
+                            if (icIP.getImagePath() == 'empty' && tIP.getTextMessage().length == 0 && tIP.getTextMessageTalkDown().length == 0) {
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return const AlertMessage(
+                                      title: '선택된 메시지가 없습니다.',
+                                      message: '메시지를 선택하거나 직접 입력해 주세요.',
+                                    );
+                                  }
+                              );
+                            } else {
+                              sendMe();
+                            }
                           },
                         ),
                       ),
@@ -563,7 +598,19 @@ class _SelectMessageState extends State<SelectMessage> {
                             ),
                           ),
                           onTap: () {
-                            convertData();
+                            if (icIP.getImagePath() == 'empty' && tIP.getTextMessage().length == 0 && tIP.getTextMessageTalkDown().length == 0) {
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return const AlertMessage(
+                                      title: '선택된 메시지가 없습니다.',
+                                      message: '메시지를 선택하거나 직접 입력해 주세요.',
+                                    );
+                                  }
+                              );
+                            } else {
+                              sendFriends();
+                            }
                           },
                         ),
                       ),

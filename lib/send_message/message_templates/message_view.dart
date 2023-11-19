@@ -33,6 +33,19 @@ class _MessageViewState extends State<MessageView> {
   @override
   void initState() {
     super.initState();
+    SendMessageFriendsItemProvider().addListener(() { });
+    TextMessageProvider().addListener(() { });
+    CurrentPageProvider().addListener(() { });
+    ImageCardProvider().addListener(() { });
+  }
+
+  @override
+  void dispose() {
+    SendMessageFriendsItemProvider().removeListener(() { });
+    TextMessageProvider().removeListener(() { });
+    CurrentPageProvider().removeListener(() { });
+    ImageCardProvider().removeListener(() { });
+    super.dispose();
   }
 
   @override

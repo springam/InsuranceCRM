@@ -12,10 +12,7 @@ import '../../user_data/response_friend_provider.dart';
 import 'new_friend_tile.dart';
 
 class NewFriends extends StatefulWidget {
-  const NewFriends({required this.updateStateSelect, super.key});
-
-  // final List<RegisteredFriendsItem> responseFriend;
-  final Function() updateStateSelect;
+  const NewFriends({super.key});
 
   @override
   State<NewFriends> createState() => _NewFriendsState();
@@ -38,24 +35,19 @@ class _NewFriendsState extends State<NewFriends> {
   List<String> options = ['존대', '반말'];
   // List<RegisteredFriendsItem> friendList = [];
 
-  void updateStateNewFriend() {
-    // setState(() {});
-    widget.updateStateSelect();
-  }
-
   @override
   void initState() {
     super.initState();
     fToast = FToast();
     fToast.init(context);
-    // SendMessageFriendsItemProvider().addListener(() { });
-    // RegisteredFriendsItemProvider().addListener(() { });
+    ResponseFriendsItemProvider().addListener(() { });
+    RegisteredFriendsItemProvider().addListener(() { });
   }
 
   @override
   void dispose() {
-    // SendMessageFriendsItemProvider().removeListener(() { });
-    // RegisteredFriendsItemProvider().removeListener(() { });
+    ResponseFriendsItemProvider().removeListener(() { });
+    RegisteredFriendsItemProvider().removeListener(() { });
     super.dispose();
   }
 
@@ -92,8 +84,6 @@ class _NewFriendsState extends State<NewFriends> {
 
     showToast('필드를 채운 친구들의 등록을 완료 했습니다.');
     resIP.setItem(tempItem);
-
-    // widget.updateStateSelect();
   }
 
   @override
@@ -162,7 +152,7 @@ class _NewFriendsState extends State<NewFriends> {
                         itemCount: itemCount,
                         controller: controller,
                         itemBuilder: (BuildContext context, int index) {
-                          return NewFriendTile(index: index, updateStateNewFriend: updateStateNewFriend, registering: registerFriend);
+                          return NewFriendTile(index: index, registering: registerFriend);
                         }
                     ),
                   )
