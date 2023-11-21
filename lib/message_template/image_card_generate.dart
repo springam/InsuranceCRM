@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import '../etc_widget/text_message.dart';
 import '../user_data/user_data.dart';
 import 'dart:io' as io;
+import 'package:image_picker_web/image_picker_web.dart';
 
 
 class ImageCardGenerate extends StatefulWidget {
@@ -21,7 +22,9 @@ class _ImageCardGenerateState extends State<ImageCardGenerate> {
   final TextEditingController messageController = TextEditingController();
 
   late XFile pickedFile;
-  XFile? pickedImage;
+  // XFile? pickedImage;
+  late Image pickedImage = Image.asset('assets/images/mosaic_logo.png');
+
 
   double listHeight = 0.0;
 
@@ -37,10 +40,17 @@ class _ImageCardGenerateState extends State<ImageCardGenerate> {
   }
 
   Future getImage() async {
-    pickedFile = (await ImagePicker().pickImage(source: ImageSource.gallery))!;
-    setState(() {
-      pickedImage = XFile(pickedFile.path);
-    });
+    var getImage = await ImagePickerWeb.getImageAsWidget();
+    if (getImage != null) {
+      setState(() {
+        pickedImage = getImage!;
+      });
+    }
+
+    // pickedFile = (await ImagePicker().pickImage(source: ImageSource.gallery))!;
+    // setState(() {
+    //   pickedImage = XFile(pickedFile.path);
+    // });
   }
 
   Future<void> uploadImage() async {
@@ -103,11 +113,21 @@ class _ImageCardGenerateState extends State<ImageCardGenerate> {
                       width: double.infinity,
                       color: const Color(0xffffffff),
                       padding: const EdgeInsets.all(5),
-                      child: Image.network(pickedImage!.path),
+                      child: pickedImage,
                     ) : const SizedBox(
                       height: 310,
                       width: double.infinity,
                     ),
+                    // (pickedImage != null) ? Container(
+                    //   height: 310,
+                    //   width: double.infinity,
+                    //   color: const Color(0xffffffff),
+                    //   padding: const EdgeInsets.all(5),
+                    //   child: Image.network(pickedImage!.path),
+                    // ) : const SizedBox(
+                    //   height: 310,
+                    //   width: double.infinity,
+                    // ),
                     Container(
                       color: const Color(0xffffffff),
                       padding: const EdgeInsets.all(5),
