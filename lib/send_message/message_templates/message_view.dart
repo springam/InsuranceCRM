@@ -24,7 +24,10 @@ class _MessageViewState extends State<MessageView> {
   late CurrentPageProvider cIP;
   late ImageCardProvider icIP;
 
-  final TextEditingController messagePresetController = TextEditingController();
+  final TextEditingController messageController = TextEditingController();
+
+  final leftFormKey = GlobalKey<FormState>();
+  final rightFormKey = GlobalKey<FormState>();
 
   int talkDownCount = 0;
   String talkDown = '존대';
@@ -59,9 +62,9 @@ class _MessageViewState extends State<MessageView> {
     talkDownCount = 0;
 
     if (widget.talkDown) {
-      messagePresetController.text = tIP.getTextMessageTalkDown();
+      messageController.text = tIP.getTextMessageTalkDown();
     } else {
-      messagePresetController.text = tIP.getTextMessage();
+      messageController.text = tIP.getTextMessage();
     }
 
     for (RegisteredFriendsItem sendMessageFriend in sIP.getItem()) {
@@ -97,45 +100,33 @@ class _MessageViewState extends State<MessageView> {
                 border: Border.all(color: Colors.black),
                 color: const Color(0xffffffff)
             ),
-            child: ListView(
-              children: [
-                // (icIP.getImagePath().length > 100) ? const SizedBox() : Container(
-                //   height: 250,
-                //   // width: double.infinity,
-                //   // margin: const EdgeInsets.only(left: 20, right: 12),
-                //   decoration: const BoxDecoration(
-                //     // shape: BoxShape.rectangle,
-                //       image: DecorationImage(
-                //           fit: BoxFit.fitHeight,
-                //           // image: AssetImage('assets/images/kakao_person.png')
-                //           image: NetworkImage(icIP.getImagePath())
-                //       )
-                //   ),
-                // ),
-                TextField(
-                  controller: messagePresetController,
-                  keyboardType: TextInputType.multiline,
-                  maxLines: null,
-                  style: buttonTextStyle,
-                  decoration: const InputDecoration(
-                      border: InputBorder.none
-                  ),
-                  onChanged: (value) {
-                    if (widget.talkDown) {
-                      tIP.setTextMessageTalkDown(messagePresetController.text);
-                      if (cIP.getTalkDown() == 0) {
-                        cIP.setTalkDown(1);
-                      }
-                    } else {
-                      tIP.setTextMessage(messagePresetController.text);
-                      if (cIP.getTalkDown() == 1) {
-                        cIP.setTalkDown(0);
-                      }
+            child: Form(
+              key: leftFormKey,
+              child: TextFormField(
+                controller: messageController,
+                keyboardType: TextInputType.multiline,
+                maxLines: null,
+                style: buttonTextStyle,
+                decoration: const InputDecoration(
+                    border: InputBorder.none
+                ),
+                validator: (value) {},
+                onSaved: (value) {},
+                onChanged: (value) {
+                  if (widget.talkDown) {
+                    tIP.setTextMessageTalkDown(messageController.text);
+                    if (cIP.getTalkDown() == 0) {
+                      cIP.setTalkDown(1);
                     }
-                  },
-                )
-              ],
-            ),
+                  } else {
+                    tIP.setTextMessage(messageController.text);
+                    if (cIP.getTalkDown() == 1) {
+                      cIP.setTalkDown(0);
+                    }
+                  }
+                },
+              ),
+            )
           ),
         ],
       ),

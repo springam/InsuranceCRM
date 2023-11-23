@@ -70,7 +70,7 @@ class _ImageGridViewBoxState extends State<ImageGridViewBox> {
         ),
       ),
       onTap: () {
-        icIP.setImagePath(widget.imageCard.imagePath);
+        icIP.setImagePath(widget.imageCard.imagePath, widget.imageCard.documentId);
         cIP.setCurrentSubPage(1);
       },
     );

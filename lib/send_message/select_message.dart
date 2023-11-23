@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:mosaicbluenco/send_message/message_templates/message_theme_list.dart';
 import 'package:mosaicbluenco/user_data/user_data.dart';
@@ -72,8 +73,10 @@ class _SelectMessageState extends State<SelectMessage> {
     String result = json.encode({
       'request':'sendMe',
       'imageMessage': '${icIP.getImagePath()}',
-      'textMessage':tIP.getTextMessageTalkDown(),
-      'name':UserData.userNickname});
+      'textMessage': tIP.getTextMessageTalkDown(),
+      'name': UserData.userNickname,
+      'imageName': icIP.getImageName()
+    });
     _channel.sink.add(result);
   }
 
@@ -85,13 +88,17 @@ class _SelectMessageState extends State<SelectMessage> {
           'request':'sendFriends',
           'imageMessage':'${icIP.getImagePath()}',
           'textMessage':tIP.getTextMessage(),
-          'name':value.kakaoNickname});
+          'name':value.kakaoNickname,
+          'imageName': icIP.getImageName()
+        });
       } else {
         messageItem.add({
           'request':'sendFriends',
           'imageMessage':'${icIP.getImagePath()}',
           'textMessage':tIP.getTextMessageTalkDown(),
-          'name':value.kakaoNickname});
+          'name':value.kakaoNickname,
+          'imageName': icIP.getImageName()
+        });
       }
     }
     String result = json.encode(messageItem);
@@ -207,11 +214,22 @@ class _SelectMessageState extends State<SelectMessage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          const TextMessage(
-                              "카톡 보낼사람 선택하기",
-                              Color(0xffd9d9d9),
-                              FontWeight.w400,
-                              22.0
+                          InkWell(
+                            child: const Text(
+                                "카톡 보낼사람 선택하기",
+                              style: TextStyle(
+                                color:  Color(0xffd9d9d9),
+                                fontWeight: FontWeight.w400,
+                                fontFamily: "NotoSansCJKKR",
+                                fontFeatures: [FontFeature.proportionalFigures()],
+                                fontStyle:  FontStyle.normal,
+                                fontSize: 22.0,
+                              ),
+                            ),
+                            onTap: () {
+                              sIP.initItem();
+                              cIP.setCurrentSubPage(0);
+                            },
                           ),
                           Container(
                             margin: const EdgeInsets.only(left: 13.5, right: 13.5),
@@ -284,7 +302,7 @@ class _SelectMessageState extends State<SelectMessage> {
                                       setState(() {
                                         tIP.setTextMessage('');
                                         tIP.setTextMessageTalkDown('');
-                                        icIP.setImagePath('');
+                                        icIP.setImagePath('', '');
                                       });
                                     },
                                   ),

@@ -54,7 +54,7 @@ class _ImageCardGenerateState extends State<ImageCardGenerate> {
   }
 
   Future<void> uploadImage() async {
-    Reference ref = FirebaseStorage.instance.ref().child('card').child('/${pickedFile .name}');
+    Reference ref = FirebaseStorage.instance.ref().child('card').child('/${pickedFile.name}');
     await ref.putData(await pickedFile.readAsBytes()); //(kIsWeb) ? putData() : putFile()
     String downloadUrl = await ref.getDownloadURL();
     saveData(downloadUrl);

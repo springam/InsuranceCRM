@@ -3,17 +3,19 @@ import 'package:flutter/material.dart';
 class ImageCardProvider with ChangeNotifier { //실제 보내질 메시지 내용
 
   String imagePath = '';
+  String imageName = '';
 
   getImagePath() {
     return imagePath;
   }
 
-  // getTextMessageTalkDown() {
-  //   return textMessageTalkDown;
-  // }
+  getImageName() {
+    return imageName;
+  }
 
-  setImagePath(String path) {
+  setImagePath(String path, String name) {
     imagePath = path;
+    imageName = name;
     notifyListeners();
   }
 
