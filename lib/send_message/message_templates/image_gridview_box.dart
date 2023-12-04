@@ -1,5 +1,7 @@
+import 'dart:html';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:image_network/image_network.dart';
 import 'package:provider/provider.dart';
 import '../../user_data/image_provider.dart';
 import '../../user_data/message_provider.dart';
@@ -59,12 +61,32 @@ class _ImageGridViewBoxState extends State<ImageGridViewBox> {
             controller: controller,
             child: Container(
               padding: const EdgeInsets.all(10),
+              alignment: Alignment.topCenter,
               decoration: const BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(12)),
                   color: Colors.transparent
               ),
-              // child: Image.memory(imageBytes),
-              child: Image.network(widget.imageCard.imagePath),
+              child: LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints constraints) {
+                  return ImageNetwork(
+                    image: widget.imageCard.imagePath,
+                    height: 250,
+                    width: constraints.maxWidth,
+                    fitWeb: BoxFitWeb.fill,
+                    borderRadius: BorderRadius.circular(10),
+                    // onLoading: const CircularProgressIndicator(
+                    //   color: Colors.indigoAccent,
+                    // ),
+                    duration: 100,
+                    onPointer: true,
+                    onLoading: const SizedBox(),
+                    onTap: () {
+                      icIP.setImagePath(widget.imageCard.imagePath, widget.imageCard.documentId);
+                      cIP.setCurrentSubPage(1);
+                    },
+                  );
+                },
+              ),
             ),
           ),
         ),

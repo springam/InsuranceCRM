@@ -27,7 +27,7 @@ class _MessagePresetState extends State<MessagePreset> {
   List<PresetMessageItem> messageList = [];
   List<ImageCardItem> imageList = [];
   int gridCount = 0;
-  int crossCountGrid = 4;
+  int crossCountGrid = 5;
 
   Color selectedColor = const Color(0xffc9ced9);
   Color normalColor = const Color(0xfff0f0f0);
@@ -101,12 +101,6 @@ class _MessagePresetState extends State<MessagePreset> {
       }
 
       (titleIsMessage) ? gridCount = messageList.length : gridCount = imageList.length;
-
-      // if (MediaQuery.of(context).size.width > 1500) {
-      //   crossCountGrid = 4;
-      // } else {
-      //   crossCountGrid = 3;
-      // }
 
       return Container(
         height: MediaQuery.of(context).size.height,
@@ -245,7 +239,7 @@ class _MessagePresetState extends State<MessagePreset> {
                           crossAxisCount: crossCountGrid,
                           mainAxisSpacing: 15,
                           crossAxisSpacing: 20,
-                          childAspectRatio: 1.5
+                          childAspectRatio: 1.0
                       ),
                       itemCount: gridCount,
                       itemBuilder: (BuildContext context, int index) {

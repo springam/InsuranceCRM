@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:image_network/image_network.dart';
 import 'package:mosaicbluenco/send_message/message_templates/message_theme_list.dart';
 import 'package:mosaicbluenco/user_data/user_data.dart';
 import 'package:provider/provider.dart';
@@ -161,7 +162,7 @@ class _SelectMessageState extends State<SelectMessage> {
                   style: const TextStyle(
                       color:  Color(0xff000000),
                       fontWeight: FontWeight.w400,
-                      fontFamily: "NotoSansCJKKR",
+                      fontFamily: "NotoSansCJKkr-Regular",
                       fontStyle:  FontStyle.normal,
                       fontSize: 12.0
                   )
@@ -220,7 +221,7 @@ class _SelectMessageState extends State<SelectMessage> {
                               style: TextStyle(
                                 color:  Color(0xffd9d9d9),
                                 fontWeight: FontWeight.w400,
-                                fontFamily: "NotoSansCJKKR",
+                                fontFamily: "NotoSansCJKkr-Regular",
                                 fontFeatures: [FontFeature.proportionalFigures()],
                                 fontStyle:  FontStyle.normal,
                                 fontSize: 22.0,
@@ -353,7 +354,7 @@ class _SelectMessageState extends State<SelectMessage> {
                                   style: TextStyle(
                                       color:  Color(0xff000000),
                                       fontWeight: FontWeight.w400,
-                                      fontFamily: "NotoSansCJKKR",
+                                      fontFamily: "NotoSansCJKkr-Regular",
                                       fontStyle:  FontStyle.normal,
                                       fontSize: 12.0
                                   )
@@ -478,7 +479,7 @@ class _SelectMessageState extends State<SelectMessage> {
                                   controller: controller,
                                   thumbVisibility: true,
                                   trackVisibility: true,
-                                  thickness: 12.0,
+                                  thickness: 5.0,
                                 child: SingleChildScrollView(
                                   controller: controller,
                                   child: Column(
@@ -489,13 +490,15 @@ class _SelectMessageState extends State<SelectMessage> {
                                             height: 25,
                                             width: 25,
                                             margin: const EdgeInsets.only(left: 0, bottom: 5),
-                                            decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                image: DecorationImage(
-                                                    fit: BoxFit.fill,
-                                                    // image: AssetImage('assets/images/kakao_person.png')
-                                                  image: NetworkImage(UserData.userImageUrl)
-                                                )
+                                            child: ImageNetwork(
+                                              image: UserData.userImageUrl,
+                                              height: 25,
+                                              width: 25,
+                                              fitWeb: BoxFitWeb.fill,
+                                              borderRadius: BorderRadius.circular(13),
+                                              onLoading: const CircularProgressIndicator(
+                                                color: Colors.indigoAccent,
+                                              ),
                                             ),
                                           ),
                                           Container(
@@ -506,7 +509,7 @@ class _SelectMessageState extends State<SelectMessage> {
                                         ],
                                       ),
 
-                                      (selectedMessage.isNotEmpty || icIP.getImagePath().length != 0) ? Container(
+                                      (selectedMessage.isNotEmpty) ? Container(
                                         // width: 19,
                                         alignment: Alignment.centerLeft,
                                         margin: const EdgeInsets.only(left: 22),
@@ -521,37 +524,54 @@ class _SelectMessageState extends State<SelectMessage> {
                                         ),
                                       ) : const SizedBox(),
 
-                                      Column(
-                                        children: [
-                                          (icIP.getImagePath().length == 0) ? const SizedBox() : Container(
-                                            height: 250,
-                                            // width: double.infinity,
-                                            padding: const EdgeInsets.all(10),
-                                            color: const Color(0xffffdf8e),
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                // shape: BoxShape.circle,
-                                                  color: const Color(0xffffdf8e),
-                                                  borderRadius: const BorderRadius.all(Radius.circular(10)),
-                                                  image: DecorationImage(
-                                                      fit: BoxFit.fitWidth,
-                                                      // image: AssetImage('assets/images/kakao_person.png')
-                                                    image: NetworkImage(icIP.getImagePath())
-                                                  )
+                                      Container(
+                                        padding: const EdgeInsets.all(10),
+                                        alignment: Alignment.centerLeft,
+                                        color: (selectedMessage.isEmpty) ? Colors.transparent : const Color(0xffffdf8e),
+                                        child: Text(
+                                          selectedMessage,
+                                          style: buttonTextStyle,
+                                        ),
+                                      ),
+
+                                      (icIP.getImagePath().length == 0) ? const SizedBox() : Container(
+                                        alignment: Alignment.topRight,
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                              height: 20,
+                                              width: double.infinity,
+                                              margin: const EdgeInsets.only(top: 10, bottom: 10),
+                                              alignment: Alignment.centerRight,
+                                              child: IconButton(
+                                                icon: const Icon(Icons.cancel_rounded),
+                                                color: Colors.black54,
+                                                iconSize: 20,
+                                                onPressed: () {
+                                                  icIP.setImagePath('', '');
+                                                },
                                               ),
                                             ),
-                                          ),
-                                          Container(
-                                            padding: const EdgeInsets.all(10),
-                                            alignment: Alignment.centerLeft,
-                                            color: (selectedMessage.isEmpty) ? Colors.transparent : const Color(0xffffdf8e),
-                                            child: Text(
-                                              selectedMessage,
-                                              style: buttonTextStyle,
+
+                                            LayoutBuilder(
+                                              builder: (BuildContext context, BoxConstraints constraints) {
+                                                return ImageNetwork(
+                                                  image: icIP.getImagePath(),
+                                                  height: 250,
+                                                  width: constraints.maxWidth,
+                                                  fitWeb: BoxFitWeb.fill,
+                                                  borderRadius: BorderRadius.circular(10),
+                                                  // duration: 100,
+                                                  onPointer: true,
+                                                  onLoading: const SizedBox(),
+                                                  onTap: () {},
+                                                );
+                                              },
                                             ),
-                                          )
-                                        ],
+                                          ],
+                                        ),
                                       ),
+
                                     ],
                                   ),
                                 ),
@@ -633,30 +653,30 @@ class _SelectMessageState extends State<SelectMessage> {
                         ),
                       ),
 
-                      const SizedBox(height: 13),
-
-                      Material(
-                        color: const Color(0xffffffff),
-                        child: InkWell(
-                          borderRadius: BorderRadius.circular(10),
-                          splashColor: const Color(0xffffdf8e),
-                          hoverColor: Colors.grey,
-                          child: Ink(
-                            height: 38,
-                            decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(10)),
-                              color: Color(0xffffdf8e),
-                            ),
-                            child: Center(
-                              child: Text('뒤로가기(테스트용 버튼)', style: buttonTextStyle,),
-                            ),
-                          ),
-                          onTap: () {
-                            sIP.initItem();
-                            cIP.setCurrentSubPage(0);
-                          },
-                        ),
-                      ),
+                      // const SizedBox(height: 13),
+                      //
+                      // Material(
+                      //   color: const Color(0xffffffff),
+                      //   child: InkWell(
+                      //     borderRadius: BorderRadius.circular(10),
+                      //     splashColor: const Color(0xffffdf8e),
+                      //     hoverColor: Colors.grey,
+                      //     child: Ink(
+                      //       height: 38,
+                      //       decoration: const BoxDecoration(
+                      //         borderRadius: BorderRadius.all(Radius.circular(10)),
+                      //         color: Color(0xffffdf8e),
+                      //       ),
+                      //       child: Center(
+                      //         child: Text('뒤로가기(테스트용 버튼)', style: buttonTextStyle,),
+                      //       ),
+                      //     ),
+                      //     onTap: () {
+                      //       sIP.initItem();
+                      //       cIP.setCurrentSubPage(0);
+                      //     },
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),

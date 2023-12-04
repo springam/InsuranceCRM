@@ -1,13 +1,17 @@
+import 'dart:convert';
+import 'dart:typed_data';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mosaicbluenco/message_template/theme_list.dart';
-import 'package:image_picker/image_picker.dart';
 import '../etc_widget/text_message.dart';
+import '../etc_widget/toast_message.dart';
 import '../user_data/user_data.dart';
 import 'dart:io' as io;
 import 'package:image_picker_web/image_picker_web.dart';
+import 'package:image_network/image_network.dart';
 
 
 class ImageCardGenerate extends StatefulWidget {
@@ -21,10 +25,12 @@ class _ImageCardGenerateState extends State<ImageCardGenerate> {
 
   final TextEditingController messageController = TextEditingController();
 
-  late XFile pickedFile;
+  // late XFile pickedFile;
   // XFile? pickedImage;
-  late Image pickedImage = Image.asset('assets/images/mosaic_logo.png');
+  // late Image pickedImage = Image.asset('assets/images/mosaic_logo.png');
+  Uint8List? bytesFromPicker;
 
+  late FToast fToast;
 
   double listHeight = 0.0;
 
@@ -32,6 +38,13 @@ class _ImageCardGenerateState extends State<ImageCardGenerate> {
   void initState() {
     super.initState();
     SelectedTheme.selectedTheme = [];
+    fToast = FToast();
+    fToast.init(context);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   List<Widget> themeList() {
@@ -40,10 +53,10 @@ class _ImageCardGenerateState extends State<ImageCardGenerate> {
   }
 
   Future getImage() async {
-    var getImage = await ImagePickerWeb.getImageAsWidget();
+    var getImage = await ImagePickerWeb.getImageAsBytes();
     if (getImage != null) {
       setState(() {
-        pickedImage = getImage!;
+        bytesFromPicker = getImage!;
       });
     }
 
@@ -54,9 +67,11 @@ class _ImageCardGenerateState extends State<ImageCardGenerate> {
   }
 
   Future<void> uploadImage() async {
-    Reference ref = FirebaseStorage.instance.ref().child('card').child('/${pickedFile.name}');
-    await ref.putData(await pickedFile.readAsBytes()); //(kIsWeb) ? putData() : putFile()
+    String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+    Reference ref = FirebaseStorage.instance.ref().child('card').child('/$fileName.png'); //.child('/$fileName.bmp')
+    await ref.putData(bytesFromPicker!); //(kIsWeb) ? putData() : putFile()
     String downloadUrl = await ref.getDownloadURL();
+    print(ref.getDownloadURL());
     saveData(downloadUrl);
   }
 
@@ -108,15 +123,16 @@ class _ImageCardGenerateState extends State<ImageCardGenerate> {
                 flex: 1,
                 child: Column(
                   children: [
-                    (pickedImage != null) ? Container(
+                    (bytesFromPicker != null) ? Container(
                       height: 310,
                       width: double.infinity,
                       color: const Color(0xffffffff),
                       padding: const EdgeInsets.all(5),
-                      child: pickedImage,
-                    ) : const SizedBox(
+                      child: Image.memory(bytesFromPicker!),
+                    ) : SizedBox(
                       height: 310,
                       width: double.infinity,
+                      child: Image.asset('assets/images/mosaic_logo.png'),
                     ),
                     // (pickedImage != null) ? Container(
                     //   height: 310,
@@ -166,16 +182,6 @@ class _ImageCardGenerateState extends State<ImageCardGenerate> {
                         ),
                       ),
                     ),
-                    // Container(
-                    //   color: const Color(0xffffffff),
-                    //   padding: const EdgeInsets.all(5),
-                    //   child: ElevatedButton(
-                    //     child: const Text('이미지를 선택해 주세요'),
-                    //     onPressed: () async {
-                    //
-                    //     },
-                    //   ),
-                    // ),
                   ],
                 ),
               ),
@@ -184,8 +190,13 @@ class _ImageCardGenerateState extends State<ImageCardGenerate> {
         ),
 
         ElevatedButton(
-            onPressed: () {
-              uploadImage();
+            onPressed: () async {
+              showToast('이미지 카드를 저장 중 입니다. 잠시만 기다려 주세요');
+              await uploadImage();
+              setState(() {
+                bytesFromPicker = null;
+                messageController.text = '이미지를 저장 하였습니다.';
+              });
             },
             child: const Text('확인 작업 없습니다. 한 번 더 보고 저장해 주세요.')
         )

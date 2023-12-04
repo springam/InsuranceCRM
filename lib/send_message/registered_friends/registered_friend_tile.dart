@@ -121,8 +121,8 @@ class _RegisteredFriendTileState extends State<RegisteredFriendTile> {
                 widget.registeredFriend.name,
                 style: const TextStyle(
                     color:  Color(0xff000000),
-                    fontWeight: FontWeight.w400,
-                    // fontFamily: "Inter",
+                    fontWeight: FontWeight.w100,
+                    fontFamily: "NotoSansCJKkr-Regular",
                     fontStyle:  FontStyle.normal,
                     fontSize: 12.0
                 ),
@@ -137,8 +137,9 @@ class _RegisteredFriendTileState extends State<RegisteredFriendTile> {
                 (widget.registeredFriend.talkDown == 0) ? '존대' : '반말',
                 style: const TextStyle(
                     color:  Color(0xff000000),
-                    fontWeight: FontWeight.w400,
+                    fontWeight: FontWeight.w100,
                     // fontFamily: "Inter",
+                    fontFamily: "NotoSansCJKkr-Regular",
                     fontStyle:  FontStyle.normal,
                     fontSize: 12.0
                 ),

@@ -288,7 +288,8 @@ class ModifyFriendTileState extends State<ModifyFriendTile> {
                       testMsg,
                       style: const TextStyle(
                           color:  Color(0xff000000),
-                          fontWeight: FontWeight.w400,
+                          fontWeight: FontWeight.w100,
+                          fontFamily: "NotoSansCJKkr-Regular",
                           fontStyle:  FontStyle.normal,
                           fontSize: 12.0
                       ),

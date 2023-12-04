@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:image_network/image_network.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:mosaicbluenco/kakao_login.dart';
 import 'package:mosaicbluenco/message_template/image_card_generate.dart';
@@ -299,14 +300,28 @@ class _HomeMainState extends State<HomeMain> {
                                             height: 36,
                                             width: 36,
                                             margin: const EdgeInsets.only(left: 20, right: 12),
-                                            decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                image: DecorationImage(
-                                                    fit: BoxFit.fill,
-                                                    // image: AssetImage('assets/images/kakao_person.png')
-                                                  image: NetworkImage(UserData.userImageUrl)
-                                                )
+                                            child: ImageNetwork(
+                                              image: UserData.userImageUrl,
+                                              height: 30,
+                                              width: 30,
+                                              fitWeb: BoxFitWeb.fill,
+                                              borderRadius: BorderRadius.circular(15),
+                                              onLoading: const CircularProgressIndicator(
+                                                color: Colors.indigoAccent,
+                                              ),
+                                              onError: const Icon(
+                                                Icons.error,
+                                                color: Colors.red,
+                                              ),
                                             ),
+                                            // decoration: BoxDecoration(
+                                            //     shape: BoxShape.circle,
+                                            //     image: DecorationImage(
+                                            //         fit: BoxFit.fill,
+                                            //         // image: AssetImage('assets/images/kakao_person.png')
+                                            //       image: NetworkImage(UserData.userImageUrl)
+                                            //     )
+                                            // ),
                                           ),
                                           SelectableText(UserData.userNickname)
                                         ],

@@ -41,7 +41,7 @@ class TextMessageNormal extends StatelessWidget {
         style: TextStyle(
             color:  const Color(0xff000000),
             fontWeight: FontWeight.w100,
-            fontFamily: "NotoSansCJKKR",
+            fontFamily: "NotoSansCJKkr-Regular",
             fontFeatures: const [FontFeature.proportionalFigures()],
             fontStyle:  FontStyle.normal,
             fontSize: textSize,
@@ -100,7 +100,7 @@ class TitleHeavy extends StatelessWidget {
 TextStyle buttonTextStyle = const TextStyle(
     color:  Color(0xff000000),
     fontWeight: FontWeight.w100,
-    fontFamily: "NotoSansCJKKR",
+    fontFamily: "NotoSansCJKkr-Regular",
     fontFeatures: [FontFeature.proportionalFigures()],
     fontStyle:  FontStyle.normal,
     fontSize: 12.0,
