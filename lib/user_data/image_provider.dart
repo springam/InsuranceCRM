@@ -48,14 +48,16 @@ class ImageCardItem {
   List<dynamic> subjectIndex = []; //분류
   String imagePath = ''; //경로
   String message = ''; //기본 메시지
+  String fileName = '';
   bool customMessage = false; //커스텀 메시지 인지
   String madeBy = ''; //생성자 ID
   String creationDate = ''; //생성일
   String documentId = '';
   int consumedCount = 0;  //사용된 횟수
 
-  ImageCardItem({required this.subjectIndex, required this.imagePath, required this.message, required this.customMessage,
-    required this.madeBy, required this.creationDate, required this.documentId, required this.consumedCount});
+  ImageCardItem({required this.subjectIndex, required this.imagePath, required this.message, required this.fileName,
+    required this.customMessage, required this.madeBy, required this.creationDate, required this.documentId,
+    required this.consumedCount});
 }
 
 //['월초', '생일', '안부', '결혼', '계절', '연휴', '맨 처음', '계약후', '보상후', '내 메시지', '다른 사람 메시지']

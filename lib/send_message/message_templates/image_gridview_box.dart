@@ -1,5 +1,7 @@
 import 'dart:html';
 import 'dart:typed_data';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_network/image_network.dart';
 import 'package:provider/provider.dart';
@@ -9,9 +11,10 @@ import '../../user_data/status_provider.dart';
 import 'package:http/http.dart' as http;
 
 class ImageGridViewBox extends StatefulWidget {
-  const ImageGridViewBox({required this.imageCard,  super.key});
+  const ImageGridViewBox({required this.imageCard, required this.modifyMessage, super.key});
 
   final ImageCardItem imageCard;
+  final bool modifyMessage;
 
   @override
   State<ImageGridViewBox> createState() => _ImageGridViewBoxState();
@@ -37,6 +40,17 @@ class _ImageGridViewBoxState extends State<ImageGridViewBox> {
     TextMessageProvider().removeListener(() { });
     CurrentPageProvider().removeListener(() { });
     super.dispose();
+  }
+
+  Future<void> deleteMessage() async {
+    Reference ref = FirebaseStorage.instance.ref().child('card');
+    await ref.child('/${widget.imageCard.fileName}').delete();
+    deleteData(widget.imageCard.documentId);
+  }
+
+  Future<void> deleteData(String documentId) async{
+    final docRef = FirebaseFirestore.instance.collection('image');
+    await docRef.doc(documentId).delete();
   }
 
   @override
@@ -92,8 +106,34 @@ class _ImageGridViewBoxState extends State<ImageGridViewBox> {
         ),
       ),
       onTap: () {
-        icIP.setImagePath(widget.imageCard.imagePath, widget.imageCard.documentId);
-        cIP.setCurrentSubPage(1);
+        if (widget.modifyMessage) {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: const Text('Delete Image'),
+                  content: const Text('Are you sure?'),
+                  actions: [
+                    ElevatedButton(
+                        onPressed: () {
+                          deleteMessage();
+                        },
+                        child: const Text('ok')
+                    ),
+                    ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text('cancel')
+                    ),
+                  ],
+                );
+              }
+          );
+        } else {
+          icIP.setImagePath(widget.imageCard.imagePath, widget.imageCard.documentId);
+          cIP.setCurrentSubPage(1);
+        }
       },
     );
   }

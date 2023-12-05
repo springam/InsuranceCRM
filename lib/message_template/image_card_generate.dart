@@ -25,14 +25,11 @@ class _ImageCardGenerateState extends State<ImageCardGenerate> {
 
   final TextEditingController messageController = TextEditingController();
 
-  // late XFile pickedFile;
-  // XFile? pickedImage;
-  // late Image pickedImage = Image.asset('assets/images/mosaic_logo.png');
   Uint8List? bytesFromPicker;
 
   late FToast fToast;
 
-  double listHeight = 0.0;
+  double listHeight = 50;
 
   @override
   void initState() {
@@ -72,15 +69,16 @@ class _ImageCardGenerateState extends State<ImageCardGenerate> {
     await ref.putData(bytesFromPicker!); //(kIsWeb) ? putData() : putFile()
     String downloadUrl = await ref.getDownloadURL();
     print(ref.getDownloadURL());
-    saveData(downloadUrl);
+    saveData(downloadUrl, fileName);
   }
 
-  Future<void> saveData(String downloadUrl) async{
+  Future<void> saveData(String downloadUrl, String fileName) async{
     final docRef = FirebaseFirestore.instance.collection('image').doc();
     await docRef.set({
       'subject_index': SelectedTheme.selectedTheme,
       'image_path': downloadUrl,
       'message': messageController.text,
+      'fileName' : fileName,
       'custom_message': false,
       'made_by': UserData.userDocumentId,
       'creation_date': DateFormat("yyyy년 MM월 dd일 hh시 mm분").format(DateTime.now()),
@@ -93,16 +91,14 @@ class _ImageCardGenerateState extends State<ImageCardGenerate> {
   Widget build(BuildContext context) {
 
     if (MediaQuery.of(context).size.width >1280) {
-      listHeight = 100;
+      listHeight = 50;
     } else {
-      listHeight = 100; //140
+      listHeight = 50; //140
     }
 
     return Column(
       children: [
         Text('입력자: ${UserData.userNickname}'),
-        const Text('커스텀 메시지: false'),
-        const Text ('사용된 횟수: 0'),
         Container(
           width: double.infinity,
           height: listHeight,
@@ -134,16 +130,6 @@ class _ImageCardGenerateState extends State<ImageCardGenerate> {
                       width: double.infinity,
                       child: Image.asset('assets/images/mosaic_logo.png'),
                     ),
-                    // (pickedImage != null) ? Container(
-                    //   height: 310,
-                    //   width: double.infinity,
-                    //   color: const Color(0xffffffff),
-                    //   padding: const EdgeInsets.all(5),
-                    //   child: Image.network(pickedImage!.path),
-                    // ) : const SizedBox(
-                    //   height: 310,
-                    //   width: double.infinity,
-                    // ),
                     Container(
                       color: const Color(0xffffffff),
                       padding: const EdgeInsets.all(5),
@@ -191,14 +177,20 @@ class _ImageCardGenerateState extends State<ImageCardGenerate> {
 
         ElevatedButton(
             onPressed: () async {
-              showToast('이미지 카드를 저장 중 입니다. 잠시만 기다려 주세요');
-              await uploadImage();
-              setState(() {
-                bytesFromPicker = null;
-                messageController.text = '이미지를 저장 하였습니다.';
-              });
+              if (SelectedTheme.selectedTheme.isEmpty) {
+                showToast('테마를 선택해 주세요');
+              } else if (bytesFromPicker == null) {
+                showToast('이미지를 선택해 주세요');
+              } else {
+                showToast('이미지 카드를 저장 중 입니다. 잠시만 기다려 주세요');
+                await uploadImage();
+                setState(() {
+                  bytesFromPicker = null;
+                  messageController.text = '이미지를 저장 하였습니다.';
+                });
+              }
             },
-            child: const Text('확인 작업 없습니다. 한 번 더 보고 저장해 주세요.')
+            child: const Text('저장하기')
         )
       ],
     );

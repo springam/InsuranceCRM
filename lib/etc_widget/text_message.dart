@@ -18,7 +18,7 @@ class TextMessage extends StatelessWidget {
         style: TextStyle(
             color:  textColor,
             fontWeight: textFontWeight,
-            fontFamily: "NotoSansCJKKR",
+            fontFamily: "NotoSansCJKkr-Regular",
             fontFeatures: const [FontFeature.proportionalFigures()],
             fontStyle:  FontStyle.normal,
             fontSize: textSize,
@@ -64,7 +64,7 @@ class TitleNormal extends StatelessWidget {
         style: TextStyle(
             color:  const Color(0xff000000),
             fontWeight: FontWeight.w100,
-            fontFamily: "NotoSansCJKKR",
+            fontFamily: "NotoSansCJKkr-Regular",
             fontFeatures: const [FontFeature.proportionalFigures()],
             fontStyle:  FontStyle.normal,
             fontSize: textSize,
@@ -87,7 +87,7 @@ class TitleHeavy extends StatelessWidget {
         style: TextStyle(
           color:  const Color(0xff000000),
           fontWeight: FontWeight.w600,
-          fontFamily: "NotoSansCJKKR",
+          fontFamily: "NotoSansCJKkr-Regular",
           fontFeatures: const [FontFeature.proportionalFigures()],
           fontStyle:  FontStyle.normal,
           fontSize: textSize,

@@ -26,7 +26,7 @@ class _MessageGenerateState extends State<MessageGenerate> {
   String leftText = '';
   String rightText = '';
 
-  double listHeight = 0.0;
+  double listHeight = 50;
 
   @override
   void initState() {
@@ -57,16 +57,14 @@ class _MessageGenerateState extends State<MessageGenerate> {
   Widget build(BuildContext context) {
 
     if (MediaQuery.of(context).size.width >1280) {
-      listHeight = 100;
+      listHeight = 50;
     } else {
-      listHeight = 100; //140
+      listHeight = 50; //140
     }
 
     return Column(
       children: [
         Text('입력자: ${UserData.userNickname}'),
-        const Text('커스텀 메시지: false'),
-        const Text ('사용된 횟수: 0'),
         Container(
           width: double.infinity,
           height: listHeight,

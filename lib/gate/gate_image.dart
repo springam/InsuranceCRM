@@ -28,6 +28,7 @@ class _PreSetImageItemListState extends State<PreSetImageItemList> {
                 subjectIndex: doc.data()['subject_index'],
                 imagePath: doc.data()['image_path'],
                 message: doc.data()['message'],
+                fileName: doc.data()['file_name'],
                 customMessage: doc.data()['custom_message'],
                 madeBy: doc.data()['made_by'],
                 creationDate: doc.data()['creation_date'],

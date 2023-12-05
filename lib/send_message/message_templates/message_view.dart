@@ -100,33 +100,55 @@ class _MessageViewState extends State<MessageView> {
                 border: Border.all(color: Colors.black),
                 color: const Color(0xffffffff)
             ),
-            child: Form(
-              key: leftFormKey,
-              child: TextFormField(
-                controller: messageController,
-                keyboardType: TextInputType.multiline,
-                maxLines: null,
-                style: buttonTextStyle,
-                decoration: const InputDecoration(
-                    border: InputBorder.none
-                ),
-                validator: (value) {},
-                onSaved: (value) {},
-                onChanged: (value) {
-                  if (widget.talkDown) {
-                    tIP.setTextMessageTalkDown(messageController.text);
-                    if (cIP.getTalkDown() == 0) {
-                      cIP.setTalkDown(1);
-                    }
-                  } else {
-                    tIP.setTextMessage(messageController.text);
-                    if (cIP.getTalkDown() == 1) {
-                      cIP.setTalkDown(0);
-                    }
-                  }
-                },
+            child: TextField(
+              controller: messageController,
+              keyboardType: TextInputType.multiline,
+              maxLines: null,
+              style: buttonTextStyle,
+              decoration: const InputDecoration(
+                border: InputBorder.none
               ),
-            )
+              onChanged: (value) {
+                if (widget.talkDown) {
+                  tIP.setTextMessageTalkDown(messageController.text);
+                  if (cIP.getTalkDown() == 0) {
+                    cIP.setTalkDown(1);
+                  }
+                } else {
+                  tIP.setTextMessage(messageController.text);
+                  if (cIP.getTalkDown() == 1) {
+                    cIP.setTalkDown(0);
+                  }
+                }
+              },
+            ),
+            // child: Form(
+            //   key: leftFormKey,
+            //   child: TextFormField(
+            //     controller: messageController,
+            //     keyboardType: TextInputType.multiline,
+            //     maxLines: null,
+            //     style: buttonTextStyle,
+            //     decoration: const InputDecoration(
+            //         border: InputBorder.none
+            //     ),
+            //     validator: (value) {},
+            //     onSaved: (value) {},
+            //     onChanged: (value) {
+            //       if (widget.talkDown) {
+            //         tIP.setTextMessageTalkDown(messageController.text);
+            //         if (cIP.getTalkDown() == 0) {
+            //           cIP.setTalkDown(1);
+            //         }
+            //       } else {
+            //         tIP.setTextMessage(messageController.text);
+            //         if (cIP.getTalkDown() == 1) {
+            //           cIP.setTalkDown(0);
+            //         }
+            //       }
+            //     },
+            //   ),
+            // )
           ),
         ],
       ),

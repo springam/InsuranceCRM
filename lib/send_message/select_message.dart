@@ -329,45 +329,45 @@ class _SelectMessageState extends State<SelectMessage> {
                         ),
                       ),
 
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        margin: const EdgeInsets.only(top: 10, bottom: 10),
-                        child: const TitleNormal('3. 보내고 싶은 이미지나 링크가 있으면 아래에서 선택하거나 입력하세요.', 14.0),
-                      ),
-
-                      Container(
-                        width: double.infinity,
-                        height: 50,
-                        decoration: const BoxDecoration(
-                            color: Color(0xfff0f0f0)
-                        ),
-                        padding: const EdgeInsets.only(left: 10, top: 5, right: 10, bottom: 5),
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 80,
-                              height: 33,
-                              alignment: Alignment.center,
-                              margin: const EdgeInsets.only(top: 5, bottom: 5),
-                              child: const Text(
-                                  '첨부',
-                                  style: TextStyle(
-                                      color:  Color(0xff000000),
-                                      fontWeight: FontWeight.w400,
-                                      fontFamily: "NotoSansCJKkr-Regular",
-                                      fontStyle:  FontStyle.normal,
-                                      fontSize: 12.0
-                                  )
-                              ),
-                            ),
-
-                            fileOptionWidget('이미지'),
-                            fileOptionWidget('링크'),
-                            fileOptionWidget('파일'),
-
-                          ],
-                        ),
-                      ),
+                      // Container(
+                      //   alignment: Alignment.centerLeft,
+                      //   margin: const EdgeInsets.only(top: 10, bottom: 10),
+                      //   child: const TitleNormal('3. 보내고 싶은 이미지나 링크가 있으면 아래에서 선택하거나 입력하세요.', 14.0),
+                      // ),
+                      //
+                      // Container(
+                      //   width: double.infinity,
+                      //   height: 50,
+                      //   decoration: const BoxDecoration(
+                      //       color: Color(0xfff0f0f0)
+                      //   ),
+                      //   padding: const EdgeInsets.only(left: 10, top: 5, right: 10, bottom: 5),
+                      //   child: Row(
+                      //     children: [
+                      //       Container(
+                      //         width: 80,
+                      //         height: 33,
+                      //         alignment: Alignment.center,
+                      //         margin: const EdgeInsets.only(top: 5, bottom: 5),
+                      //         child: const Text(
+                      //             '첨부',
+                      //             style: TextStyle(
+                      //                 color:  Color(0xff000000),
+                      //                 fontWeight: FontWeight.w400,
+                      //                 fontFamily: "NotoSansCJKkr-Regular",
+                      //                 fontStyle:  FontStyle.normal,
+                      //                 fontSize: 12.0
+                      //             )
+                      //         ),
+                      //       ),
+                      //
+                      //       fileOptionWidget('이미지'),
+                      //       fileOptionWidget('링크'),
+                      //       fileOptionWidget('파일'),
+                      //
+                      //     ],
+                      //   ),
+                      // ),
 
                     ],
                   ),

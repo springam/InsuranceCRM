@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:mosaicbluenco/user_data/user_data.dart';
 import 'package:provider/provider.dart';
 import '../../user_data/image_provider.dart';
 import '../../user_data/registered_friends_provider.dart';
 import '../../user_data/status_provider.dart';
 import '../../user_data/message_provider.dart';
+import '../../user_data/user_provider.dart';
 import 'image_gridview_box.dart';
 import 'message_gridview_box.dart';
 import 'message_theme_subject.dart';
@@ -21,6 +23,7 @@ class _MessagePresetState extends State<MessagePreset> {
   late MessageItemProvider mIP;
   late CurrentPageProvider cIP;
   late ImageCardItemProvider iIP;
+  late UserItemProvider uIP;
 
   final ScrollController controller = ScrollController();
 
@@ -34,6 +37,7 @@ class _MessagePresetState extends State<MessagePreset> {
   Color messageColor = const Color(0xffc9ced9);
   Color imageColor = const Color(0xfff0f0f0);
   bool titleIsMessage = true;
+  bool modifyMessage = false;
 
   @override
   void initState() {
@@ -84,6 +88,7 @@ class _MessagePresetState extends State<MessagePreset> {
       mIP = Provider.of<MessageItemProvider>(context, listen: true);
       cIP = Provider.of<CurrentPageProvider>(context, listen: true);
       iIP = Provider.of<ImageCardItemProvider>(context, listen: true);
+      uIP = Provider.of<UserItemProvider>(context);
 
       messageList = [];
       imageList = [];
@@ -181,6 +186,17 @@ class _MessagePresetState extends State<MessagePreset> {
                         ],
                       ),
 
+                      // (UserData.userTier == 'master') ? IconButton(
+                      //   icon: (UserData.userTier == 'master') ? const Icon(Icons.settings) : const Icon(Icons.stop),
+                      //   color: Colors.white,
+                      //   iconSize: 20,
+                      //   onPressed: () {
+                      //     setState(() {
+                      //       modifyMessage = true;
+                      //     });
+                      //   },
+                      // ) : const SizedBox(),
+
                       IconButton(
                         icon: const Icon(Icons.cancel_rounded),
                         color: Colors.white,
@@ -244,7 +260,7 @@ class _MessagePresetState extends State<MessagePreset> {
                       itemCount: gridCount,
                       itemBuilder: (BuildContext context, int index) {
                         return (titleIsMessage) ? GridViewBox(presetMessage: messageList[index]) :
-                        ImageGridViewBox(imageCard: imageList[index]);
+                        ImageGridViewBox(imageCard: imageList[index], modifyMessage: modifyMessage,);
                       }
                   ),
                 )

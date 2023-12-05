@@ -40,6 +40,8 @@ class UserCheck extends StatelessWidget {
               ))
           ).toList();
 
+          UserData.userTier = userItemsMap[0].tier;
+
           if (userItemsMap.isNotEmpty) {
             uIP.setItem(userItemsMap);
             return const RegisteredFriendsItemList();
