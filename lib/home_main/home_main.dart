@@ -120,7 +120,7 @@ class _HomeMainState extends State<HomeMain> {
                   style: TextStyle(
                       color: const Color(0xff000000),
                       fontWeight: fontWeight,
-                      fontFamily: "NotoSansCJKKR",
+                      fontFamily: "NotoSansCJKkr-Regular",
                       fontStyle:  FontStyle.normal,
                       fontSize: 14.0
                   ),
@@ -172,7 +172,7 @@ class _HomeMainState extends State<HomeMain> {
 
     screenWidth = MediaQuery.of(context).size.width;
 
-    if (MediaQuery.of(context).size.width < 1500 || MediaQuery.of(context).size.height < 720) {
+    if (MediaQuery.of(context).size.width < 1200 || MediaQuery.of(context).size.height < 650) {
       return const Scaffold(
         body: Center(
           child: Column(
@@ -182,7 +182,8 @@ class _HomeMainState extends State<HomeMain> {
               SizedBox(height: 30),
               TitleHeavy('모자이크 화면 크기 안내', 16.0),
               SizedBox(height: 30),
-              TitleNormal('모자이크는 가로 1500, 세로 720 이상에 최적화 되어 있습니다.', 14.0),
+              TitleNormal('모자이크는 가로 1200, 세로 600 이상에 동작 하지만', 14.0),
+              TitleNormal('가로 1500, 세로 720 이상에 최적화 되어 있습니다.', 14.0),
               TitleNormal('창 크기를 키우거나 전체 창 모드로 실행해 주시기 바랍니다.', 14.0),
             ],
           ),
@@ -272,7 +273,7 @@ class _HomeMainState extends State<HomeMain> {
                                               style: TextStyle(
                                                   color:  Color(0xff000000),
                                                   fontWeight: FontWeight.w400,
-                                                  fontFamily: "NotoSansCJKKR",
+                                                  fontFamily: "NotoSansCJKkr-Regular",
                                                   fontStyle:  FontStyle.normal,
                                                   fontSize: 12.0
                                               ),
