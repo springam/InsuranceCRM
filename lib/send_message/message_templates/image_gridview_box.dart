@@ -42,17 +42,6 @@ class _ImageGridViewBoxState extends State<ImageGridViewBox> {
     super.dispose();
   }
 
-  Future<void> deleteMessage() async {
-    Reference ref = FirebaseStorage.instance.ref().child('card');
-    await ref.child('/${widget.imageCard.fileName}').delete();
-    deleteData(widget.imageCard.documentId);
-  }
-
-  Future<void> deleteData(String documentId) async{
-    final docRef = FirebaseFirestore.instance.collection('image');
-    await docRef.doc(documentId).delete();
-  }
-
   @override
   Widget build(BuildContext context) {
 
@@ -106,34 +95,8 @@ class _ImageGridViewBoxState extends State<ImageGridViewBox> {
         ),
       ),
       onTap: () {
-        if (widget.modifyMessage) {
-          showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: const Text('Delete Image'),
-                  content: const Text('Are you sure?'),
-                  actions: [
-                    ElevatedButton(
-                        onPressed: () {
-                          deleteMessage();
-                        },
-                        child: const Text('ok')
-                    ),
-                    ElevatedButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text('cancel')
-                    ),
-                  ],
-                );
-              }
-          );
-        } else {
-          icIP.setImagePath(widget.imageCard.imagePath, widget.imageCard.documentId);
-          cIP.setCurrentSubPage(1);
-        }
+        icIP.setImagePath(widget.imageCard.imagePath, widget.imageCard.documentId);
+        cIP.setCurrentSubPage(1);
       },
     );
   }

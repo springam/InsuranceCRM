@@ -64,6 +64,7 @@ class _MessageGenerateState extends State<MessageGenerate> {
 
     return Column(
       children: [
+        const SizedBox(height: 10),
         Text('입력자: ${UserData.userNickname}'),
         Container(
           width: double.infinity,

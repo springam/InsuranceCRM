@@ -78,7 +78,7 @@ class _ImageCardGenerateState extends State<ImageCardGenerate> {
       'subject_index': SelectedTheme.selectedTheme,
       'image_path': downloadUrl,
       'message': messageController.text,
-      'fileName' : fileName,
+      'file_name' : fileName,
       'custom_message': false,
       'made_by': UserData.userDocumentId,
       'creation_date': DateFormat("yyyy년 MM월 dd일 hh시 mm분").format(DateTime.now()),
@@ -96,103 +96,109 @@ class _ImageCardGenerateState extends State<ImageCardGenerate> {
       listHeight = 50; //140
     }
 
-    return Column(
-      children: [
-        Text('입력자: ${UserData.userNickname}'),
-        Container(
-          width: double.infinity,
-          height: listHeight,
-          alignment: Alignment.center,
-          decoration: const BoxDecoration(
-              color: Color(0xfff0f0f0)
+    return Container(
+      padding: const EdgeInsets.only(bottom: 30),
+      color: const Color(0xfff0f0f0),
+      child: Column(
+        children: [
+          const SizedBox(height: 10),
+          Text('입력자: ${UserData.userNickname}'),
+          Container(
+            width: double.infinity,
+            height: listHeight,
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+                color: Color(0xfff0f0f0)
+            ),
+            child: Wrap(
+              spacing: 3,
+              children: themeList(),
+            ),
           ),
-          child: Wrap(
-            spacing: 3,
-            children: themeList(),
-          ),
-        ),
-        Container(
-          margin: const EdgeInsets.all(30),
-          child: Row(
-            children: [
-              Expanded(
-                flex: 1,
-                child: Column(
-                  children: [
-                    (bytesFromPicker != null) ? Container(
-                      height: 310,
-                      width: double.infinity,
-                      color: const Color(0xffffffff),
-                      padding: const EdgeInsets.all(5),
-                      child: Image.memory(bytesFromPicker!),
-                    ) : SizedBox(
-                      height: 310,
-                      width: double.infinity,
-                      child: Image.asset('assets/images/mosaic_logo.png'),
-                    ),
-                    Container(
-                      color: const Color(0xffffffff),
-                      padding: const EdgeInsets.all(5),
-                      child: ElevatedButton(
-                        child: const Text('이미지를 선택해 주세요'),
-                        onPressed: () async {
-                          getImage();
-                        },
+          const Divider(height: 1, color: Colors.white),
+          Container(
+            margin: const EdgeInsets.all(30),
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: Column(
+                    children: [
+                      (bytesFromPicker != null) ? Container(
+                        height: 310,
+                        width: double.infinity,
+                        color: const Color(0xffffffff),
+                        padding: const EdgeInsets.all(5),
+                        child: Image.memory(bytesFromPicker!),
+                      ) : SizedBox(
+                        height: 310,
+                        width: double.infinity,
+                        child: Image.asset('assets/images/mosaic_logo.png'),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-
-              Expanded(
-                flex: 1,
-                child: Column(
-                  children: [
-                    Container(
-                      height: 310,
-                      width: double.infinity,
-                      color: const Color(0xffffffff),
-                      padding: const EdgeInsets.all(5),
-                      child: TextField(
-                        controller: messageController,
-                        keyboardType: TextInputType.multiline,
-                        maxLines: null,
-                        style: buttonTextStyle,
-                        decoration: const InputDecoration(
-                            hintText: '필요 없으면 빼야함',
-                            labelText: '이미지 설명',
-                            // enabledBorder: OutlineInputBorder(
-                            //     borderSide: BorderSide(color: Color(0xffd9d9d9), width: 1.0,)
-                            // ),
-                            border: InputBorder.none
+                      Container(
+                        color: const Color(0xffffffff),
+                        padding: const EdgeInsets.all(5),
+                        child: ElevatedButton(
+                          child: const Text('이미지를 선택해 주세요'),
+                          onPressed: () async {
+                            getImage();
+                          },
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ),
 
-        ElevatedButton(
-            onPressed: () async {
-              if (SelectedTheme.selectedTheme.isEmpty) {
-                showToast('테마를 선택해 주세요');
-              } else if (bytesFromPicker == null) {
-                showToast('이미지를 선택해 주세요');
-              } else {
-                showToast('이미지 카드를 저장 중 입니다. 잠시만 기다려 주세요');
-                await uploadImage();
-                setState(() {
-                  bytesFromPicker = null;
-                  messageController.text = '이미지를 저장 하였습니다.';
-                });
-              }
-            },
-            child: const Text('저장하기')
-        )
-      ],
+                Expanded(
+                  flex: 1,
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 310,
+                        width: double.infinity,
+                        color: const Color(0xffffffff),
+                        padding: const EdgeInsets.all(5),
+                        child: TextField(
+                          controller: messageController,
+                          keyboardType: TextInputType.multiline,
+                          maxLines: null,
+                          style: buttonTextStyle,
+                          decoration: const InputDecoration(
+                              hintText: '필요 없으면 빼야함',
+                              labelText: '이미지 설명',
+                              // enabledBorder: OutlineInputBorder(
+                              //     borderSide: BorderSide(color: Color(0xffd9d9d9), width: 1.0,)
+                              // ),
+                              border: InputBorder.none
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          ElevatedButton(
+              onPressed: () async {
+                if (SelectedTheme.selectedTheme.isEmpty) {
+                  showToast('테마를 선택해 주세요');
+                } else if (bytesFromPicker == null) {
+                  showToast('이미지를 선택해 주세요');
+                } else {
+                  showToast('이미지 카드를 저장 중 입니다. 잠시만 기다려 주세요');
+                  await uploadImage();
+                  setState(() {
+                    bytesFromPicker = null;
+                    messageController.text = '이미지를 저장 하였습니다.';
+                  });
+                }
+              },
+              child: const Text('저장하기')
+          )
+        ],
+      ),
     );
   }
 }

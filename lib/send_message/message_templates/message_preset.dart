@@ -105,6 +105,10 @@ class _MessagePresetState extends State<MessagePreset> {
         }
       }
 
+      if (MediaQuery.of(context).size.width < 1500) {
+        crossCountGrid = 4;
+      }
+
       (titleIsMessage) ? gridCount = messageList.length : gridCount = imageList.length;
 
       return Container(
@@ -115,100 +119,99 @@ class _MessagePresetState extends State<MessagePreset> {
           children: [
             Container(
               margin: const EdgeInsets.only(top: 15, right: 36),
-              child: Column(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
-                        children: [
-
-                          InkWell(
-                            child: Container(
-                              width: 130,
-                              height: 40,
-                              alignment: Alignment.center,
-                              color: messageColor,
-                              child: const Text(
-                                '메시지',
-                                style: TextStyle(
-                                    color:  Color(0xff000000),
-                                    fontWeight: FontWeight.w400,
-                                    fontFamily: "NotoSansCJKKR",
-                                    fontStyle:  FontStyle.normal,
-                                    fontSize: 14
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
+                      InkWell(
+                        child: Container(
+                          width: 130,
+                          height: 40,
+                          alignment: Alignment.center,
+                          color: messageColor,
+                          child: const Text(
+                            '메시지',
+                            style: TextStyle(
+                                color:  Color(0xff000000),
+                                fontWeight: FontWeight.w400,
+                                fontFamily: "NotoSansCJKkr-Regular",
+                                fontStyle:  FontStyle.normal,
+                                fontSize: 14
                             ),
-                            onTap: () {
-                              if (!titleIsMessage) {
-                                setState(() {
-                                  titleIsMessage = true;
-                                  messageColor = selectedColor;
-                                  imageColor = normalColor;
-                                });
-                              }
-                            },
+                            textAlign: TextAlign.center,
                           ),
-
-                          const SizedBox(width: 5),
-
-                          InkWell(
-                            child: Container(
-                              width: 130,
-                              height: 40,
-                              alignment: Alignment.center,
-                              color: imageColor,
-                              child: const Text(
-                                '이미지',
-                                style: TextStyle(
-                                    color:  Color(0xff000000),
-                                    fontWeight: FontWeight.w400,
-                                    fontFamily: "NotoSansCJKKR",
-                                    fontStyle:  FontStyle.normal,
-                                    fontSize: 14
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                            onTap: () {
-                              if (titleIsMessage) {
-                                setState(() {
-                                  titleIsMessage = false;
-                                  messageColor = normalColor;
-                                  imageColor = selectedColor;
-                                });
-                              }
-                            },
-                          ),
-
-                        ],
+                        ),
+                        onTap: () {
+                          if (!titleIsMessage) {
+                            setState(() {
+                              titleIsMessage = true;
+                              messageColor = selectedColor;
+                              imageColor = normalColor;
+                            });
+                          }
+                        },
                       ),
 
-                      // (UserData.userTier == 'master') ? IconButton(
-                      //   icon: (UserData.userTier == 'master') ? const Icon(Icons.settings) : const Icon(Icons.stop),
-                      //   color: Colors.white,
-                      //   iconSize: 20,
-                      //   onPressed: () {
-                      //     setState(() {
-                      //       modifyMessage = true;
-                      //     });
-                      //   },
-                      // ) : const SizedBox(),
+                      const SizedBox(width: 5),
 
-                      IconButton(
-                        icon: const Icon(Icons.cancel_rounded),
-                        color: Colors.white,
-                        iconSize: 20,
-                        onPressed: () {
-                          cIP.setCurrentSubPage(1);
+                      InkWell(
+                        child: Container(
+                          width: 130,
+                          height: 40,
+                          alignment: Alignment.center,
+                          color: imageColor,
+                          child: const Text(
+                            '이미지',
+                            style: TextStyle(
+                                color:  Color(0xff000000),
+                                fontWeight: FontWeight.w400,
+                                fontFamily: "NotoSansCJKkr-Regular",
+                                fontStyle:  FontStyle.normal,
+                                fontSize: 14
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        onTap: () {
+                          if (titleIsMessage) {
+                            setState(() {
+                              titleIsMessage = false;
+                              messageColor = normalColor;
+                              imageColor = selectedColor;
+                            });
+                          }
                         },
-                      )
+                      ),
+
                     ],
+                  ),
+
+                  // (UserData.userTier == 'master' && cIP.getMainPage() == 5) ? IconButton(
+                  //   icon: (UserData.userTier == 'master') ? const Icon(Icons.settings) : const Icon(Icons.stop),
+                  //   color: Colors.white,
+                  //   iconSize: 20,
+                  //   onPressed: () {
+                  //     setState(() {
+                  //       if (modifyMessage) {
+                  //         modifyMessage = false;
+                  //       } else {
+                  //         modifyMessage = true;
+                  //       }
+                  //     });
+                  //   },
+                  // ) : const SizedBox(),
+
+                  IconButton(
+                    icon: const Icon(Icons.cancel_rounded),
+                    color: Colors.white,
+                    iconSize: 20,
+                    onPressed: () {
+                      cIP.setCurrentSubPage(1);
+                    },
                   )
                 ],
-              ),
+              )
             ),
 
             Container(

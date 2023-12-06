@@ -7,6 +7,7 @@ import 'package:mosaicbluenco/message_template/message_generate.dart';
 import 'package:mosaicbluenco/user_data/user_data.dart';
 import 'package:provider/provider.dart';
 import '../etc_widget/text_message.dart';
+import '../message_template/message_modify.dart';
 import '../send_message/message_templates/message_preset.dart';
 import '../send_message/select_friends.dart';
 import '../send_message/select_message.dart';
@@ -160,6 +161,7 @@ class _HomeMainState extends State<HomeMain> {
       case 3:
         break;
       case 4:
+        return const MessageModify();
         break;
     }
     return const SizedBox();
