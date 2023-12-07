@@ -36,18 +36,28 @@ class _HomeMainState extends State<HomeMain> {
   FontWeight fontWeight = FontWeight.w400;
   FontWeight fontWeightNormal = FontWeight.w400;
   FontWeight fontWeightHover = FontWeight.w700;
+  List<String> leftMenuTextList = [
+    '메인',
+    '카톡 보내기',
+    '고객 관리카드',
+    '활용사례',
+    '처음세팅',
+    '메시지 입력',
+    '이미지 카드 입력',
+    '이미지 카드 수정'
+  ];
+  List<String> leftMenuImageList = [
+    'menu_home',
+    'menu_message',
+    'menu_customer_card',
+    'menu_example',
+    'menu_setting',
+    'menu_setting',
+    'menu_setting',
+    'menu_setting',
+  ];
   String leftMenuImage = 'menu_home';
-  String leftMenuImage1= 'menu_home';
-  String leftMenuImage2= 'menu_message';
-  String leftMenuImage3= 'menu_customer_card';
-  String leftMenuImage4= 'menu_example';
-  String leftMenuImage5= 'menu_setting';
   String leftMenuText = '메인';
-  String leftMenuText1 = '메인';
-  String leftMenuText2 = '카톡 보내기';
-  String leftMenuText3 = '고객 관리카드';
-  String leftMenuText4 = '활용사례';
-  String leftMenuText5 = '처음세팅';
 
   double screenWidth = 1280;
 
@@ -75,31 +85,8 @@ class _HomeMainState extends State<HomeMain> {
       fontWeight = fontWeightNormal;
     }
 
-    switch (menuNumber) {
-      case 1:
-        leftMenuImage = leftMenuImage1;
-        leftMenuText = leftMenuText1;
-        break;
-      case 2:
-        leftMenuImage = leftMenuImage2;
-        leftMenuText = leftMenuText2;
-        break;
-      case 3:
-        leftMenuImage = leftMenuImage3;
-        leftMenuText = leftMenuText3;
-        break;
-      case 4:
-        leftMenuImage = leftMenuImage4;
-        leftMenuText = leftMenuText4;
-        break;
-      case 5:
-        leftMenuImage = leftMenuImage5;
-        leftMenuText = leftMenuText5;
-        break;
-      default:
-        leftMenuImage = leftMenuImage1;
-        leftMenuText = leftMenuText1;
-    }
+    leftMenuImage = leftMenuImageList[menuNumber - 1];
+    leftMenuText = leftMenuTextList[menuNumber - 1];
 
     return InkWell(
       child: Container(
@@ -147,7 +134,7 @@ class _HomeMainState extends State<HomeMain> {
 
     switch (cIP.getMainPage()) {
       case 0:
-        return const MessageGenerate();
+        return const Center(child: TitleHeavy('준비중입니다.', 20));
       case 1:
         if (cIP.getSubPage() == 0) {
           return const SelectFriends();
@@ -157,12 +144,17 @@ class _HomeMainState extends State<HomeMain> {
           // return const MessagePreset();
         }
       case 2:
-        return const ImageCardGenerate();
+        return const Center(child: TitleHeavy('준비중입니다.', 20));
       case 3:
-        break;
+        return const Center(child: TitleHeavy('준비중입니다.', 20));
       case 4:
+        return const Center(child: TitleHeavy('준비중입니다.', 20));
+      case 5:
+        return const MessageGenerate();
+      case 6:
+        return const ImageCardGenerate();
+      case 7:
         return const MessageModify();
-        break;
     }
     return const SizedBox();
   }
@@ -229,6 +221,9 @@ class _HomeMainState extends State<HomeMain> {
                               leftMenu(3),
                               leftMenu(4),
                               leftMenu(5),
+                              (UserData.userTier == 'master') ? leftMenu(6) : const SizedBox(),
+                              (UserData.userTier == 'master') ? leftMenu(7) : const SizedBox(),
+                              (UserData.userTier == 'master') ? leftMenu(8) : const SizedBox(),
                             ],
                           ),
                         ),
@@ -340,8 +335,6 @@ class _HomeMainState extends State<HomeMain> {
                               ),
 
                               currentPage(), //보여줄 페이지 선택
-
-                              // const SelectFriends(),  //메시지 보내기, 선택된 메뉴에 따라 페이지 변경
 
                             ],
                           )
