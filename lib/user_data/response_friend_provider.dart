@@ -30,6 +30,10 @@ class ResponseFriendsItemProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  initItem() {
+    responseFriendsMap = [];
+  }
+
   modifyName(String name, int index) {
     responseFriendsMap[index].name = name;
   }

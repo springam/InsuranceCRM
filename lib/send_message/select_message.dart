@@ -228,7 +228,7 @@ class _SelectMessageState extends State<SelectMessage> {
                               ),
                             ),
                             onTap: () {
-                              sIP.initItem();
+                              // sIP.initItem();
                               cIP.setCurrentSubPage(0);
                             },
                           ),

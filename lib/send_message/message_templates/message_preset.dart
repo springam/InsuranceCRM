@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mosaicbluenco/user_data/user_data.dart';
 import 'package:provider/provider.dart';
+import '../../etc_widget/text_message.dart';
 import '../../user_data/image_provider.dart';
 import '../../user_data/registered_friends_provider.dart';
 import '../../user_data/status_provider.dart';
@@ -130,17 +130,7 @@ class _MessagePresetState extends State<MessagePreset> {
                           height: 40,
                           alignment: Alignment.center,
                           color: messageColor,
-                          child: const Text(
-                            '메시지',
-                            style: TextStyle(
-                                color:  Color(0xff000000),
-                                fontWeight: FontWeight.w400,
-                                fontFamily: "NotoSansCJKkr-Regular",
-                                fontStyle:  FontStyle.normal,
-                                fontSize: 14
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
+                          child: const TextMessage400('메시지', 14.0),
                         ),
                         onTap: () {
                           if (!titleIsMessage) {
@@ -161,17 +151,7 @@ class _MessagePresetState extends State<MessagePreset> {
                           height: 40,
                           alignment: Alignment.center,
                           color: imageColor,
-                          child: const Text(
-                            '이미지',
-                            style: TextStyle(
-                                color:  Color(0xff000000),
-                                fontWeight: FontWeight.w400,
-                                fontFamily: "NotoSansCJKkr-Regular",
-                                fontStyle:  FontStyle.normal,
-                                fontSize: 14
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
+                          child: const TextMessage400('이미지', 14.0),
                         ),
                         onTap: () {
                           if (titleIsMessage) {

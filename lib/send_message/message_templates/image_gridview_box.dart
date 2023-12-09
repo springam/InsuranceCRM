@@ -1,14 +1,9 @@
-import 'dart:html';
-import 'dart:typed_data';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_network/image_network.dart';
 import 'package:provider/provider.dart';
 import '../../user_data/image_provider.dart';
 import '../../user_data/message_provider.dart';
 import '../../user_data/status_provider.dart';
-import 'package:http/http.dart' as http;
 
 class ImageGridViewBox extends StatefulWidget {
   const ImageGridViewBox({required this.imageCard, required this.modifyMessage, super.key});

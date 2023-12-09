@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:typed_data';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -9,9 +8,7 @@ import 'package:mosaicbluenco/message_template/theme_list.dart';
 import '../etc_widget/text_message.dart';
 import '../etc_widget/toast_message.dart';
 import '../user_data/user_data.dart';
-import 'dart:io' as io;
 import 'package:image_picker_web/image_picker_web.dart';
-import 'package:image_network/image_network.dart';
 
 
 class ImageCardGenerate extends StatefulWidget {
@@ -53,7 +50,7 @@ class _ImageCardGenerateState extends State<ImageCardGenerate> {
     var getImage = await ImagePickerWeb.getImageAsBytes();
     if (getImage != null) {
       setState(() {
-        bytesFromPicker = getImage!;
+        bytesFromPicker = getImage;
       });
     }
 

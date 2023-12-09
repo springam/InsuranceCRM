@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mosaicbluenco/user_data/user_data.dart';
 import 'package:provider/provider.dart';
+import '../../etc_widget/text_message.dart';
 import '../../user_data/status_provider.dart';
 
 class MessageThemeListChip extends StatefulWidget {
@@ -63,16 +64,7 @@ class _MessageThemeListChipState extends State<MessageThemeListChip> {
                 color: selectedColor
             ),
             child: Center(
-              child: Text(
-                  ThemeList.themeList[widget.themeIndex],
-                  style: const TextStyle(
-                      color:  Color(0xff000000),
-                      fontWeight: FontWeight.w400,
-                      fontFamily: "NotoSansCJKKR",
-                      fontStyle:  FontStyle.normal,
-                      fontSize: 12.0
-                  )
-              ),
+              child: TextMessage400(ThemeList.themeList[widget.themeIndex], 12.0),
             ),
           ),
           onTap: () {

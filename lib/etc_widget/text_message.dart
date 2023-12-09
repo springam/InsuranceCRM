@@ -51,6 +51,29 @@ class TextMessageNormal extends StatelessWidget {
   }
 }
 
+class TextMessage400 extends StatelessWidget {
+  const TextMessage400(this.textContent, this.textSize, {super.key});
+
+  final String textContent;
+  final double textSize;
+
+  @override
+  Widget build(BuildContext context) {
+    return SelectableText(
+        textContent,
+        style: TextStyle(
+          color:  const Color(0xff000000),
+          fontWeight: FontWeight.w400,
+          fontFamily: "NotoSansCJKkr-Regular",
+          fontFeatures: const [FontFeature.proportionalFigures()],
+          fontStyle:  FontStyle.normal,
+          fontSize: textSize,
+        ),
+        textAlign: TextAlign.center
+    );
+  }
+}
+
 class TitleNormal extends StatelessWidget {
   const TitleNormal(this.textContent, this.textSize, {super.key});
 

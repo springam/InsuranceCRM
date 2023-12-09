@@ -3,6 +3,7 @@ import 'package:mosaicbluenco/user_data/user_data.dart';
 import 'package:provider/provider.dart';
 
 import '../../user_data/registered_friends_provider.dart';
+import '../etc_widget/text_message.dart';
 
 class ThemeListChip extends StatefulWidget {
   const ThemeListChip({required this.themeIndex, super.key});
@@ -69,16 +70,7 @@ class _ThemeListChipState extends State<ThemeListChip> {
                 color: chipColor
             ),
             child: Center(
-              child: Text(
-                  '#${ThemeList.themeList[widget.themeIndex]}',
-                  style: const TextStyle(
-                      color:  Color(0xff000000),
-                      fontWeight: FontWeight.w400,
-                      fontFamily: "NotoSansCJKKR",
-                      fontStyle:  FontStyle.normal,
-                      fontSize: 14.0
-                  )
-              ),
+              child: TextMessage400('#${ThemeList.themeList[widget.themeIndex]}', 14.0),
             ),
           ),
           onTap: () {

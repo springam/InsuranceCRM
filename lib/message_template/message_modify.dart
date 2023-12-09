@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_network/image_network.dart';
+import 'package:intl/intl.dart';
+import 'package:mosaicbluenco/message_template/theme_list.dart';
 import 'package:mosaicbluenco/user_data/user_data.dart';
 import 'package:provider/provider.dart';
 import '../../user_data/image_provider.dart';
@@ -9,6 +11,7 @@ import '../../user_data/registered_friends_provider.dart';
 import '../../user_data/status_provider.dart';
 import '../../user_data/message_provider.dart';
 import '../../user_data/user_provider.dart';
+import '../etc_widget/text_message.dart';
 import '../send_message/message_templates/message_theme_subject.dart';
 
 class MessageModify extends StatefulWidget {
@@ -28,8 +31,13 @@ class _MessageModifyState extends State<MessageModify> {
   late UserItemProvider uIP;
 
   final ScrollController mainController = ScrollController();
-  final ScrollController messageController = ScrollController();
   final ScrollController imageController = ScrollController();
+
+  final TextEditingController messageController = TextEditingController();
+  final TextEditingController messageTalkDownController = TextEditingController();
+
+  final leftFormKey = GlobalKey<FormState>();
+  final rightFormKey = GlobalKey<FormState>();
 
   List<PresetMessageItem> messageList = [];
   List<ImageCardItem> imageList = [];
@@ -69,7 +77,19 @@ class _MessageModifyState extends State<MessageModify> {
     await docRef.doc(imageCard.documentId).delete();
   }
 
+  Future<void> saveData(PresetMessageItem presetMessage) async{
+    final docRef = FirebaseFirestore.instance.collection('message').doc(presetMessage.documentId);
+    await docRef.update({
+      'creation_date': DateFormat("yyyy년 MM월 dd일 hh시 mm분").format(DateTime.now()),
+      'made_by': UserData.userDocumentId,
+      'message_body': messageController.text,
+      'message_body_talk_down': messageTalkDownController.text,
+      'subject_index': SelectedTheme.selectedTheme,
+    });
+  }
+
   Widget messageGridViewBoxM(PresetMessageItem presetMessage) {
+
     return InkWell(
       child: Container(
         decoration: const BoxDecoration(
@@ -94,9 +114,125 @@ class _MessageModifyState extends State<MessageModify> {
         )
       ),
       onTap: () {
-        tIP.setTextMessage(presetMessage.messageBody);
-        tIP.setTextMessageTalkDown(presetMessage.messageBodyTalkDown);
-        cIP.setCurrentSubPage(1);
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+
+              SelectedTheme.selectedTheme = [];
+
+              for (var value in presetMessage.subjectIndex) {
+                SelectedTheme.selectedTheme.add(value);
+              }
+
+              messageController.text = presetMessage.messageBody;
+              messageTalkDownController.text = presetMessage.messageBodyTalkDown;
+
+              return AlertDialog(
+                title: const Text('Preset Message'),
+                content: SizedBox(
+                  width: 1150,
+                  child: Column(
+                    children: [
+                      Wrap(
+                        spacing: 1,
+                        children: themeList(),
+                      ),
+                      const SizedBox(height: 30),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Container(
+                                height: 280,
+                                padding: const EdgeInsets.all(10),
+                                margin: const EdgeInsets.all(20),
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.black, width: 1.0),
+                                ),
+                                child: Form(
+                                  key: leftFormKey,
+                                  child: TextFormField(
+                                    controller: messageController,
+                                    keyboardType: TextInputType.multiline,
+                                    maxLines: null,
+                                    style: buttonTextStyle,
+                                    decoration: const InputDecoration(
+                                        hintText: '내용을 입력해 주세요',
+                                        labelText: '존대 메시지',
+                                        // enabledBorder: OutlineInputBorder(
+                                        //     borderSide: BorderSide(color: Color(0xffd9d9d9), width: 1.0,)
+                                        // ),
+                                        border: InputBorder.none
+                                    ),
+                                    // validator: (value) {
+                                    //   if (value!.isEmpty) {
+                                    //     return '내용을 입력해 주세요.';
+                                    //   }
+                                    // },
+                                    onSaved: (value) {},
+                                    onChanged: (value) {},
+                                  ),
+                                )
+                            ),
+                          ),
+
+                          Expanded(
+                            child: Container(
+                              height: 280,
+                              width: double.infinity,
+                              // color: const Color(0xffffffff),
+                              padding: const EdgeInsets.all(10),
+                              margin: const EdgeInsets.all(20),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.black, width: 1.0),
+                              ),
+                              child: Form(
+                                key: rightFormKey,
+                                child: TextFormField(
+                                  controller: messageTalkDownController,
+                                  keyboardType: TextInputType.multiline,
+                                  maxLines: null,
+                                  style: buttonTextStyle,
+                                  decoration: const InputDecoration(
+                                      hintText: '내용을 입력해 주세요',
+                                      labelText: '반말 메시지',
+                                      // enabledBorder: OutlineInputBorder(
+                                      //     borderSide: BorderSide(color: Color(0xffd9d9d9), width: 1.0,)
+                                      // ),
+                                      border: InputBorder.none
+                                  ),
+                                  // validator: (value) {
+                                  //   if (value!.isEmpty) {
+                                  //     return '내용을 입력해 주세요.';
+                                  //   }
+                                  // },
+                                ),
+                              ),
+
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                actions: [
+                  ElevatedButton(
+                      onPressed: () {
+                        saveData(presetMessage);
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('저장')
+                  ),
+                  ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('취소')
+                  ),
+                ],
+              );
+            }
+        );
       },
     );
   }
@@ -187,6 +323,11 @@ class _MessageModifyState extends State<MessageModify> {
         listCount, (themeIndex) => MessageThemeSubject(themeIndex: themeIndex + additionCount,)).toList();
   }
 
+  List<Widget> themeList() {
+    return List<Widget>.generate(
+        ThemeList.themeList.length, (themeIndex) => ThemeListChip(themeIndex: themeIndex,)).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -237,17 +378,7 @@ class _MessageModifyState extends State<MessageModify> {
                     height: 40,
                     alignment: Alignment.center,
                     color: messageColor,
-                    child: const Text(
-                      '메시지',
-                      style: TextStyle(
-                          color:  Color(0xff000000),
-                          fontWeight: FontWeight.w400,
-                          fontFamily: "NotoSansCJKKR",
-                          fontStyle:  FontStyle.normal,
-                          fontSize: 14
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
+                    child: const TextMessage400('메시지', 14.0),
                   ),
                   onTap: () {
                     if (!titleIsMessage) {
@@ -268,17 +399,7 @@ class _MessageModifyState extends State<MessageModify> {
                     height: 40,
                     alignment: Alignment.center,
                     color: imageColor,
-                    child: const Text(
-                      '이미지',
-                      style: TextStyle(
-                          color:  Color(0xff000000),
-                          fontWeight: FontWeight.w400,
-                          fontFamily: "NotoSansCJKKR",
-                          fontStyle:  FontStyle.normal,
-                          fontSize: 14
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
+                    child: const TextMessage400('이미지', 14.0),
                   ),
                   onTap: () {
                     if (titleIsMessage) {
