@@ -132,7 +132,7 @@ class SelectFriendsState extends State<SelectFriends> {
     channel.stream.listen((data) {
       if (data.contains('version')) {
         var version = int.parse(data.substring(8));
-        if (version < 3) { //version check
+        if (version < 4) { //version check
           showDialog(
               context: context,
               builder: (BuildContext context) {

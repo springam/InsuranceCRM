@@ -24,7 +24,7 @@ class SelectMessage extends StatefulWidget {
 
 class _SelectMessageState extends State<SelectMessage> {
 
-  final _channel = WebSocketChannel.connect(
+  final channel = WebSocketChannel.connect(
     // Uri.parse('wss://echo.websocket.events'),
     Uri.parse('ws://localhost:8080'),
   );
@@ -53,6 +53,7 @@ class _SelectMessageState extends State<SelectMessage> {
     TextMessageProvider().addListener(() { });
     CurrentPageProvider().addListener(() { });
     ImageCardProvider().addListener(() { });
+    streamListen();
   }
 
   @override
@@ -61,7 +62,7 @@ class _SelectMessageState extends State<SelectMessage> {
     TextMessageProvider().removeListener(() { });
     CurrentPageProvider().removeListener(() { });
     ImageCardProvider().removeListener(() { });
-    _channel.sink.close();
+    channel.sink.close();
     super.dispose();
   }
 
@@ -76,9 +77,10 @@ class _SelectMessageState extends State<SelectMessage> {
       'imageMessage': '${icIP.getImagePath()}',
       'textMessage': tIP.getTextMessageTalkDown(),
       'name': UserData.userNickname,
+      'userName': UserData.userNickname,
       'imageName': icIP.getImageName()
     });
-    _channel.sink.add(result);
+    channel.sink.add(result);
   }
 
   void sendFriends() async {
@@ -90,6 +92,7 @@ class _SelectMessageState extends State<SelectMessage> {
           'imageMessage':'${icIP.getImagePath()}',
           'textMessage':tIP.getTextMessage(),
           'name':value.kakaoNickname,
+          'userName': UserData.userNickname,
           'imageName': icIP.getImageName()
         });
       } else {
@@ -98,12 +101,13 @@ class _SelectMessageState extends State<SelectMessage> {
           'imageMessage':'${icIP.getImagePath()}',
           'textMessage':tIP.getTextMessageTalkDown(),
           'name':value.kakaoNickname,
+          'userName': UserData.userNickname,
           'imageName': icIP.getImageName()
         });
       }
     }
     String result = json.encode(messageItem);
-    _channel.sink.add(result);
+    channel.sink.add(result);
   }
 
   List<Widget> selectChip() {
@@ -175,6 +179,33 @@ class _SelectMessageState extends State<SelectMessage> {
         ),
       ),
     );
+  }
+
+  void streamListen() {
+
+    channel.stream.listen((data) {
+      if (data == 'kakaotalk not found') {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return const AlertMessage(
+                title: '카카오톡을 실행해 주세요',
+                message: '메시지를 보내기 위해서는 카카오톡을 먼저 실행해 주세요',
+              );
+            }
+        );
+      } else if (data == 'notMatch'){
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return const AlertMessage(
+                title: '모자이크 계정와 카카오톡 계정이 다릅니다.',
+                message: '모자이크 계정과 같은 계정으로 로그인 해 주세요',
+              );
+            }
+        );
+      }
+    });
   }
 
   @override
