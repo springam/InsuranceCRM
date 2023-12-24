@@ -40,10 +40,9 @@ class UserCheck extends StatelessWidget {
               ))
           ).toList();
 
-          UserData.userTier = userItemsMap[0].tier;
-
           if (userItemsMap.isNotEmpty) {
             uIP.setItem(userItemsMap);
+            UserData.userTier = userItemsMap[0].tier;
             return const RegisteredFriendsItemList();
           } else {
             final docRef = FirebaseFirestore.instance.collection('customer').doc();

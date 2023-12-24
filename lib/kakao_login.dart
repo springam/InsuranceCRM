@@ -100,7 +100,8 @@ class _LoginState extends State<Login> {
     // bool isInstalled = await isKakaoTalkInstalled();
     //
     // OAuthToken token = isInstalled
-    //     ? await UserApi.instance.loginWithKakaoTalk()
+    //     ? await UserApi.instance.
+    //     ()
     //     : await UserApi.instance.loginWithKakaoAccount();
 
     if (await isKakaoTalkInstalled()) {
