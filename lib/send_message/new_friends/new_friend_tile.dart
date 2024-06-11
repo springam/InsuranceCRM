@@ -25,6 +25,10 @@ class NewFriendTileState extends State<NewFriendTile> {
 
   DateTime now = DateTime.now();
 
+  Color selectedColor = const Color(0xffffffff);
+  Color selectedBorderColor = const Color(0xff000000);
+  bool selectedTile = false;
+
   int selectedIndex = 2;
   int selectedFilterIndex = 10;
   String nickname = '';
@@ -165,13 +169,17 @@ class NewFriendTileState extends State<NewFriendTile> {
     selectedIndex = resIP.getItem()[widget.index].talkDown?? 2;
     selectedHashTag = resIP.getItem()[widget.index].tag?? [];
 
-    if (middleNickController.text.isNotEmpty && selectedIndex != 2 && selectedHashTag.isNotEmpty) {
-      warnColor = Colors.transparent;
-      resIP.modifyRegistered(1, widget.index);
-    } else {
-      warnColor = Colors.red;
-      resIP.modifyRegistered(0, widget.index);
-    }
+    //여기서 문제 됨
+    //아래 내용 확인하고 변경해야 함
+
+    // if (middleNickController.text.isNotEmpty && selectedIndex != 2 && selectedHashTag.isNotEmpty) {
+    //   warnColor = Colors.transparent;
+    //   resIP.modifyRegistered(1, widget.index);
+    // } else {
+    //   warnColor = Colors.red;
+    //   resIP.modifyRegistered(0, widget.index);
+    // }
+
 
     // if (widget.registering) {
     //   if (middleNickController.text.isNotEmpty && selectedIndex != 2 && selectedHashTag.isNotEmpty) {
@@ -204,31 +212,54 @@ class NewFriendTileState extends State<NewFriendTile> {
                   // onHover: updateLocation,
                   // onExit: exitBoxArea,
                   child: Container(
-                    height: 33,
+                    height: 30,
                     alignment: Alignment.centerLeft,
                     margin: const EdgeInsets.only(left: 7),
-                    // padding: const EdgeInsets.only(left: 13, top: 3, right: 13, bottom: 3),
+                    padding: const EdgeInsets.only(left: 13, top: 3, right: 13, bottom: 3),
                     color: const Color(0xffffffff),
                     child: Material(
                       color: const Color(0xffffffff),
                       child: InkWell(
                         borderRadius: BorderRadius.circular(15),
-                        splashColor: const Color(0xffffffff),
-                        hoverColor: const Color(0xffffffff),
+                        splashColor: const Color(0xffffdf8e), //0xffffffff
+                        hoverColor: const Color(0xffbcc0c7),
                         child: Ink(
-                          // width: 88,
-                          // height: 21,
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(15)),
-                            color: Color(0xffffffff),
+                          width: double.infinity,
+                          height: 34,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: selectedBorderColor, width: 1.0),
+                            borderRadius: const BorderRadius.all(Radius.circular(15)),
+                            color: selectedColor,
                           ),
-                          child: Text(
-                            nickname,
-                            style: buttonTextStyle,
-                            overflow: TextOverflow.ellipsis,
+                          child: Container(
+                            color: Colors.transparent,
+                            padding: const EdgeInsets.only(left: 10, top: 2),
+                            child: Text(
+                              nickname,
+                              style: buttonTextStyle,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                         ),
-                        onTap: () {},
+                        onTap: () {
+                          // if (selectedTile) {
+                          //   sIP.removeItem(widget.registeredFriend);
+                          //   setState(() {
+                          //     selectedColor = const Color(0xffffffff);
+                          //     selectedBorderColor = const Color(0xff000000);
+                          //     selectedTile = false;
+                          //   });
+                          // } else {
+                          //   if (!sIP.getItem().contains(widget.registeredFriend)) {
+                          //     sIP.addItem(widget.registeredFriend);
+                          //     setState(() {
+                          //       selectedColor = const Color(0xffd7e3f7);
+                          //       selectedBorderColor = const Color(0xff000000); //변화 안 줄거면 지워
+                          //       selectedTile = true;
+                          //     });
+                          //   }
+                          // }
+                        },
                       ),
                     ),
                   ),

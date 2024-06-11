@@ -7,6 +7,7 @@ import 'package:mosaicbluenco/message_template/message_generate.dart';
 import 'package:mosaicbluenco/user_data/user_data.dart';
 import 'package:provider/provider.dart';
 import '../etc_widget/text_message.dart';
+import '../first_page/main_first.dart';
 import '../message_template/message_modify.dart';
 import '../send_message/message_templates/message_preset.dart';
 import '../send_message/select_friends.dart';
@@ -134,7 +135,7 @@ class _HomeMainState extends State<HomeMain> {
 
     switch (cIP.getMainPage()) {
       case 0:
-        return const Center(child: TitleHeavy('준비중입니다.', 20));
+        return const MainFirst();
       case 1:
         if (cIP.getSubPage() == 0) {
           return const SelectFriends();

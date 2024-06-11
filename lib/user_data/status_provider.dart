@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class CurrentPageProvider with ChangeNotifier {
 
-  int currentMainPage = 1;
+  int currentMainPage = 0;
   int currentSubPage = 0;
   int selectedThemeIndex = 20;
   int talkDown = 0;
@@ -13,7 +13,7 @@ class CurrentPageProvider with ChangeNotifier {
   // 2: 고객 관리카드
   // 3: 처음 세팅
 
-  // mina 1 subPage
+  // main 1 subPage
   // 0: select_friends
   // 1: select_message
   // 2: message_preset

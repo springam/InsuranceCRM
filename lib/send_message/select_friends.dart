@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:mosaicbluenco/send_message/new_friends/new_friends.dart';
@@ -32,7 +31,7 @@ class SelectFriendsState extends State<SelectFriends> {
     Uri.parse('ws://localhost:8080'),
   );
 
-  final _formKey = GlobalKey<FormState>();
+  // final _formKey = GlobalKey<FormState>();
 
   late SendMessageFriendsItemProvider sIP;
   late CurrentPageProvider cIP;
@@ -120,11 +119,6 @@ class SelectFriendsState extends State<SelectFriends> {
       'talk_down': 2,
       'tier': 0
     });
-  }
-
-  void searchFriend() {
-    searchText = searchFriendController.text;
-    responseFriendsMap = [];
   }
 
   void streamListen() {
@@ -217,10 +211,19 @@ class SelectFriendsState extends State<SelectFriends> {
 
     registerFriendsMap = [];
     responseFriendsMap = [];
+    resIP.initItem();
+
+    int count = 0;
 
     for (RegisteredFriendsItem item in fIP.getItem()) {
       bool exitResponse = false;
       bool exitRegister = false;
+
+      count ++;
+
+      if (count == 2 || count ==280) {
+      }
+
       if (item.registered == 1) {
         for (int i = 0; i < regIP.getItem().length + 1; i++) {
           if (i < regIP.getItem().length) {
@@ -233,9 +236,8 @@ class SelectFriendsState extends State<SelectFriends> {
             }
           }
         }
-      }
+      } else if (item.registered == 2) {
 
-      if (item.registered == 2) {
         if (searchText.isEmpty) {
           for (int i = 0; i < resIP.getItem().length + 1; i++) {
             if (i < resIP.getItem().length) {
@@ -263,14 +265,28 @@ class SelectFriendsState extends State<SelectFriends> {
             }
           }
         }
+
       }
 
-      if (item == fIP.getItem().last && registerFriendsMap.isNotEmpty) {
-        regIP.addItems(registerFriendsMap);
+      if (item == fIP.getItem().last) {
+
+        if (registerFriendsMap.isNotEmpty) {
+          regIP.addItems(registerFriendsMap);
+        }
+        if (responseFriendsMap.isNotEmpty) {
+          resIP.addItems(responseFriendsMap);
+        }
+
       }
-      if (item == fIP.getItem().last && responseFriendsMap.isNotEmpty) {
-        resIP.addItems(responseFriendsMap);
-      }
+
+      // if (item == fIP.getItem().last && registerFriendsMap.isNotEmpty) {
+      //   regIP.addItems(registerFriendsMap);
+      // }
+      //
+      // if (item == fIP.getItem().last && responseFriendsMap.isNotEmpty) {
+      //   resIP.addItems(responseFriendsMap);
+      //   print(resIP.getItem().length);
+      // }
     }
 
     return Container(
@@ -447,33 +463,43 @@ class SelectFriendsState extends State<SelectFriends> {
                               margin: const EdgeInsets.only(left: 9, right: 4),
                               child: Image.asset('assets/images/search_friends.png'),
                             ),
+
                             Container(
                               width: 160,
                               alignment: Alignment.centerLeft,
-                              padding: const EdgeInsets.only(bottom: 4),
-                              child: Form(
-                                key: _formKey,
-                                child: TextFormField(
-                                  controller: searchFriendController,
-                                  onFieldSubmitted: (value) {
-                                    // print('Enter here');
-                                    // setState(() {
-                                    //   print(value);
-                                    //   resIP.initItem();
-                                    //   searchText = value;
-                                    // });
-                                  },
-                                ),
-                              )
-                              // child: TextField(
-                              //   maxLines: null,
-                              //   controller: searchFriendController,
-                              //   style: buttonTextStyle,
-                              //   decoration: const InputDecoration(
-                              //       hintText: '카톡대화명 검색',
-                              //       border: InputBorder.none
+                              // child: Form(
+                              //   key: _formKey,
+                              //   child: TextFormField(
+                              //     controller: searchFriendController,
+                              //     onFieldSubmitted: (value) {
+                              //       print('Enter here');
+                              //       setState(() {
+                              //         print(value);
+                              //         resIP.initItem();
+                              //         searchText = value;
+                              //       });
+                              //     },
                               //   ),
-                              // ),
+                              // )
+
+                              child: TextField(
+                                maxLines: null,
+                                controller: searchFriendController,
+                                style: buttonTextStyle,
+                                decoration: const InputDecoration(
+                                    isDense: true,
+                                    contentPadding: EdgeInsets.zero,
+                                    hintText: '카톡대화명 검색',
+                                    border: InputBorder.none
+                                ),
+                                onChanged: (value) {
+
+                                  setState(() {
+                                    // resIP.initItem();
+                                    searchText = value;
+                                  });
+                                },
+                              ),
                             )
                           ],
                         ),

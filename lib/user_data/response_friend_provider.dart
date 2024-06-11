@@ -31,7 +31,7 @@ class ResponseFriendsItemProvider with ChangeNotifier {
   }
 
   initItem() {
-    responseFriendsMap = [];
+    responseFriendsMap.clear();
   }
 
   modifyName(String name, int index) {

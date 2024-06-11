@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:image_network/image_network.dart';
 import 'package:mosaicbluenco/send_message/message_templates/message_theme_list.dart';

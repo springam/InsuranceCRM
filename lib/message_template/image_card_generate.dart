@@ -65,7 +65,6 @@ class _ImageCardGenerateState extends State<ImageCardGenerate> {
     Reference ref = FirebaseStorage.instance.ref().child('card').child('/$fileName.png'); //.child('/$fileName.bmp')
     await ref.putData(bytesFromPicker!); //(kIsWeb) ? putData() : putFile()
     String downloadUrl = await ref.getDownloadURL();
-    print(ref.getDownloadURL());
     saveData(downloadUrl, fileName);
   }
 
