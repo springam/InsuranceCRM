@@ -6,13 +6,14 @@ import 'package:mosaicbluenco/message_template/image_card_generate.dart';
 import 'package:mosaicbluenco/message_template/message_generate.dart';
 import 'package:mosaicbluenco/user_data/user_data.dart';
 import 'package:provider/provider.dart';
-import '../etc_widget/text_message.dart';
-import '../first_page/main_first.dart';
-import '../message_template/message_modify.dart';
-import '../send_message/message_templates/message_preset.dart';
-import '../send_message/select_friends.dart';
-import '../send_message/select_message.dart';
-import '../user_data/status_provider.dart';
+import 'etc_widget/text_message.dart';
+import 'first_page/main_first.dart';
+import 'friend_care/friend_care.dart';
+import 'message_template/message_modify.dart';
+import 'send_message/message_templates/message_preset.dart';
+import 'send_message/select_friends.dart';
+import 'send_message/select_message.dart';
+import 'user_data/status_provider.dart';
 
 class HomeMain extends StatefulWidget {
   const HomeMain({super.key});
@@ -145,7 +146,7 @@ class _HomeMainState extends State<HomeMain> {
           // return const MessagePreset();
         }
       case 2:
-        return const Center(child: TitleHeavy('준비중입니다.', 20));
+        return const FriendCare();
       case 3:
         return const Center(child: TitleHeavy('준비중입니다.', 20));
       case 4:

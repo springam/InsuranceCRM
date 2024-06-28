@@ -199,30 +199,11 @@ class SelectFriendsState extends State<SelectFriends> {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-
-    sIP = Provider.of<SendMessageFriendsItemProvider>(context, listen: true);
-    cIP = Provider.of<CurrentPageProvider>(context, listen: true);
-    fIP = Provider.of<FriendsItemProvider>(context, listen: true);
-    regIP = Provider.of<RegisteredFriendsItemProvider>(context, listen: true);
-    resIP = Provider.of<ResponseFriendsItemProvider>(context, listen: true);
-    // nsIP = Provider.of<NotSetItemProvider>(context, listen: true);
-
-    registerFriendsMap = [];
-    responseFriendsMap = [];
-    resIP.initItem();
-
-    int count = 0;
+  void setFriendList(String searchText) {
 
     for (RegisteredFriendsItem item in fIP.getItem()) {
       bool exitResponse = false;
       bool exitRegister = false;
-
-      count ++;
-
-      if (count == 2 || count ==280) {
-      }
 
       if (item.registered == 1) {
         for (int i = 0; i < regIP.getItem().length + 1; i++) {
@@ -237,7 +218,6 @@ class SelectFriendsState extends State<SelectFriends> {
           }
         }
       } else if (item.registered == 2) {
-
         if (searchText.isEmpty) {
           for (int i = 0; i < resIP.getItem().length + 1; i++) {
             if (i < resIP.getItem().length) {
@@ -265,7 +245,6 @@ class SelectFriendsState extends State<SelectFriends> {
             }
           }
         }
-
       }
 
       if (item == fIP.getItem().last) {
@@ -276,18 +255,25 @@ class SelectFriendsState extends State<SelectFriends> {
         if (responseFriendsMap.isNotEmpty) {
           resIP.addItems(responseFriendsMap);
         }
-
       }
-
-      // if (item == fIP.getItem().last && registerFriendsMap.isNotEmpty) {
-      //   regIP.addItems(registerFriendsMap);
-      // }
-      //
-      // if (item == fIP.getItem().last && responseFriendsMap.isNotEmpty) {
-      //   resIP.addItems(responseFriendsMap);
-      //   print(resIP.getItem().length);
-      // }
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    sIP = Provider.of<SendMessageFriendsItemProvider>(context, listen: true);
+    cIP = Provider.of<CurrentPageProvider>(context, listen: true);
+    fIP = Provider.of<FriendsItemProvider>(context, listen: true);
+    regIP = Provider.of<RegisteredFriendsItemProvider>(context, listen: true);
+    resIP = Provider.of<ResponseFriendsItemProvider>(context, listen: true);
+    // nsIP = Provider.of<NotSetItemProvider>(context, listen: true);
+
+    registerFriendsMap = [];
+    responseFriendsMap = [];
+    resIP.initItem();
+
+    setFriendList(searchText);
 
     return Container(
       // height: MediaQuery.of(context).size.height * 1.3,
