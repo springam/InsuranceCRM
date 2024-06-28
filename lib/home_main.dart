@@ -126,7 +126,6 @@ class _HomeMainState extends State<HomeMain> {
         });
       },
       onTap: () {
-        debugPrint('$menuNumber Tap');
         cIP.setCurrentMainPage(menuNumber - 1);
       },
     );

@@ -24,6 +24,7 @@ class _FriendCareState extends State<FriendCare> {
 
   List<RegisteredFriendsItem> careFriends = [];
   int dateDifference = 0;  //0: 1년이상, 1: 6개월~1년, 2: 3개월~6개월, 3: 1개월~3개월
+  String dateDiffText = '';
   int selectedPage = 1;  //첫 페이지 = 1
 
   @override
@@ -41,55 +42,125 @@ class _FriendCareState extends State<FriendCare> {
     careFriends = [];
 
     for (RegisteredFriendsItem friend in fIP.getItem()) {
+      int diff = 20;
+
       if (friend.managedCount != 0) {
-        int diff = int.parse(
+        diff = int.parse(
             DateTime.now().difference(
-                DateTime.parse(friend.managedLastDate)).inDays.toString()
+              DateTime.parse(friend.managedLastDate)).inDays.toString()
         );
-        if (dateDifference == 0) {
-          if (diff >= 12) {
-            careFriends.add(friend);
-          }
-        } else if (dateDifference == 1) {
-          if (diff >= 6 && diff < 12) {
-            careFriends.add(friend);
-          }
-        } else if (dateDifference == 2) {
-          if (diff >= 3 && diff < 6) {
-            careFriends.add(friend);
-          }
-        } else {
-          if (diff >= 1 && diff < 3) {
-            careFriends.add(friend);
-          }
+      }
+
+      if (dateDifference == 0) {
+        dateDiffText = '1년이상';
+        if (diff >= 12) {
+          careFriends.add(friend);
         }
-      } else {  //테스트용으로 count == 0 인 친구를 모두 담음
-        careFriends.add(friend);
+      } else if (dateDifference == 1) {
+        dateDiffText = '6개월~1년';
+        if (diff >= 6 && diff < 12) {
+          careFriends.add(friend);
+        }
+      } else if (dateDifference == 2) {
+        dateDiffText = '3개월~6개월';
+        if (diff >= 3 && diff < 6) {
+          careFriends.add(friend);
+        }
+      } else {
+        dateDiffText = '1개월~3개월';
+        if (diff >= 1 && diff < 3) {
+          careFriends.add(friend);
+        }
       }
 
     }
+  }
+
+  Widget dateDiffSelect(int index) {
+
+    String diffText ='';
+
+    switch (index) {
+      case 0:
+        diffText = '1년이상';
+        break;
+      case 1:
+        diffText = '6개월~1년';
+        break;
+      case 2:
+        diffText = '3개월~6개월';
+        break;
+      case 3:
+        diffText = '1개월~3개월';
+        break;
+    }
+
+    return InkWell(
+      child: Container(
+        width: 100,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+            border: Border.all(
+                color: const Color(0xffd9d9d9),
+                width: 1
+            ),
+            color: (dateDifference == index) ? Colors.blueGrey : Colors.white
+        ),
+        child: Text(diffText),
+      ),
+      onTap: () {
+        setState(() {
+          dateDifference = index;
+        });
+      },
+    );
+  }
+
+  Widget tegListCareFriend(List<dynamic> tagList) {
+
+    List<Widget> tagTextList = [];
+
+    if (tagList.isNotEmpty) {
+      for (var item in tagList) {
+        tagTextList.add(Container(
+          margin: const EdgeInsets.only(right: 10),
+          child: Text('# $item'),
+        ));
+      }
+    }
+
+    return Row(
+      children: tagTextList,
+    );
   }
 
   Widget cardFriendInfo(int lineCount) {
 
     return Container(
       height: 121,
-      alignment: Alignment.center,
-      margin: const EdgeInsets.all(10),
+      alignment: Alignment.centerLeft,
       color: const Color(0xfff0f0f0),
       child: Column(
         children: [
-          SizedBox(
+          Container(
             height: 30,
+            alignment: Alignment.centerLeft,
+            padding: const EdgeInsets.only(left: 10),
             child: Text(careFriends[((selectedPage - 1) * 9) + lineCount].kakaoNickname),
           ),
-          SizedBox(
+          Container(
             height: 30,
-            child: Text(careFriends[((selectedPage - 1) * 9) + lineCount].tag.toString()),
+            alignment: Alignment.centerLeft,
+            padding: const EdgeInsets.only(left: 10),
+            child: tegListCareFriend(careFriends[((selectedPage - 1) * 9) + lineCount].tag),
           ),
-          SizedBox(
+          Container(
             height: 30,
-            child: Text(careFriends[((selectedPage - 1) * 9) + lineCount].managedLastDate),
+            alignment: Alignment.centerLeft,
+            padding: const EdgeInsets.only(left: 10),
+            child: (careFriends[((selectedPage - 1) * 9) + lineCount].managedCount == 0)
+                ? const Text('관리된 기록이 없습니다.')
+                : Text(careFriends[((selectedPage - 1) * 9) + lineCount].managedLastDate),
           ),
 
           Container(
@@ -122,19 +193,28 @@ class _FriendCareState extends State<FriendCare> {
   Widget careFriendList(int lineCount) {
     return Row(
       children: [
-        (((selectedPage - 1) * 9) < careFriends.length) ? Expanded(
+        ((((selectedPage - 1) * 9) + (lineCount * 3)) < careFriends.length - 1) ? Expanded(
           flex: 1,
-          child: cardFriendInfo(lineCount * 3),
+          child: Container(
+            margin: const EdgeInsets.only(top: 5, right: 5, bottom: 5),
+            child: cardFriendInfo(lineCount * 3),
+          ),
         ) : const Expanded(flex: 1, child: SizedBox()),
 
-        (((selectedPage - 1) * 9) + 1 < careFriends.length) ? Expanded(
+        (((selectedPage - 1) * 9) + (lineCount * 3) + 1 < careFriends.length - 1) ? Expanded(
           flex: 1,
-          child: cardFriendInfo((lineCount * 3) + 1),
+          child: Container(
+            margin: const EdgeInsets.only(left: 5, top: 5, right: 5, bottom: 5),
+            child: cardFriendInfo((lineCount * 3) + 1),
+          ),
         ) : const Expanded(flex: 1, child: SizedBox()),
 
-        (((selectedPage - 1) * 9) + 1 < careFriends.length) ? Expanded(
+        (((selectedPage - 1) * 9) + (lineCount * 3) + 2 < careFriends.length - 1) ? Expanded(
           flex: 1,
-          child: cardFriendInfo((lineCount * 3) + 2),
+          child: Container(
+            margin: const EdgeInsets.only(top: 5, bottom: 5),
+            child: cardFriendInfo((lineCount * 3) + 2),
+          ),
         ) : const Expanded(flex: 1, child: SizedBox()),
       ],
     );
@@ -155,37 +235,8 @@ class _FriendCareState extends State<FriendCare> {
       lastIndex = firstIndex + 5;
       moreIndex = true;
     } else {
-      lastIndex = (fullCount ~/ 9) + 3;
+      lastIndex = (fullCount ~/ 9);
     }
-
-    // if (fullCount > 54) {
-    //
-    //   firstIndex = ((((selectedPage - 2) ~/ 5) * 5) + 2);
-    //
-    //   if (fullCount > (firstIndex + 3) * 9) {
-    //     lastIndex = firstIndex + 5;
-    //     moreIndex = true;
-    //   } else {
-    //     lastIndex = fullCount ~/ 9;
-    //   }
-    //
-    // } else {
-    //   if (selectedPage > 6) {  //마지막 앞 버튼 누를실 다음에 보여질 index의 범위를 아래처럼 설정해야함.
-    //     firstIndex = (((selectedPage - 2) ~/ 5) * 5) + 2;
-    //     lastIndex = (((selectedPage - 2) ~/ 5) * 5) + 6;
-    //   } else {
-    //     if (fullCount > 45) {
-    //       firstIndex = 2;
-    //       lastIndex = 6;
-    //     } else if (fullCount < 10) {
-    //       firstIndex = 0;
-    //       lastIndex = 0;
-    //     } else {
-    //       firstIndex = 2;
-    //       lastIndex = ((fullCount - 1) ~/ 9) + 1;
-    //     }
-    //   }
-    // }
 
     int itemCount  = (lastIndex - firstIndex) + 3;
 
@@ -202,7 +253,7 @@ class _FriendCareState extends State<FriendCare> {
         selectedIndex = (firstIndex + (i - 1));
       } else if (i == itemCount - 1) {
         countIndex = '마지막';
-        selectedIndex = 0;
+        selectedIndex = (fullCount ~/ 9) + 1;
       } else {
         countIndex = (firstIndex + (i - 1)).toString();
         selectedIndex = (firstIndex + (i - 1));
@@ -268,57 +319,37 @@ class _FriendCareState extends State<FriendCare> {
                     width: 400,
                     child: Row(
                       children: [
-                        Container(
-                          width: 100,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                                color: const Color(0xffd9d9d9),
-                                width: 1
-                            )
-                          ),
-                          child: const Text('1년이상'),
-                        ),
-                        Container(
-                          width: 100,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: const Color(0xffd9d9d9),
-                                  width: 1
-                              )
-                          ),
-                          child: const Text('6개월~1년'),
-                        ),
-                        Container(
-                          width: 100,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: const Color(0xffd9d9d9),
-                                  width: 1
-                              )
-                          ),
-                          child: const Text('3개월~6개월'),
-                        ),
-                        Container(
-                          width: 100,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: const Color(0xffd9d9d9),
-                                  width: 1
-                              )
-                          ),
-                          child: const Text('1개월~3개월'),
-                        )
+                        dateDiffSelect(0),
+                        dateDiffSelect(1),
+                        dateDiffSelect(2),
+                        dateDiffSelect(3)
+
+                        // InkWell(
+                        //   child: Container(
+                        //     width: 100,
+                        //     alignment: Alignment.center,
+                        //     decoration: BoxDecoration(
+                        //         border: Border.all(
+                        //             color: const Color(0xffd9d9d9),
+                        //             width: 1
+                        //         ),
+                        //         color: (dateDifference == 1) ? Colors.blueGrey : Colors.white
+                        //     ),
+                        //     child: const Text('6개월~1년'),
+                        //   ),
+                        //   onTap: () {
+                        //     setState(() {
+                        //       dateDifference = 1;
+                        //     });
+                        //   },
+                        // ),
                       ],
                     ),
                   ),
 
                   const SizedBox(height: 13),
 
-                  const TextMessageNormal("1년 이상 연락을 안 한 고객 리스트", 18.0),
+                  TextMessageNormal("$dateDiffText 연락을 안 한 고객 리스트", 18.0),
 
                   const SizedBox(height: 13),
 
@@ -328,7 +359,37 @@ class _FriendCareState extends State<FriendCare> {
 
                   ((((selectedPage - 1) * 9) + 6) < careFriends.length) ? careFriendList(2) : const SizedBox(),
 
-                  (careFriends.length < 10) ? const SizedBox() : indexBar(selectedPage)
+                  (careFriends.length < 10) ? const SizedBox() : indexBar(selectedPage),
+
+                  (careFriends.isEmpty) ? Container(
+                    height: 120,
+                    alignment: Alignment.center,
+                    color: const Color(0xffbcc0c7),
+                    child: Text('$dateDiffText 연락을 안 한 고객은 없습니다.'),
+                  ) : const SizedBox(),
+
+                  (careFriends.isEmpty) ? const SizedBox() : Container(
+                    margin: const EdgeInsets.only(top: 10),
+                    child: Material(
+                      color: const Color(0xffffffff),
+                      child: InkWell(
+                        // borderRadius: BorderRadius.circular(10),
+                        splashColor: const Color(0xffffdf8e),
+                        hoverColor: Colors.grey,
+                        child: Ink(
+                          height: 30,
+                          decoration: const BoxDecoration(
+                            // borderRadius: BorderRadius.all(Radius.circular(10)),
+                            color: Color(0xffbcc0c7),
+                          ),
+                          child: Center(
+                            child: Text('카톡 보내기', style: buttonTextStyle,),
+                          ),
+                        ),
+                        onTap: () {},
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),

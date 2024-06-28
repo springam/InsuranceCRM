@@ -301,12 +301,12 @@ class _MainFirstState extends State<MainFirst> {
                               Expanded(
                                   flex: 4,
                                   child: Center(
-                                    child: Text(rankingFriends[index].managedCount.toString()),
+                                    child: Text(rankingFriends[index - 1].managedCount.toString()),
                                   )
                               ),
                               Expanded(
                                   flex: 4,
-                                  child: Text(rankingFriends[index].kakaoNickname)
+                                  child: Text(rankingFriends[index - 1].kakaoNickname)
                               ),
                             ],
                           ),
