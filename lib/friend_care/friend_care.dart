@@ -71,6 +71,7 @@ class _FriendCareState extends State<FriendCare> {
   }
 
   Widget cardFriendInfo(int lineCount) {
+
     return Container(
       height: 121,
       alignment: Alignment.center,
@@ -154,7 +155,7 @@ class _FriendCareState extends State<FriendCare> {
       lastIndex = firstIndex + 5;
       moreIndex = true;
     } else {
-      lastIndex = fullCount ~/ 9;
+      lastIndex = (fullCount ~/ 9) + 3;
     }
 
     // if (fullCount > 54) {
