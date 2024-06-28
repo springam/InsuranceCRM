@@ -146,30 +146,49 @@ class _FriendCareState extends State<FriendCare> {
     int firstIndex = 2;
     int lastIndex = 6;
     int fullCount = careFriends.length;
+    bool moreIndex = false;
 
-    print(fullCount);
+    firstIndex = ((((selectedPage - 2) ~/ 5) * 5) + 2);
 
-    if (selectedPage > 54) {
-
+    if (fullCount > (firstIndex + 4) * 9) {
+      lastIndex = firstIndex + 5;
+      moreIndex = true;
     } else {
-      if (selectedPage > 6) {  //마지막 앞 버튼 누를실 다음에 보여질 index의 범위를 아래처럼 설정해야함.
-        firstIndex = (((selectedPage - 2) ~/ 5) * 5) + 2;
-        lastIndex = (((selectedPage - 2) ~/ 5) * 5) + 6;
-      } else {
-        if (fullCount > 45) {
-          firstIndex = 2;
-          lastIndex = 6;
-        } else if (fullCount < 10) {
-          firstIndex = 0;
-          lastIndex = 0;
-        } else {
-          firstIndex = 2;
-          lastIndex = ((fullCount - 1) ~/ 9) + 1;
-        }
-      }
+      lastIndex = fullCount ~/ 9;
     }
 
-    for (int i = 0; i < lastIndex + 1; i++) {
+    // if (fullCount > 54) {
+    //
+    //   firstIndex = ((((selectedPage - 2) ~/ 5) * 5) + 2);
+    //
+    //   if (fullCount > (firstIndex + 3) * 9) {
+    //     lastIndex = firstIndex + 5;
+    //     moreIndex = true;
+    //   } else {
+    //     lastIndex = fullCount ~/ 9;
+    //   }
+    //
+    // } else {
+    //   if (selectedPage > 6) {  //마지막 앞 버튼 누를실 다음에 보여질 index의 범위를 아래처럼 설정해야함.
+    //     firstIndex = (((selectedPage - 2) ~/ 5) * 5) + 2;
+    //     lastIndex = (((selectedPage - 2) ~/ 5) * 5) + 6;
+    //   } else {
+    //     if (fullCount > 45) {
+    //       firstIndex = 2;
+    //       lastIndex = 6;
+    //     } else if (fullCount < 10) {
+    //       firstIndex = 0;
+    //       lastIndex = 0;
+    //     } else {
+    //       firstIndex = 2;
+    //       lastIndex = ((fullCount - 1) ~/ 9) + 1;
+    //     }
+    //   }
+    // }
+
+    int itemCount  = (lastIndex - firstIndex) + 3;
+
+    for (int i = 0; i < itemCount; i++) {
 
       String countIndex = '처음';
       int selectedIndex = 1;  //0이면 마지막, 00이면 more
@@ -177,12 +196,15 @@ class _FriendCareState extends State<FriendCare> {
       if (i == 0) {
         countIndex = '처음';
         selectedIndex = 1;
-      } else if (i == lastIndex) {
+      } else if (i == itemCount -2 && moreIndex) {
+        countIndex = '...';
+        selectedIndex = (firstIndex + (i - 1));
+      } else if (i == itemCount - 1) {
         countIndex = '마지막';
         selectedIndex = 0;
       } else {
-        countIndex = (i + 1).toString();
-        selectedIndex = (i + 1);
+        countIndex = (firstIndex + (i - 1)).toString();
+        selectedIndex = (firstIndex + (i - 1));
       }
 
       indexWidget.add(
