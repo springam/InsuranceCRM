@@ -145,7 +145,13 @@ class _HomeMainState extends State<HomeMain> {
           // return const MessagePreset();
         }
       case 2:
-        return const FriendCare();
+        if (cIP.getSubPage() == 0) {
+          return const FriendCare();
+        } else if (cIP.getSubPage() == 1) {
+          return const SelectMessage();
+        } else {
+          // return const MessagePreset();
+        }
       case 3:
         return const Center(child: TitleHeavy('준비중입니다.', 20));
       case 4:

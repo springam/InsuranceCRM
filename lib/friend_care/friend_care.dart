@@ -2,7 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../etc_widget/alert_dialog.dart';
 import '../etc_widget/text_message.dart';
+import '../send_message/send_message_friends/send_message_friend_list.dart';
+import '../send_message/send_message_friends/send_message_friend_tile.dart';
 import '../user_data/registered_friends_provider.dart';
 import '../user_data/response_friend_provider.dart';
 import '../user_data/status_provider.dart';
@@ -21,6 +24,8 @@ class _FriendCareState extends State<FriendCare> {
   late FriendsItemProvider fIP;
   late RegisteredFriendsItemProvider regIP;
   late ResponseFriendsItemProvider resIP;
+
+  final ScrollController sendMessageFriendController = ScrollController();
 
   List<RegisteredFriendsItem> careFriends = [];
   int dateDifference = 0;  //0: 1년이상, 1: 6개월~1년, 2: 3개월~6개월, 3: 1개월~3개월
@@ -136,6 +141,15 @@ class _FriendCareState extends State<FriendCare> {
 
   Widget cardFriendInfo(int lineCount) {
 
+    Color buttonColor = const Color(0xffbcc0c7);
+    bool selectedCard = false;
+    RegisteredFriendsItem cardFriendItem = careFriends[((selectedPage - 1) * 9) + lineCount];
+
+    if (sIP.getItem().contains(cardFriendItem)) {
+      buttonColor = Colors.grey;
+      selectedCard = true;
+    }
+
     return Container(
       height: 121,
       alignment: Alignment.centerLeft,
@@ -146,21 +160,21 @@ class _FriendCareState extends State<FriendCare> {
             height: 30,
             alignment: Alignment.centerLeft,
             padding: const EdgeInsets.only(left: 10),
-            child: Text(careFriends[((selectedPage - 1) * 9) + lineCount].kakaoNickname),
+            child: Text(cardFriendItem.kakaoNickname),
           ),
           Container(
             height: 30,
             alignment: Alignment.centerLeft,
             padding: const EdgeInsets.only(left: 10),
-            child: tegListCareFriend(careFriends[((selectedPage - 1) * 9) + lineCount].tag),
+            child: tegListCareFriend(cardFriendItem.tag),
           ),
           Container(
             height: 30,
             alignment: Alignment.centerLeft,
             padding: const EdgeInsets.only(left: 10),
-            child: (careFriends[((selectedPage - 1) * 9) + lineCount].managedCount == 0)
+            child: (cardFriendItem.managedCount == 0)
                 ? const Text('관리된 기록이 없습니다.')
-                : Text(careFriends[((selectedPage - 1) * 9) + lineCount].managedLastDate),
+                : Text(cardFriendItem.managedLastDate),
           ),
 
           Container(
@@ -173,15 +187,29 @@ class _FriendCareState extends State<FriendCare> {
                 hoverColor: Colors.grey,
                 child: Ink(
                   height: 30,
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     // borderRadius: BorderRadius.all(Radius.circular(10)),
-                    color: Color(0xffbcc0c7),
+                    color: buttonColor,
                   ),
                   child: Center(
                     child: Text('고객 선택', style: buttonTextStyle,),
                   ),
                 ),
-                onTap: () {},
+                onTap: () {
+                  if (selectedCard) {
+                    sIP.removeItem(cardFriendItem);
+                    setState(() {
+                      selectedCard = false;
+                    });
+                  } else {
+                    if (!sIP.getItem().contains(cardFriendItem)) {
+                      sIP.addItem(cardFriendItem);
+                      setState(() {
+                        selectedCard = true;
+                      });
+                    }
+                  }
+                },
               ),
             ),
           )
@@ -291,7 +319,13 @@ class _FriendCareState extends State<FriendCare> {
     regIP = Provider.of<RegisteredFriendsItemProvider>(context, listen: true);
     resIP = Provider.of<ResponseFriendsItemProvider>(context, listen: true);
 
+    Color sendButtonColor = const Color(0xffbcc0c7);
+
     setCareFriends();
+
+    if (sIP.getItem().length == 0) {
+      sendButtonColor = const Color(0xfff0f0f0);
+    }
 
     return Container(
       // height: MediaQuery.of(context).size.height * 1.3,
@@ -323,26 +357,6 @@ class _FriendCareState extends State<FriendCare> {
                         dateDiffSelect(1),
                         dateDiffSelect(2),
                         dateDiffSelect(3)
-
-                        // InkWell(
-                        //   child: Container(
-                        //     width: 100,
-                        //     alignment: Alignment.center,
-                        //     decoration: BoxDecoration(
-                        //         border: Border.all(
-                        //             color: const Color(0xffd9d9d9),
-                        //             width: 1
-                        //         ),
-                        //         color: (dateDifference == 1) ? Colors.blueGrey : Colors.white
-                        //     ),
-                        //     child: const Text('6개월~1년'),
-                        //   ),
-                        //   onTap: () {
-                        //     setState(() {
-                        //       dateDifference = 1;
-                        //     });
-                        //   },
-                        // ),
                       ],
                     ),
                   ),
@@ -378,9 +392,9 @@ class _FriendCareState extends State<FriendCare> {
                         hoverColor: Colors.grey,
                         child: Ink(
                           height: 30,
-                          decoration: const BoxDecoration(
+                          decoration: BoxDecoration(
                             // borderRadius: BorderRadius.all(Radius.circular(10)),
-                            color: Color(0xffbcc0c7),
+                            color: sendButtonColor,
                           ),
                           child: Center(
                             child: Text('카톡 보내기', style: buttonTextStyle,),
@@ -400,11 +414,9 @@ class _FriendCareState extends State<FriendCare> {
             child: SizedBox(width: 38),
           ),
 
-          Expanded(
+          const Expanded(
             flex: 5,
-            child: Container(
-              height: 700,
-            ),
+            child: SendMessageFriendList(),
           ),
 
         ],
