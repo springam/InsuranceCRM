@@ -19,17 +19,17 @@ class _TagListChipAddState extends State<TagListChipAdd> {
       margin: const EdgeInsets.only(left: 7),
       alignment: Alignment.center,
       child: Material(
-        color: const Color(0xfff0f0f0),
+        // color: const Color(0xfff0f0f0),
         child: InkWell(
           borderRadius: BorderRadius.circular(33),
           splashColor: const Color(0xffffdf8e),
-          hoverColor: Colors.grey,
+          hoverColor: const Color(0xffbcc0c7),
           child: Ink(
             width: 33,
             height: 33,
             decoration: const BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(33)),
-              color: Color(0xffffffff),
+              color: Color(0xfffae9e8),
             ),
             child: const CircleAvatar(
               backgroundColor: Colors.transparent,

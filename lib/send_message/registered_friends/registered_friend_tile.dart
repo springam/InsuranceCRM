@@ -64,9 +64,9 @@ class _RegisteredFriendTileState extends State<RegisteredFriendTile> {
               alignment: Alignment.centerLeft,
               margin: const EdgeInsets.only(left: 7),
               padding: const EdgeInsets.only(left: 13, top: 3, right: 13, bottom: 3),
-              color: const Color(0xffffffff),
+              // color: const Color(0xffffffff),
               child: Material(
-                color: const Color(0xffffffff),
+                // color: const Color(0xffffffff),
                 child: InkWell(
                   borderRadius: BorderRadius.circular(15),
                   splashColor: const Color(0xffffdf8e),

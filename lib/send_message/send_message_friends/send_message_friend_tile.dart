@@ -33,9 +33,9 @@ class _SendMessageFriendTileState extends State<SendMessageFriendTile> {
               alignment: Alignment.centerLeft,
               // margin: const EdgeInsets.only(left: 7),
               padding: const EdgeInsets.only(top: 3, bottom: 3),
-              color: const Color(0xffffffff),
+              // color: const Color(0xffffffff),
               child: Material(
-                color: const Color(0xffffffff),
+                // color: const Color(0xffffffff),
                 child: InkWell(
                   borderRadius: BorderRadius.circular(15),
                   splashColor: const Color(0xffffdf8e),
@@ -71,7 +71,7 @@ class _SendMessageFriendTileState extends State<SendMessageFriendTile> {
               alignment: Alignment.centerLeft,
               margin: const EdgeInsets.only(left: 15, right: 15),
               child: Text(
-                widget.registeredFriend.name,
+                (widget.registeredFriend.name.isEmpty) ? '없음' : widget.registeredFriend.name,
                 style: const TextStyle(
                     color:  Color(0xff000000),
                     fontWeight: FontWeight.w400,

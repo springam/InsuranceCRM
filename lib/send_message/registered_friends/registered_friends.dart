@@ -71,7 +71,7 @@ class RegisteredFriendsState extends State<RegisteredFriends> {
                   color: const Color(0xff000000),
                   width: 1
               ),
-              color: const Color(0xfff0f0f0)
+              color: const Color(0xfffbf8f1)
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -30,11 +30,11 @@ class _HomeMainState extends State<HomeMain> {
 
   int hoveringNumber = 0;
   Color menuColor = const Color(0xffbcc0c7);
-  Color normalColor = const Color(0xffbcc0c7);
+  Color normalColor = const Color(0xfffbf8f1);
   Color hoverColor = const Color(0xffc9ced9);
-  Color imageColor = Colors.white;
-  Color imageColorNormal = const Color(0xffffffff);
-  Color imageColorHover = const Color(0xffe96558);
+  Color imageColor = const Color(0xffffffff);
+  Color imageColorNormal = const Color(0xff000000);
+  Color imageColorHover = const Color(0xffe76659);
   FontWeight fontWeight = FontWeight.w400;
   FontWeight fontWeightNormal = FontWeight.w400;
   FontWeight fontWeightHover = FontWeight.w700;
@@ -108,7 +108,7 @@ class _HomeMainState extends State<HomeMain> {
               child: Text(
                   leftMenuText,
                   style: TextStyle(
-                      color: const Color(0xff000000),
+                      color: imageColor,
                       fontWeight: fontWeight,
                       fontFamily: "NotoSansCJKkr-Regular",
                       fontStyle:  FontStyle.normal,
@@ -208,7 +208,7 @@ class _HomeMainState extends State<HomeMain> {
                           width: 192,
                           height: MediaQuery.of(context).size.height * 1.5,
                           decoration: const BoxDecoration(
-                              color: Color(0xffbcc0c7)
+                              color: Color(0xfffbf8f1)
                           ),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -218,7 +218,7 @@ class _HomeMainState extends State<HomeMain> {
                                 height: 89,
                                 margin: const EdgeInsets.only(top: 16, bottom: 37),
                                 decoration: const BoxDecoration(
-                                    color: Color(0xffbcc0c7)
+                                    color: Color(0xfffbf8f1)
                                 ),
                                 child: Image.asset('assets/images/mosaic_logo.png', scale: 1.0),
                               ),

@@ -298,7 +298,7 @@ class SelectFriendsState extends State<SelectFriends> {
                       ),
                       const TextMessage(
                           "메시지 작성하기",
-                          Color(0xffd9d9d9),
+                          Color(0xff000000),
                           FontWeight.w400,
                           22.0
                       ),
@@ -310,7 +310,7 @@ class SelectFriendsState extends State<SelectFriends> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const TextMessageNormal("1. 태그를 선택하거나 등록한 사람 중 카톡 대화명을 선택하세요", 16.0),
+                      const TextMessageNormal("1. 아래의 태그를 선택하거나 등록한 사람들에서 카톡 대화명을 선택하세요", 16.0),
 
                       Material(  //친구 목록 가져오기
                         color: Colors.white,
@@ -410,7 +410,12 @@ class SelectFriendsState extends State<SelectFriends> {
                   Container(
                     height: 58,
                     decoration: const BoxDecoration(
-                        color: Color(0xfff0f0f0)
+                        border: Border(
+                            bottom: BorderSide(
+                                color: Color(0xff000000),
+                                width: 1.0
+                            )
+                        )
                     ),
                     child: Row(
                       children: [

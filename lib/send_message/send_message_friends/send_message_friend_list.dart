@@ -80,14 +80,21 @@ class _SendMessageFriendListState extends State<SendMessageFriendList> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                  margin: const EdgeInsets.only(left: 45),
-                  child: const TextMessageNormal('카톡대화명', 12.0),
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 45),
+                    child: const TextMessageNormal('카톡대화명', 12.0),
+                  ),
                 ),
-                Container(
-                  margin: const EdgeInsets.only(right: 54),
-                  child: const TextMessageNormal('호칭', 12.0),
-                ),
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    margin: const EdgeInsets.only(right: 54),
+                    child: const TextMessageNormal('호칭', 12.0),
+                  ),
+                )
+
               ],
             ),
           ),

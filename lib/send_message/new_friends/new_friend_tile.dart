@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:mosaicbluenco/etc_widget/text_message.dart';
 import 'package:mosaicbluenco/user_data/user_data.dart';
 import 'package:provider/provider.dart';
+import '../../user_data/registered_friends_provider.dart';
 import '../../user_data/response_friend_provider.dart';
 
 class NewFriendTile extends StatefulWidget {
@@ -19,6 +20,7 @@ class NewFriendTile extends StatefulWidget {
 class NewFriendTileState extends State<NewFriendTile> {
 
   late ResponseFriendsItemProvider resIP;
+  late SendMessageFriendsItemProvider sIP;
 
   final ScrollController controller = ScrollController();
   final TextEditingController middleNickController = TextEditingController();
@@ -41,6 +43,9 @@ class NewFriendTileState extends State<NewFriendTile> {
   bool warnNick = false;
   bool warnSelectChip = false;
   bool warnTag = false;
+
+  bool selectedItem = false;
+  Color selectedItemColor = const Color(0xffffffff);
 
   Color warnColor = Colors.transparent;
 
@@ -163,11 +168,18 @@ class NewFriendTileState extends State<NewFriendTile> {
   Widget build(BuildContext context) {
 
     resIP = Provider.of<ResponseFriendsItemProvider>(context, listen: true);
+    sIP = Provider.of<SendMessageFriendsItemProvider>(context, listen: true);
 
     nickname = resIP.getItem()[widget.index].kakaoNickname?? '';
     middleNickController.text = resIP.getItem()[widget.index].name?? '';
     selectedIndex = resIP.getItem()[widget.index].talkDown?? 2;
     selectedHashTag = resIP.getItem()[widget.index].tag?? [];
+
+    if (selectedItem) {
+      selectedItemColor = const Color(0xffd7e3f7);
+    } else {
+      selectedItemColor = const Color(0xffffffff);
+    }
 
     //여기서 문제 됨
     //아래 내용 확인하고 변경해야 함
@@ -216,9 +228,9 @@ class NewFriendTileState extends State<NewFriendTile> {
                     alignment: Alignment.centerLeft,
                     margin: const EdgeInsets.only(left: 7),
                     padding: const EdgeInsets.only(left: 13, top: 3, right: 13, bottom: 3),
-                    color: const Color(0xffffffff),
+                    // color: const Color(0xffffffff),
                     child: Material(
-                      color: const Color(0xffffffff),
+                      // color: const Color(0xffffffff),
                       child: InkWell(
                         borderRadius: BorderRadius.circular(15),
                         splashColor: const Color(0xffffdf8e), //0xffffffff
@@ -229,7 +241,7 @@ class NewFriendTileState extends State<NewFriendTile> {
                           decoration: BoxDecoration(
                             border: Border.all(color: selectedBorderColor, width: 1.0),
                             borderRadius: const BorderRadius.all(Radius.circular(15)),
-                            color: selectedColor,
+                            color: selectedItemColor,
                           ),
                           child: Container(
                             color: Colors.transparent,
@@ -242,23 +254,19 @@ class NewFriendTileState extends State<NewFriendTile> {
                           ),
                         ),
                         onTap: () {
-                          // if (selectedTile) {
-                          //   sIP.removeItem(widget.registeredFriend);
-                          //   setState(() {
-                          //     selectedColor = const Color(0xffffffff);
-                          //     selectedBorderColor = const Color(0xff000000);
-                          //     selectedTile = false;
-                          //   });
-                          // } else {
-                          //   if (!sIP.getItem().contains(widget.registeredFriend)) {
-                          //     sIP.addItem(widget.registeredFriend);
-                          //     setState(() {
-                          //       selectedColor = const Color(0xffd7e3f7);
-                          //       selectedBorderColor = const Color(0xff000000); //변화 안 줄거면 지워
-                          //       selectedTile = true;
-                          //     });
-                          //   }
-                          // }
+                          if (selectedItem) {
+                            sIP.removeItem(resIP.getItem()[widget.index]);
+                            setState(() {
+                              selectedItem = false;
+                            });
+                          } else {
+                            if (!sIP.getItem().contains(resIP.getItem()[widget.index])) {
+                              sIP.addItem(resIP.getItem()[widget.index]);
+                              setState(() {
+                                selectedItem = true;
+                              });
+                            }
+                          }
                         },
                       ),
                     ),

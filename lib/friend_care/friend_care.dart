@@ -103,13 +103,14 @@ class _FriendCareState extends State<FriendCare> {
     return InkWell(
       child: Container(
         width: 100,
+        height: 30,
         alignment: Alignment.center,
         decoration: BoxDecoration(
             border: Border.all(
                 color: const Color(0xffd9d9d9),
                 width: 1
             ),
-            color: (dateDifference == index) ? Colors.blueGrey : Colors.white
+            color: (dateDifference == index) ? const Color(0xffd7e3f7) : Colors.white
         ),
         child: Text(diffText),
       ),
@@ -141,19 +142,22 @@ class _FriendCareState extends State<FriendCare> {
 
   Widget cardFriendInfo(int lineCount) {
 
-    Color buttonColor = const Color(0xffbcc0c7);
+    Color buttonColor = const Color(0xffc9ced9);
     bool selectedCard = false;
     RegisteredFriendsItem cardFriendItem = careFriends[((selectedPage - 1) * 9) + lineCount];
 
     if (sIP.getItem().contains(cardFriendItem)) {
-      buttonColor = Colors.grey;
+      buttonColor = const Color(0xffd7e3f7);
       selectedCard = true;
     }
 
     return Container(
-      height: 121,
+      height: 123,
       alignment: Alignment.centerLeft,
-      color: const Color(0xfff0f0f0),
+      // color: const Color(0xfff0f0f0),
+      decoration: BoxDecoration(
+        border: Border.all(color: const Color(0xff000000))
+      ),
       child: Column(
         children: [
           Container(
@@ -180,11 +184,11 @@ class _FriendCareState extends State<FriendCare> {
           Container(
             margin: const EdgeInsets.only(top: 1),
             child: Material(
-              color: const Color(0xffffffff),
+              color: const Color(0xffc9ced9),
               child: InkWell(
                 // borderRadius: BorderRadius.circular(10),
                 splashColor: const Color(0xffffdf8e),
-                hoverColor: Colors.grey,
+                hoverColor: const Color(0xffbcc0c7),
                 child: Ink(
                   height: 30,
                   decoration: BoxDecoration(
@@ -192,7 +196,7 @@ class _FriendCareState extends State<FriendCare> {
                     color: buttonColor,
                   ),
                   child: Center(
-                    child: Text('고객 선택', style: buttonTextStyle,),
+                    child: Text('선택', style: buttonTextStyle,),
                   ),
                 ),
                 onTap: () {
@@ -389,7 +393,7 @@ class _FriendCareState extends State<FriendCare> {
                       child: InkWell(
                         // borderRadius: BorderRadius.circular(10),
                         splashColor: const Color(0xffffdf8e),
-                        hoverColor: Colors.grey,
+                        hoverColor: const Color(0xffbcc0c7),
                         child: Ink(
                           height: 30,
                           decoration: BoxDecoration(
