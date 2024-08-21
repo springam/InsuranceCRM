@@ -251,6 +251,7 @@ class ModifyFriendTileState extends State<ModifyFriendTile> {
                       controller: middleNickController,
                       style: buttonTextStyle,
                       decoration: const InputDecoration(
+                        isDense: true,
                           border: InputBorder.none
                       ),
                       onChanged: (value) {

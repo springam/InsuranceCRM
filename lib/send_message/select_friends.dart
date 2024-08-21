@@ -202,6 +202,9 @@ class SelectFriendsState extends State<SelectFriends> {
 
   void setFriendList(String searchText) {
 
+    regIP.initItem();
+    resIP.initItem();
+
     for (RegisteredFriendsItem item in fIP.getItem()) {
       bool exitResponse = false;
       bool exitRegister = false;

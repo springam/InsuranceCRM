@@ -291,6 +291,7 @@ class NewFriendTileState extends State<NewFriendTile> {
                           // enabledBorder: OutlineInputBorder(
                           //     borderSide: BorderSide(color: Color(0xffd9d9d9), width: 1.0,)
                           // ),
+                            isDense: true,
                             border: InputBorder.none
                         ),
                         onChanged: (value) {

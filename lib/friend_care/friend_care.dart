@@ -1,11 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../etc_widget/alert_dialog.dart';
 import '../etc_widget/text_message.dart';
 import '../send_message/send_message_friends/send_message_friend_list.dart';
-import '../send_message/send_message_friends/send_message_friend_tile.dart';
 import '../user_data/registered_friends_provider.dart';
 import '../user_data/response_friend_provider.dart';
 import '../user_data/status_provider.dart';
