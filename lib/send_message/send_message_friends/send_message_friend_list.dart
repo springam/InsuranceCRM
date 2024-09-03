@@ -1,9 +1,9 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:mosaicbluenco/send_message/send_message_friends/send_message_friend_temp_tile.dart';
 import 'package:mosaicbluenco/send_message/send_message_friends/send_message_friend_tile.dart';
 import 'package:provider/provider.dart';
-
 import '../../etc_widget/alert_dialog.dart';
 import '../../etc_widget/text_message.dart';
 import '../../user_data/registered_friends_provider.dart';
@@ -21,6 +21,7 @@ class _SendMessageFriendListState extends State<SendMessageFriendList> {
   late SendMessageFriendsItemProvider sIP;
   late CurrentPageProvider cIP;
   final ScrollController sendMessageFriendController = ScrollController();
+  final TextEditingController middleNickController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -156,6 +157,12 @@ class _SendMessageFriendListState extends State<SendMessageFriendList> {
                 ),
               ),
               onTap: () {
+                bool emptyFiend = false;
+                for (RegisteredFriendsItem friendTemp in sIP.getItem()) {
+                  if (friendTemp.name.isEmpty || friendTemp.talkDown == 2) {
+                    emptyFiend = true;
+                  }
+                }
                 if (sIP.getItem().isEmpty) {
                   showDialog(
                       context: context,
@@ -167,7 +174,82 @@ class _SendMessageFriendListState extends State<SendMessageFriendList> {
                       }
                   );
                 } else {
-                  cIP.setCurrentSubPage(1);
+                  if (emptyFiend) { //비어있는 필드가 있는 친구목록을 보여주고 임시로 sIP에 내용저장하여 메세지로 넘겨주기(후에 sIP목록을 초기화하는 작업을 어디에 넣어야 하는지 생각해야함)
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                            title: const TitleNormal('1. 호칭과 문구, 그리고 태그 입럭하세요', 16.0),
+                            content: Container(
+                              height: 500,
+                              width: 400,
+                              padding: const EdgeInsets.all(10),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    margin: const EdgeInsets.all(10),
+                                    child: const Row(
+                                      children: [
+                                        Expanded(
+                                            flex: 1,
+                                            child: TextMessageNormal('카톡대화명', 12.0),
+                                        ),
+                                        Expanded(
+                                          flex: 1,
+                                          child: TextMessageNormal('호칭', 12.0),
+                                        ),
+                                        Expanded(
+                                          flex: 1,
+                                          child: TextMessageNormal('문구톤', 12.0),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const Divider(height: 2),
+                                  Container(
+                                    height: 340,
+                                    margin: const EdgeInsets.all(10),
+                                    child: ListView.builder(
+                                        itemCount: sIP.getItem().length,
+                                        controller: sendMessageFriendController,
+                                        itemBuilder: (BuildContext context, int index) {
+                                          if (sIP.getItem().length == 0) {
+                                            return const Text('select friend');
+                                          } else {
+                                            return SendMessageFriendTempTile(registeredFriend: sIP.getItem()[index],);
+                                          }
+                                        }
+                                    ),
+                                  ),
+
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      ElevatedButton(
+                                        child: const Text('메세지 보내기'),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                          cIP.setCurrentSubPage(1);
+                                        },
+                                      ),
+                                      const SizedBox(width: 30),
+                                      ElevatedButton(
+                                        child: const Text('취소'),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      )
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+                        );
+                      }
+                    );
+                  } else {
+                    cIP.setCurrentSubPage(1);
+                  }
                 }
               },
             ),

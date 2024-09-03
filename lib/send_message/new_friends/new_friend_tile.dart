@@ -328,17 +328,7 @@ class NewFriendTileState extends State<NewFriendTile> {
               Expanded(
                 flex: 1,
                 child: InkWell(
-                  child: Text(
-                      testMsg,
-                      style: const TextStyle(
-                          color:  Color(0xff000000),
-                          fontWeight: FontWeight.w100,
-                          fontFamily: "NotoSansCJKkr-Regular",
-                          fontStyle:  FontStyle.normal,
-                          fontSize: 12.0
-                      ),
-                      textAlign: TextAlign.center
-                  ),
+                  child: TextMessageNormal(testMsg, 12.0),
                   onTap: () async{
                     await notRegisterFriends();
                   },
