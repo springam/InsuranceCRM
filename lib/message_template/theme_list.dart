@@ -51,17 +51,17 @@ class _ThemeListChipState extends State<ThemeListChip> {
       chipColor = unSelectedColor;
     }
 
-    return Container(
-      width: 105,
-      height: 33,
-      alignment: Alignment.center,
-      margin: const EdgeInsets.only(left: 7),
-      child: Material(
-        color: const Color(0xfff0f0f0),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(20),
-          splashColor: const Color(0xffffdf8e),
-          hoverColor: const Color(0xffbcc0c7),
+    return InkWell(
+      borderRadius: BorderRadius.circular(20),
+      splashColor: const Color(0xffffdf8e),
+      hoverColor: const Color(0xffbcc0c7),
+      child: Container(
+        width: 105,
+        height: 33,
+        alignment: Alignment.center,
+        margin: const EdgeInsets.only(left: 7),
+        child: Material(
+          color: const Color(0xfff0f0f0),
           child: Ink(
             // width: 88,
             // height: 21,
@@ -73,19 +73,19 @@ class _ThemeListChipState extends State<ThemeListChip> {
               child: TextMessage400('#${ThemeList.themeList[widget.themeIndex]}', 14.0),
             ),
           ),
-          onTap: () {
-            if (SelectedTheme.selectedTheme.contains(widget.themeIndex)) {
-              setState(() {
-                SelectedTheme.selectedTheme.remove(widget.themeIndex);
-              });
-            } else {
-              setState(() {
-                SelectedTheme.selectedTheme.add(widget.themeIndex);
-              });
-            }
-          },
         ),
       ),
+      onTap: () {
+        if (SelectedTheme.selectedTheme.contains(widget.themeIndex)) {
+          setState(() {
+            SelectedTheme.selectedTheme.remove(widget.themeIndex);
+          });
+        } else {
+          setState(() {
+            SelectedTheme.selectedTheme.add(widget.themeIndex);
+          });
+        }
+      },
     );
   }
 }

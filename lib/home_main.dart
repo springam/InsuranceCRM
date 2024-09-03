@@ -29,12 +29,12 @@ class _HomeMainState extends State<HomeMain> {
   late CurrentPageProvider cIP;
 
   int hoveringNumber = 0;
-  Color menuColor = const Color(0xffbcc0c7);
-  Color normalColor = const Color(0xfffbf8f1);
-  Color hoverColor = const Color(0xffc9ced9);
+  Color menuColor = const Color(0xffbcc0c7); //menu text color
+  Color menuNormalColor = const Color(0xff384d6a); //const Color(0xfffbf8f1);
+  Color menuHoverColor = const Color(0xffc9ced9); //선택되거나 올려진 컬러
   Color imageColor = const Color(0xffffffff);
-  Color imageColorNormal = const Color(0xff000000);
-  Color imageColorHover = const Color(0xffe76659);
+  Color imageColorNormal = const Color(0xffffffff); //const Color(0xff000000);
+  Color imageColorHover = const Color(0xffe96558);
   FontWeight fontWeight = FontWeight.w400;
   FontWeight fontWeightNormal = FontWeight.w400;
   FontWeight fontWeightHover = FontWeight.w700;
@@ -78,11 +78,11 @@ class _HomeMainState extends State<HomeMain> {
   Widget leftMenu(int menuNumber) {
 
     if (hoveringNumber == menuNumber) {
-      menuColor = hoverColor;
-      imageColor = imageColorHover;
+      menuColor = menuHoverColor; //메뉴 text의 선택되거나 hover 색상
+      imageColor = imageColorHover; //메뉴 아이콘의 선택되거나 hover 색상
       fontWeight = fontWeightHover;
     } else {
-      menuColor = normalColor;
+      menuColor = menuNormalColor;
       imageColor = imageColorNormal;
       fontWeight = fontWeightNormal;
     }
@@ -93,18 +93,20 @@ class _HomeMainState extends State<HomeMain> {
     return InkWell(
       child: Container(
         height: 55,
-        decoration: BoxDecoration(color: menuColor),
+        padding: const EdgeInsets.only(left: 50),
+        decoration: const BoxDecoration(color: Color(0xff384d6a)), //메뉴 hover 배경색 변경 원할시 menuColor로 변경
         child: Row(
           children: [
-            Container(
-              height: 55,
-              margin: const EdgeInsets.only(left: 15),
-              child: Image.asset('assets/images/$leftMenuImage.png', scale: 1.0, color: imageColor,),
-            ),
+            // Container( //아이콘 삭제함
+            //   height: 55,
+            //   margin: const EdgeInsets.only(left: 15),
+            //   child: Image.asset('assets/images/$leftMenuImage.png', scale: 1.0, color: imageColor,),
+            // ),
             Container(
               height: 55,
               margin: const EdgeInsets.only(left: 5),
               alignment: Alignment.center,
+              color: const Color(0xff384d6a),
               child: Text(
                   leftMenuText,
                   style: TextStyle(
@@ -208,7 +210,7 @@ class _HomeMainState extends State<HomeMain> {
                           width: 192,
                           height: MediaQuery.of(context).size.height * 1.5,
                           decoration: const BoxDecoration(
-                              color: Color(0xfffbf8f1)
+                              color: Color(0xff384d6a)
                           ),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -218,7 +220,7 @@ class _HomeMainState extends State<HomeMain> {
                                 height: 89,
                                 margin: const EdgeInsets.only(top: 16, bottom: 37),
                                 decoration: const BoxDecoration(
-                                    color: Color(0xfffbf8f1)
+                                    color: Color(0xff384d6a)
                                 ),
                                 child: Image.asset('assets/images/mosaic_logo.png', scale: 1.0),
                               ),

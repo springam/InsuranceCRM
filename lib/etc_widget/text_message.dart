@@ -12,7 +12,7 @@ class TextMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SelectableText(
+    return Text( //선택 가능하게 할지?
         textContent,
         style: TextStyle(
             color:  textColor,
@@ -35,7 +35,7 @@ class TextMessageNormal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SelectableText(
+    return Text( //글 선택 가능하게 할지?
         textContent,
         style: TextStyle(
             color:  const Color(0xff000000),
@@ -58,7 +58,7 @@ class TextMessage400 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SelectableText(
+    return Text( //SelectableText 글 선택 가능
         textContent,
         style: TextStyle(
           color:  const Color(0xff000000),
@@ -81,7 +81,7 @@ class TitleNormal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SelectableText(
+    return Text(
         textContent,
         style: TextStyle(
             color:  const Color(0xff000000),
@@ -104,7 +104,7 @@ class TitleHeavy extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SelectableText(
+    return Text(
         textContent,
         style: TextStyle(
           color:  const Color(0xff000000),

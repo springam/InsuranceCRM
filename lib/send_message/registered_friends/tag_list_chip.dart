@@ -18,7 +18,7 @@ class _TagListChipState extends State<TagListChip> {
   late RegisteredFriendsItemProvider fIP;
   late SendMessageFriendsItemProvider sIP;
 
-  Color selectedColor = const Color(0xfffae9e8);
+  Color selectedColor = const Color(0xffffffff);
   bool selectedTile = false;
   String selectedTag = '';
   List<RegisteredFriendsItem> selectedMessageFriends = [];
@@ -46,11 +46,12 @@ class _TagListChipState extends State<TagListChip> {
 
     return Container(
       width: 105,
-      height: 33,
+      height: 28,
       alignment: Alignment.center,
-      margin: const EdgeInsets.only(left: 7),
+      color: const Color(0xfff0f0f0),
+      margin: const EdgeInsets.only(left: 5, right: 5),
       child: Material(
-        // color: const Color(0xfffae9e8),
+        color: const Color(0xfff0f0f0),
         child: InkWell(
           borderRadius: BorderRadius.circular(20),
           splashColor: const Color(0xffffdf8e),
@@ -82,7 +83,7 @@ class _TagListChipState extends State<TagListChip> {
                 if (i == sIP.getItem().length) {
                   sIP.setItem(selectedMessageFriends);
                   setState(() {
-                    selectedColor = const Color(0xfffae9e8);
+                    selectedColor = const Color(0xffffffff);
                     selectedTile = false;
                   });
                 } else {

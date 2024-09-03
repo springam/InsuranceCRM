@@ -70,6 +70,20 @@ class _SelectMessageState extends State<SelectMessage> {
         ThemeList.themeList.length, (themeIndex) => MessageThemeListChip(themeIndex: themeIndex,)).toList();
   }
 
+  Widget titleTextSet(String textMessage, Color textColor, double textSize) {
+    return Text(
+        textMessage,
+        style: TextStyle(
+            color: textColor,
+            fontWeight: FontWeight.w400,
+            fontFamily: "NotoSansCJKkr-Regular",
+            fontStyle:  FontStyle.normal,
+            fontSize: textSize
+        ),
+        textAlign: TextAlign.center
+    );
+  }
+
   void sendMe() async {
     String result = json.encode({
       'request':'sendMe',
@@ -245,17 +259,32 @@ class _SelectMessageState extends State<SelectMessage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          InkWell(
-                            child: const Text(
-                                "카톡 보낼사람 선택하기",
-                              style: TextStyle(
-                                color:  Color(0xffd9d9d9),
-                                fontWeight: FontWeight.w400,
-                                fontFamily: "NotoSansCJKkr-Regular",
-                                fontFeatures: [FontFeature.proportionalFigures()],
-                                fontStyle:  FontStyle.normal,
-                                fontSize: 22.0,
+                          Container(
+                              height: 30,
+                              alignment: Alignment.center,
+                              padding: const EdgeInsets.only(left: 10, right: 10),
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: const Color(0xffd9d9d9),
+                                      width: 1
+                                  ),
+                                  color: const Color(0xffd9d9d9)
                               ),
+                              child: titleTextSet('Step 1', const Color(0xffffffff), 14.0)
+                          ),
+                          InkWell(
+                            child: Container(
+                                height: 30,
+                                alignment: Alignment.center,
+                                padding: const EdgeInsets.only(left: 10, right: 10),
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: const Color(0xffd9d9d9),
+                                      width: 1
+                                  ),
+                                  // color: const Color(0xff384d6a)
+                                ),
+                                child: titleTextSet('카톡 보낼 사람 선택하기', const Color(0xffd9d9d9), 14.0)
                             ),
                             onTap: () {
                               // sIP.initItem();
@@ -266,7 +295,32 @@ class _SelectMessageState extends State<SelectMessage> {
                             margin: const EdgeInsets.only(left: 13.5, right: 13.5),
                             child: const Icon(Icons.play_arrow, color: Color(0xffdde1e1),),
                           ),
-                          const TextMessageNormal("메시지 작성하기", 22.0),
+                          Container(
+                              height: 30,
+                              alignment: Alignment.center,
+                              padding: const EdgeInsets.only(left: 10, right: 10),
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: const Color(0xff384d6a),
+                                      width: 1
+                                  ),
+                                  color: const Color(0xff384d6a)
+                              ),
+                              child: titleTextSet('Step 2', const Color(0xffffffff), 14.0)
+                          ),
+                          Container(
+                              height: 30,
+                              alignment: Alignment.center,
+                              padding: const EdgeInsets.only(left: 10, right: 10),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: const Color(0xff384d6a),
+                                    width: 1
+                                ),
+                                // color: const Color(0xff384d6a)
+                              ),
+                              child: titleTextSet('메시지 작성하기', const Color(0xff384d6a), 14.0)
+                          ),
                         ],
                       ),
 

@@ -96,6 +96,20 @@ class SelectFriendsState extends State<SelectFriends> {
         TagList.tagList.length, (tagIndex) => TagListChip(tagIndex: tagIndex,)).toList();
   }
 
+  Widget titleTextSet(String textMessage, Color textColor, double textSize) {
+    return Text(
+        textMessage,
+        style: TextStyle(
+            color: textColor,
+            fontWeight: FontWeight.w400,
+            fontFamily: "NotoSansCJKkr-Regular",
+            fontStyle:  FontStyle.normal,
+            fontSize: textSize
+        ),
+        textAlign: TextAlign.center
+    );
+  }
+
   // Widget channelWidget() {
   //   if (resIP.getItem().isEmpty) {
   //     return const SizedBox();
@@ -294,17 +308,63 @@ class SelectFriendsState extends State<SelectFriends> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      const TextMessageNormal("카톡 보낼사람 선택하기", 22.0),
+                      Container(
+                        height: 30,
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.only(left: 10, right: 10),
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                                color: const Color(0xff384d6a),
+                                width: 1
+                            ),
+                            color: const Color(0xff384d6a)
+                        ),
+                        child: titleTextSet('Step 1', const Color(0xffffffff), 14.0)
+                      ),
+                      Container(
+                        height: 30,
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.only(left: 10, right: 10),
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                                color: const Color(0xff384d6a),
+                                width: 1
+                            ),
+                            // color: const Color(0xff384d6a)
+                        ),
+                        child: titleTextSet('카톡 보낼 사람 선택하기', const Color(0xff384d6a), 14.0)
+                      ),
                       Container(
                         margin: const EdgeInsets.only(left: 13.5, right: 13.5),
                         child: const Icon(Icons.play_arrow, color: Color(0xffdde1e1),),
                       ),
-                      const TextMessage(
-                          "메시지 작성하기",
-                          Color(0xff000000),
-                          FontWeight.w400,
-                          22.0
+                      Container(
+                        height: 30,
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.only(left: 10, right: 10),
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                                color: const Color(0xffd9d9d9),
+                                width: 1
+                            ),
+                            color: const Color(0xffd9d9d9)
+                        ),
+                        child: titleTextSet('Step 2', const Color(0xffffffff), 14.0)
                       ),
+                      Container(
+                        height: 30,
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.only(left: 10, right: 10),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                              color: const Color(0xffd9d9d9),
+                              width: 1
+                          ),
+                          // color: const Color(0xff384d6a)
+                        ),
+                        child: titleTextSet('메시지 작성하기', const Color(0xffd9d9d9), 14.0)
+                      ),
+
                     ],
                   ),
 
@@ -313,7 +373,7 @@ class SelectFriendsState extends State<SelectFriends> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const TextMessageNormal("1. 아래의 태그를 선택하거나 등록한 사람들에서 카톡 대화명을 선택하세요", 16.0),
+                      const TextMessageNormal("1. 태그를 선택하거나 등록한 사람 중 카톡 대화명을 선택하세요", 16.0),
 
                       Material(  //친구 목록 가져오기
                         color: Colors.white,
@@ -410,95 +470,92 @@ class SelectFriendsState extends State<SelectFriends> {
 
                   const SizedBox(height: 10),
 
-                  Container(
-                    height: 58,
-                    decoration: const BoxDecoration(
-                        border: Border(
-                            bottom: BorderSide(
-                                color: Color(0xff000000),
-                                width: 1.0
-                            )
-                        )
-                    ),
-                    child: Row(
-                      children: [
-                        Wrap(
-                          spacing: 3,
-                          children: tagList(),  //tag list widget
-                        ),
-
-                        const TagListChipAdd(),  //tag list add widget
-
-                      ],
-                    ),
-                  ),
-
-                  const SizedBox(height: 13),
-
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                        width: 214,
-                        height: 32,
-                        decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.all(
-                                Radius.circular(15)
-                            ),
-                            border: Border.all(
-                                color: const Color(0xffd9d9d9),
-                                width: 1
-                            )
-                        ),
-                        child: Row(
+                        height: 40,
+                        color: const Color(0xfff0f0f0),
+                        padding: const EdgeInsets.only(left: 15, right: 15),
+                        child: Row( //TagListChipAdd를 사용하지 않을 경우 Row 삭제
                           children: [
-                            Container(
-                              width: 20,
-                              height: 20,
-                              margin: const EdgeInsets.only(left: 9, right: 4),
-                              child: Image.asset('assets/images/search_friends.png'),
+                            Wrap(
+                              spacing: 3,
+                              children: tagList(),  //tag list widget
                             ),
 
-                            Container(
-                              width: 160,
-                              alignment: Alignment.centerLeft,
-                              // child: Form(
-                              //   key: _formKey,
-                              //   child: TextFormField(
-                              //     controller: searchFriendController,
-                              //     onFieldSubmitted: (value) {
-                              //       print('Enter here');
-                              //       setState(() {
-                              //         print(value);
-                              //         resIP.initItem();
-                              //         searchText = value;
-                              //       });
-                              //     },
-                              //   ),
-                              // )
+                            // const TagListChipAdd(),  //tag list add widget
 
-                              child: TextField(
-                                maxLines: null,
-                                controller: searchFriendController,
-                                style: buttonTextStyle,
-                                decoration: const InputDecoration(
-                                    isDense: true,
-                                    contentPadding: EdgeInsets.zero,
-                                    hintText: '카톡대화명 검색',
-                                    border: InputBorder.none
-                                ),
-                                onChanged: (value) {
-
-                                  setState(() {
-                                    // resIP.initItem();
-                                    searchText = value;
-                                  });
-                                },
-                              ),
-                            )
                           ],
                         ),
-                      )
+                      ),
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Container(
+                            width: 214,
+                            height: 32,
+                            decoration: BoxDecoration(
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(15)
+                                ),
+                                border: Border.all(
+                                    color: const Color(0xffd9d9d9),
+                                    width: 1
+                                )
+                            ),
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 20,
+                                  height: 20,
+                                  margin: const EdgeInsets.only(left: 9, right: 4),
+                                  child: Image.asset('assets/images/search_friends.png'),
+                                ),
+
+                                Container(
+                                  width: 160,
+                                  alignment: Alignment.centerLeft,
+                                  // child: Form(
+                                  //   key: _formKey,
+                                  //   child: TextFormField(
+                                  //     controller: searchFriendController,
+                                  //     onFieldSubmitted: (value) {
+                                  //       print('Enter here');
+                                  //       setState(() {
+                                  //         print(value);
+                                  //         resIP.initItem();
+                                  //         searchText = value;
+                                  //       });
+                                  //     },
+                                  //   ),
+                                  // )
+
+                                  child: TextField(
+                                    maxLines: null,
+                                    controller: searchFriendController,
+                                    style: buttonTextStyle,
+                                    decoration: const InputDecoration(
+                                        isDense: true,
+                                        contentPadding: EdgeInsets.zero,
+                                        hintText: '카톡대화명 검색',
+                                        border: InputBorder.none
+                                    ),
+                                    onChanged: (value) {
+
+                                      setState(() {
+                                        // resIP.initItem();
+                                        searchText = value;
+                                      });
+                                    },
+                                  ),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ), //대화명 검색 BOX
                     ],
                   ),
 
