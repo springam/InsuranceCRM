@@ -44,6 +44,11 @@ class _TagListChipState extends State<TagListChip> {
     fIP = Provider.of<RegisteredFriendsItemProvider>(context);
     sIP = Provider.of<SendMessageFriendsItemProvider>(context, listen: true);
 
+    if (sIP.getItem().length == 0) {
+      selectedColor = const Color(0xffffffff);
+      selectedTile = false;
+    }
+
     return Container(
       width: 105,
       height: 28,

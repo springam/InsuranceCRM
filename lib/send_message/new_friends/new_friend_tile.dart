@@ -175,9 +175,11 @@ class NewFriendTileState extends State<NewFriendTile> {
     selectedIndex = resIP.getItem()[widget.index].talkDown?? 2;
     selectedHashTag = resIP.getItem()[widget.index].tag?? [];
 
-    if (selectedItem) {
+    if (sIP.getItem().contains(resIP.getItem()[widget.index])) {
+      selectedItem = true;
       selectedItemColor = const Color(0xffd7e3f7);
     } else {
+      selectedItem = false;
       selectedItemColor = const Color(0xffffffff);
     }
 

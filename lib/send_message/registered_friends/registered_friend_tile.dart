@@ -92,19 +92,25 @@ class _RegisteredFriendTileState extends State<RegisteredFriendTile> {
                   onTap: () {
                     if (selectedTile) {
                       sIP.removeItem(widget.registeredFriend);
-                      setState(() {
-                        selectedColor = const Color(0xffffffff);
-                        selectedBorderColor = const Color(0xff000000);
-                        selectedTile = false;
-                      });
+                      selectedColor = const Color(0xffffffff);
+                      selectedBorderColor = const Color(0xff000000);
+                      selectedTile = false;
+                      // setState(() {
+                      //   selectedColor = const Color(0xffffffff);
+                      //   selectedBorderColor = const Color(0xff000000);
+                      //   selectedTile = false;
+                      // });
                     } else {
                       if (!sIP.getItem().contains(widget.registeredFriend)) {
                         sIP.addItem(widget.registeredFriend);
-                        setState(() {
-                          selectedColor = const Color(0xffd7e3f7);
-                          selectedBorderColor = const Color(0xff000000); //변화 안 줄거면 지워
-                          selectedTile = true;
-                        });
+                        selectedColor = const Color(0xffd7e3f7);
+                        selectedBorderColor = const Color(0xff000000); //변화 안 줄거면 지워
+                        selectedTile = true;
+                        // setState(() {
+                        //   selectedColor = const Color(0xffd7e3f7);
+                        //   selectedBorderColor = const Color(0xff000000); //변화 안 줄거면 지워
+                        //   selectedTile = true;
+                        // });
                       }
                     }
                   },

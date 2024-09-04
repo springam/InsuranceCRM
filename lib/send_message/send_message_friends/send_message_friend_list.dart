@@ -63,7 +63,7 @@ class _SendMessageFriendListState extends State<SendMessageFriendList> {
                   ),
                 ),
                 onTap: () {
-                  sIP.setItem([]);
+                  sIP.initItem();
                 },
               ),
             ),

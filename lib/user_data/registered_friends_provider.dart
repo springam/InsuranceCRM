@@ -21,12 +21,12 @@ class RegisteredFriendsItemProvider with ChangeNotifier {
 
   removeItem(responseFriend) {
     registeredFriendsMap.remove(responseFriend);
-    notifyListeners();
+    // notifyListeners();
   }
 
   initItem() {
     registeredFriendsMap.clear();
-    notifyListeners();
+    // notifyListeners();
   }
 
   modifyItem(String name, List<dynamic> selectedHashTag, int talkDown, int index) {

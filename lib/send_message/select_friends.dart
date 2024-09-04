@@ -57,6 +57,11 @@ class SelectFriendsState extends State<SelectFriends> {
   List<RegisteredFriendsItem> registerFriendsMap = [];
   List<RegisteredFriendsItem> responseFriendsMap = [];
   String searchText = '';
+  Color friendListColorReg = const Color(0xffd7e3f7);
+  Color friendListColorNew = const Color(0xfff0f0f0);
+  Color selectedColor = const Color(0xffd7e3f7);
+  Color unSelectedColor = const Color(0xfff0f0f0);
+  bool selectedRegFriend = true;
 
   @override
   void initState() {
@@ -292,6 +297,14 @@ class SelectFriendsState extends State<SelectFriends> {
     resIP.initItem();
 
     setFriendList(searchText);
+
+    if (selectedRegFriend) {
+      friendListColorReg = selectedColor;
+      friendListColorNew = unSelectedColor;
+    } else {
+      friendListColorReg = unSelectedColor;
+      friendListColorNew = selectedColor;
+    }
 
     return Container(
       // height: MediaQuery.of(context).size.height * 1.3,
@@ -561,11 +574,57 @@ class SelectFriendsState extends State<SelectFriends> {
 
                   const SizedBox(height: 13),
 
-                  (resIP.getItem().isEmpty) ? const SizedBox() : const NewFriends(),
+                  Row(
+                    children: [
+                      InkWell(
+                        child: Container(
+                          width: 130,
+                          height: 32,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            border: const Border(
+                              left: BorderSide(color: Color(0xff000000), width: 1.0),
+                              top: BorderSide(color: Color(0xff000000), width: 1.0),
+                              right: BorderSide(color: Color(0xff000000), width: 1.0),
+                            ),
+                            color: friendListColorReg,
+                          ),
+                          child: const TextMessage400('등록한 사람', 14.0),
+                        ),
+                        onTap: () {
+                          setState(() {
+                            selectedRegFriend = true;
+                          });
+                        },
+                      ),
+                      InkWell(
+                        child: Container(
+                          width: 130,
+                          height: 32,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            border: const Border(
+                              top: BorderSide(color: Color(0xff000000), width: 1.0),
+                              right: BorderSide(color: Color(0xff000000), width: 1.0),
+                            ),
+                            color: friendListColorNew,
+                          ),
+                          child: const TextMessage400('신규등록명단', 14.0),
+                        ),
+                        onTap: () {
+                          setState(() {
+                            selectedRegFriend = false;
+                          });
+                        },
+                      )
+                    ],
+                  ),
+
+                  (selectedRegFriend) ? RegisteredFriends(key: registeredFriendsStateKey) : const NewFriends(),
+
+                  // (resIP.getItem().isEmpty) ? const SizedBox() : const NewFriends(),
 
                   // (channelValue) ? (resIP.getItem().isEmpty) ? const SizedBox() : NewFriends() : const SizedBox(),
-
-                  RegisteredFriends(key: registeredFriendsStateKey),  //등록친구 widget
 
                   const SizedBox(height: 30),
 
