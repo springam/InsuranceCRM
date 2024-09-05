@@ -178,72 +178,90 @@ class _SendMessageFriendListState extends State<SendMessageFriendList> {
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
-                        return AlertDialog(
-                            title: const TitleNormal('1. 호칭과 문구, 그리고 태그 입럭하세요', 16.0),
-                            content: Container(
+                        return Dialog(
+                            child: SizedBox(
                               height: 500,
                               width: 400,
-                              padding: const EdgeInsets.all(10),
                               child: Column(
                                 children: [
                                   Container(
-                                    margin: const EdgeInsets.all(10),
-                                    child: const Row(
+                                    padding: const EdgeInsets.only(left: 10, top: 10, right: 10),
+                                    child: Column(
                                       children: [
-                                        Expanded(
-                                            flex: 1,
-                                            child: TextMessageNormal('카톡대화명', 12.0),
+                                        Container(
+                                            height: 40,
+                                            alignment: Alignment.centerRight,
+                                            child: IconButton(
+                                              icon: const Icon(Icons.close),
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                            )
                                         ),
-                                        Expanded(
-                                          flex: 1,
-                                          child: TextMessageNormal('호칭', 12.0),
+                                        const TitleNormal('1. 호칭과 문구, 그리고 태그 입럭하세요', 16.0),
+                                        Container(
+                                          height: 40,
+                                          margin: const EdgeInsets.only(left: 10, right: 10),
+                                          child: const Row(
+                                            children: [
+                                              Expanded(
+                                                flex: 1,
+                                                child: TextMessageNormal('카톡대화명', 12.0),
+                                              ),
+                                              Expanded(
+                                                flex: 1,
+                                                child: TextMessageNormal('호칭', 12.0),
+                                              ),
+                                              Expanded(
+                                                flex: 1,
+                                                child: TextMessageNormal('문구톤', 12.0),
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                        Expanded(
-                                          flex: 1,
-                                          child: TextMessageNormal('문구톤', 12.0),
+                                        const Divider(height: 2),
+                                        Container(
+                                          height: 324, //388
+                                          margin: const EdgeInsets.all(10),
+                                          child: ListView.builder(
+                                              itemCount: sIP.getItem().length,
+                                              controller: sendMessageFriendController,
+                                              itemBuilder: (BuildContext context, int index) {
+                                                if (sIP.getItem().length == 0) {
+                                                  return const Text('select friend');
+                                                } else {
+                                                  return SendMessageFriendTempTile(registeredFriend: sIP.getItem()[index],);
+                                                }
+                                              }
+                                          ),
                                         ),
+
                                       ],
                                     ),
                                   ),
-                                  const Divider(height: 2),
-                                  Container(
-                                    height: 340,
-                                    margin: const EdgeInsets.all(10),
-                                    child: ListView.builder(
-                                        itemCount: sIP.getItem().length,
-                                        controller: sendMessageFriendController,
-                                        itemBuilder: (BuildContext context, int index) {
-                                          if (sIP.getItem().length == 0) {
-                                            return const Text('select friend');
-                                          } else {
-                                            return SendMessageFriendTempTile(registeredFriend: sIP.getItem()[index],);
-                                          }
-                                        }
-                                    ),
-                                  ),
 
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      ElevatedButton(
-                                        child: const Text('메세지 보내기'),
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                          cIP.setCurrentSubPage(1);
-                                        },
+                                  InkWell(
+                                    child: Container(
+                                      height: 40,
+                                      width: double.infinity,
+                                      alignment: Alignment.center,
+                                      decoration: const BoxDecoration(
+                                        borderRadius: BorderRadius.only(
+                                            bottomLeft: Radius.circular(10.0),
+                                            bottomRight: Radius.circular(10.0)
+                                        ),
+                                        color: Color(0xffd0d6df),
                                       ),
-                                      const SizedBox(width: 30),
-                                      ElevatedButton(
-                                        child: const Text('취소'),
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                      )
-                                    ],
-                                  )
+                                      child: const Text('입력 완료하기'),
+                                    ),
+                                    onTap: () {
+                                      Navigator.of(context).pop();
+                                      cIP.setCurrentSubPage(1);
+                                    },
+                                  ),
                                 ],
                               ),
-                            ),
+                            )
                         );
                       }
                     );
