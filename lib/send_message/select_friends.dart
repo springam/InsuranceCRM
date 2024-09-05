@@ -13,6 +13,7 @@ import 'package:provider/provider.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import '../etc_widget/alert_dialog.dart';
 import '../etc_widget/design_widget.dart';
+import '../etc_widget/theme_set.dart';
 import '../user_data/response_friend_provider.dart';
 import 'registered_friends/tag_list_chip_add.dart';
 import '../etc_widget/text_message.dart';
@@ -59,8 +60,8 @@ class SelectFriendsState extends State<SelectFriends> {
   String searchText = '';
   Color friendListColorReg = const Color(0xffd7e3f7);
   Color friendListColorNew = const Color(0xfff0f0f0);
-  Color selectedColor = const Color(0xffd7e3f7);
-  Color unSelectedColor = const Color(0xfff0f0f0);
+  Color selectedColor = ThemeSet.tabSelectedBackGroundColor;
+  Color unSelectedColor = ThemeSet.whiteColor;
   bool selectedRegFriend = true;
 
   @override
@@ -332,7 +333,7 @@ class SelectFriendsState extends State<SelectFriends> {
                             ),
                             color: const Color(0xff384d6a)
                         ),
-                        child: titleTextSet('Step 1', const Color(0xffffffff), 14.0)
+                        child: titleTextSet('Step 1', ThemeSet.leftMenuColor, 14.0)
                       ),
                       Container(
                         height: 30,
@@ -345,11 +346,11 @@ class SelectFriendsState extends State<SelectFriends> {
                             ),
                             // color: const Color(0xff384d6a)
                         ),
-                        child: titleTextSet('카톡 보낼 사람 선택하기', const Color(0xff384d6a), 14.0)
+                        child: titleTextSet('카톡 보낼 사람 선택하기', ThemeSet.leftMenuBackGroundColor, 14.0)
                       ),
                       Container(
                         margin: const EdgeInsets.only(left: 13.5, right: 13.5),
-                        child: const Icon(Icons.play_arrow, color: Color(0xffdde1e1),),
+                        child: Icon(Icons.play_arrow, color: ThemeSet.leftMenuBackGroundColor),
                       ),
                       Container(
                         height: 30,
@@ -357,12 +358,12 @@ class SelectFriendsState extends State<SelectFriends> {
                         padding: const EdgeInsets.only(left: 10, right: 10),
                         decoration: BoxDecoration(
                             border: Border.all(
-                                color: const Color(0xffd9d9d9),
+                                color: ThemeSet.disableColor,
                                 width: 1
                             ),
-                            color: const Color(0xffd9d9d9)
+                            color: ThemeSet.disableColor
                         ),
-                        child: titleTextSet('Step 2', const Color(0xffffffff), 14.0)
+                        child: titleTextSet('Step 2', const Color(0xff606163), 14.0)
                       ),
                       Container(
                         height: 30,
@@ -370,12 +371,12 @@ class SelectFriendsState extends State<SelectFriends> {
                         padding: const EdgeInsets.only(left: 10, right: 10),
                         decoration: BoxDecoration(
                           border: Border.all(
-                              color: const Color(0xffd9d9d9),
+                              color: ThemeSet.disableColor,
                               width: 1
                           ),
                           // color: const Color(0xff384d6a)
                         ),
-                        child: titleTextSet('메시지 작성하기', const Color(0xffd9d9d9), 14.0)
+                        child: titleTextSet('메시지 작성하기', const Color(0xff606163), 14.0)
                       ),
 
                     ],
@@ -393,7 +394,7 @@ class SelectFriendsState extends State<SelectFriends> {
                         child: InkWell(
                           borderRadius: BorderRadius.circular(10),
                           splashColor: const Color(0xffffdf8e),
-                          hoverColor: Colors.grey,
+                          hoverColor: ThemeSet.hoverColor,
                           child: Ink(
                             width: 115,
                             height: 26,
@@ -488,7 +489,7 @@ class SelectFriendsState extends State<SelectFriends> {
                     children: [
                       Container(
                         height: 40,
-                        color: const Color(0xfff0f0f0),
+                        color: const Color(0xffe5e8ec),
                         padding: const EdgeInsets.only(left: 15, right: 15),
                         child: Row( //TagListChipAdd를 사용하지 않을 경우 Row 삭제
                           children: [

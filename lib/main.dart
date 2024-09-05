@@ -67,7 +67,9 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Mosaic Blue&co',
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
+          scaffoldBackgroundColor: Colors.white,
+          canvasColor: Colors.white,
           useMaterial3: true,
           fontFamily: "NotoSansCJKKR",
         ),

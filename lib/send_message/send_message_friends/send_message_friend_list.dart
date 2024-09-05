@@ -6,6 +6,7 @@ import 'package:mosaicbluenco/send_message/send_message_friends/send_message_fri
 import 'package:provider/provider.dart';
 import '../../etc_widget/alert_dialog.dart';
 import '../../etc_widget/text_message.dart';
+import '../../etc_widget/theme_set.dart';
 import '../../user_data/registered_friends_provider.dart';
 import '../../user_data/status_provider.dart';
 
@@ -47,7 +48,7 @@ class _SendMessageFriendListState extends State<SendMessageFriendList> {
               child: InkWell(
                 borderRadius: BorderRadius.circular(10),
                 splashColor: const Color(0xffffdf8e),
-                hoverColor: Colors.grey,
+                hoverColor: ThemeSet.hoverColor,
                 child: Ink(
                   width: 87,
                   height: 25,
@@ -141,16 +142,16 @@ class _SendMessageFriendListState extends State<SendMessageFriendList> {
           const SizedBox(height: 13),
 
           Material(
-            color: const Color(0xffffffff),
+            // color: ThemeSet.messageBackGroundColor,
             child: InkWell(
               borderRadius: BorderRadius.circular(10),
               splashColor: const Color(0xffffdf8e),
-              hoverColor: Colors.grey,
+              hoverColor: ThemeSet.hoverColor,
               child: Ink(
                 height: 38,
                 decoration: const BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(10)),
-                  color: Color(0xfff0f0f0),
+                  color: Color(0xffe5e8ec),
                 ),
                 child: Center(
                   child: Text('메시지 작성', style: buttonTextStyle,),

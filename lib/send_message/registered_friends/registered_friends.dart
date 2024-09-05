@@ -3,6 +3,7 @@ import 'package:mosaicbluenco/send_message/registered_friends/modify_registered_
 import 'package:mosaicbluenco/send_message/registered_friends/registered_friend_tile.dart';
 import 'package:provider/provider.dart';
 import '../../etc_widget/text_message.dart';
+import '../../etc_widget/theme_set.dart';
 import '../../user_data/registered_friends_provider.dart';
 
 GlobalKey<RegisteredFriendsState> registeredFriendsStateKey = GlobalKey();
@@ -83,11 +84,11 @@ class RegisteredFriendsState extends State<RegisteredFriends> {
               Container(
                 margin: const EdgeInsets.only(right: 19),
                 child: Material(
-                  color: const Color(0xfff0f0f0),
+                  color: const Color(0xfffbf8f1),
                   child: InkWell(
                     borderRadius: BorderRadius.circular(10),
                     splashColor: const Color(0xffffdf8e),
-                    hoverColor: Colors.grey,
+                    hoverColor: ThemeSet.hoverColor,
                     child: Ink(
                       width: 100,
                       height: 21,

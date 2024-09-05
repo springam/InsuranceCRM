@@ -7,6 +7,7 @@ import 'package:mosaicbluenco/message_template/message_generate.dart';
 import 'package:mosaicbluenco/user_data/user_data.dart';
 import 'package:provider/provider.dart';
 import 'etc_widget/text_message.dart';
+import 'etc_widget/theme_set.dart';
 import 'first_page/main_first.dart';
 import 'friend_care/friend_care.dart';
 import 'message_template/message_modify.dart';
@@ -29,12 +30,12 @@ class _HomeMainState extends State<HomeMain> {
   late CurrentPageProvider cIP;
 
   int hoveringNumber = 0;
-  Color menuColor = const Color(0xffbcc0c7); //menu text color
-  Color menuNormalColor = const Color(0xff384d6a); //const Color(0xfffbf8f1);
-  Color menuHoverColor = const Color(0xffc9ced9); //선택되거나 올려진 컬러
-  Color imageColor = const Color(0xffffffff);
-  Color imageColorNormal = const Color(0xffffffff); //const Color(0xff000000);
-  Color imageColorHover = const Color(0xffe96558);
+  Color menuColor = ThemeSet.leftMenuColor; //left menu Color변수
+  Color menuNormalColor = ThemeSet.leftMenuColor; //const Color(0xfffbf8f1);
+  Color menuHoverColor = ThemeSet.leftMenuSelectedColor; //선택되거나 올려진 컬러
+  // Color imageColor = const Color(0xffffffff);
+  // Color imageColorNormal = const Color(0xffffffff); //const Color(0xff000000);
+  // Color imageColorHover = ThemeSet.hoverColor;
   FontWeight fontWeight = FontWeight.w400;
   FontWeight fontWeightNormal = FontWeight.w400;
   FontWeight fontWeightHover = FontWeight.w700;
@@ -79,11 +80,11 @@ class _HomeMainState extends State<HomeMain> {
 
     if (hoveringNumber == menuNumber) {
       menuColor = menuHoverColor; //메뉴 text의 선택되거나 hover 색상
-      imageColor = imageColorHover; //메뉴 아이콘의 선택되거나 hover 색상
+      // imageColor = imageColorHover; //메뉴 아이콘의 선택되거나 hover 색상
       fontWeight = fontWeightHover;
     } else {
       menuColor = menuNormalColor;
-      imageColor = imageColorNormal;
+      // imageColor = imageColorNormal;
       fontWeight = fontWeightNormal;
     }
 
@@ -94,7 +95,7 @@ class _HomeMainState extends State<HomeMain> {
       child: Container(
         height: 55,
         padding: const EdgeInsets.only(left: 50),
-        decoration: const BoxDecoration(color: Color(0xff384d6a)), //메뉴 hover 배경색 변경 원할시 menuColor로 변경
+        decoration: BoxDecoration(color: ThemeSet.leftMenuBackGroundColor),
         child: Row(
           children: [
             // Container( //아이콘 삭제함
@@ -106,11 +107,11 @@ class _HomeMainState extends State<HomeMain> {
               height: 55,
               margin: const EdgeInsets.only(left: 5),
               alignment: Alignment.center,
-              color: const Color(0xff384d6a),
+              color: ThemeSet.leftMenuBackGroundColor,
               child: Text(
                   leftMenuText,
                   style: TextStyle(
-                      color: imageColor,
+                      color: menuColor,
                       fontWeight: fontWeight,
                       fontFamily: "NotoSansCJKkr-Regular",
                       fontStyle:  FontStyle.normal,
@@ -321,14 +322,6 @@ class _HomeMainState extends State<HomeMain> {
                                                 color: Colors.red,
                                               ),
                                             ),
-                                            // decoration: BoxDecoration(
-                                            //     shape: BoxShape.circle,
-                                            //     image: DecorationImage(
-                                            //         fit: BoxFit.fill,
-                                            //         // image: AssetImage('assets/images/kakao_person.png')
-                                            //       image: NetworkImage(UserData.userImageUrl)
-                                            //     )
-                                            // ),
                                           ),
                                           SelectableText(UserData.userNickname)
                                         ],

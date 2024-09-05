@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mosaicbluenco/user_data/user_data.dart';
 import 'package:provider/provider.dart';
 
+import '../../etc_widget/theme_set.dart';
 import '../../user_data/registered_friends_provider.dart';
 
 class TagListChip extends StatefulWidget {
@@ -53,31 +54,29 @@ class _TagListChipState extends State<TagListChip> {
       width: 105,
       height: 28,
       alignment: Alignment.center,
-      color: const Color(0xfff0f0f0),
+      color: const Color(0xffe5e8ec),
       margin: const EdgeInsets.only(left: 5, right: 5),
       child: Material(
-        color: const Color(0xfff0f0f0),
+        color: const Color(0xffe5e8ec),
         child: InkWell(
           borderRadius: BorderRadius.circular(20),
           splashColor: const Color(0xffffdf8e),
-          hoverColor: const Color(0xffbcc0c7),
+          hoverColor: ThemeSet.hoverColor,
           child: Ink(
-            // width: 88,
-            // height: 21,
             decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(Radius.circular(20)),
                 color: selectedColor
             ),
             child: Center(
               child: Text(
-                '#${TagList.tagList[widget.tagIndex]}',
-                style: const TextStyle(
-                    color:  Color(0xff000000),
-                    fontWeight: FontWeight.w400,
-                    fontFamily: "NotoSansCJKKR",
-                    fontStyle:  FontStyle.normal,
-                    fontSize: 14.0
-                )
+                  '#${TagList.tagList[widget.tagIndex]}',
+                  style: TextStyle(
+                      color:  ThemeSet.blackColor,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: "NotoSansCJKKR",
+                      fontStyle:  FontStyle.normal,
+                      fontSize: 14.0
+                  )
               ),
             ),
           ),
