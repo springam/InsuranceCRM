@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
-import 'package:mosaicbluenco/kakao_login.dart';
 import 'package:mosaicbluenco/user_data/image_provider.dart';
 import 'package:mosaicbluenco/user_data/registered_friends_provider.dart';
 import 'package:mosaicbluenco/user_data/response_friend_provider.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_network/image_network.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
-import 'package:mosaicbluenco/kakao_login.dart';
+import 'package:mosaicbluenco/user_data/kakao_login.dart';
 import 'package:mosaicbluenco/message_template/image_card_generate.dart';
 import 'package:mosaicbluenco/message_template/message_generate.dart';
 import 'package:mosaicbluenco/user_data/user_data.dart';
@@ -10,6 +10,8 @@ import 'etc_widget/text_message.dart';
 import 'etc_widget/theme_set.dart';
 import 'first_page/main_first.dart';
 import 'friend_care/friend_care.dart';
+import 'homepage_main.dart';
+import 'login.dart';
 import 'message_template/message_modify.dart';
 import 'send_message/message_templates/message_preset.dart';
 import 'send_message/select_friends.dart';
@@ -261,7 +263,7 @@ class _HomeMainState extends State<HomeMain> {
                                             debugPrint('로그아웃 성공, SDK에서 토큰 삭제');
                                             setState(() {
                                               UserToken.hasToken = false;
-                                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const Login()));
+                                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomepageMain())); //이전버전은 Login()임
                                             });
                                           } catch (error) {
                                             debugPrint('로그아웃 실패, SDK에서 토큰 삭제 $error');
