@@ -11,6 +11,8 @@ import 'package:mosaicbluenco/user_data/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:url_strategy/url_strategy.dart';
 
+import 'homepage_main.dart';
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -75,7 +77,8 @@ class MyApp extends StatelessWidget {
         ),
         // home: const Login(title: 'Mosaic Blue&co'),
         home: const Scaffold(
-            body: Login()
+          body: HomepageMain(),
+            // body: Login()
         ),
       ),
     );
