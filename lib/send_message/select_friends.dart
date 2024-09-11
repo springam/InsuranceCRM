@@ -228,14 +228,30 @@ class SelectFriendsState extends State<SelectFriends> {
       bool exitRegister = false;
 
       if (item.registered == 1) {
-        for (int i = 0; i < regIP.getItem().length + 1; i++) {
-          if (i < regIP.getItem().length) {
-            if (regIP.getItem()[i].kakaoNickname == item.kakaoNickname) {
-              exitRegister = true;
+        if (searchText.isEmpty) {
+          for (int i = 0; i < regIP.getItem().length + 1; i++) {
+            if (i < regIP.getItem().length) {
+              if (regIP.getItem()[i].kakaoNickname == item.kakaoNickname) {
+                exitRegister = true;
+              }
+            } else {
+              if (!exitRegister) {
+                registerFriendsMap.add(item);
+              }
             }
-          } else {
-            if (!exitRegister) {
-              registerFriendsMap.add(item);
+          }
+        } else {
+          if (item.kakaoNickname.contains(searchText)) {
+            for (int i = 0; i < resIP.getItem().length + 1; i++) {
+              if (i < regIP.getItem().length) {
+                if (regIP.getItem()[i].kakaoNickname == item.kakaoNickname) {
+                  exitRegister = true;
+                }
+              } else {
+                if (!exitRegister) {
+                  registerFriendsMap.add(item);
+                }
+              }
             }
           }
         }
@@ -289,11 +305,10 @@ class SelectFriendsState extends State<SelectFriends> {
     fIP = Provider.of<FriendsItemProvider>(context, listen: true);
     regIP = Provider.of<RegisteredFriendsItemProvider>(context, listen: true);
     resIP = Provider.of<ResponseFriendsItemProvider>(context, listen: true);
-    // nsIP = Provider.of<NotSetItemProvider>(context, listen: true);
 
     registerFriendsMap = [];
     responseFriendsMap = [];
-    resIP.initItem();
+    // resIP.initItem();
 
     setFriendList(searchText);
 
@@ -356,10 +371,10 @@ class SelectFriendsState extends State<SelectFriends> {
                         padding: const EdgeInsets.only(left: 10, right: 10),
                         decoration: BoxDecoration(
                             border: Border.all(
-                                color: ThemeSet.disableColor,
+                                color: ThemeSet.step2Color,
                                 width: 1
                             ),
-                            color: ThemeSet.disableColor
+                            color: ThemeSet.step2Color
                         ),
                         child: titleTextSet('Step 2', const Color(0xff606163), 14.0)
                       ),
@@ -369,7 +384,7 @@ class SelectFriendsState extends State<SelectFriends> {
                         padding: const EdgeInsets.only(left: 10, right: 10),
                         decoration: BoxDecoration(
                           border: Border.all(
-                              color: ThemeSet.disableColor,
+                              color: ThemeSet.step2Color,
                               width: 1
                           ),
                           // color: const Color(0xff384d6a)
@@ -557,7 +572,6 @@ class SelectFriendsState extends State<SelectFriends> {
                                     onChanged: (value) {
 
                                       setState(() {
-                                        // resIP.initItem();
                                         searchText = value;
                                       });
                                     },

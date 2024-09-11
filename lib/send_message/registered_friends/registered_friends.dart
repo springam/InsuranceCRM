@@ -78,7 +78,8 @@ class RegisteredFriendsState extends State<RegisteredFriends> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                margin: const EdgeInsets.only(left: 18),
+                margin: const EdgeInsets.only(left: 20),
+                color: const Color(0xfffbf8f1),
                 child: TextMessageNormal('등록한 사람들 ($registeredCount명)', 12.0),
               ),
               Container(

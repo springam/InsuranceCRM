@@ -106,10 +106,19 @@ class _NewFriendsState extends State<NewFriends> {
               ),
               color: const Color(0xfffbf8f1) // 0xffc9ced9
           ),
-          child: Container(
-            margin: const EdgeInsets.only(left: 18),
-            color: const Color(0xfffbf8f1),
-            child: const TextMessageNormal('신규 등록 명단', 12.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                margin: const EdgeInsets.only(left: 20),
+                // color: const Color(0xfffbf8f1),
+                child: TextMessageNormal('미등록 신규명단 ($itemCount명)', 12.0),
+              ),
+              Container(
+                margin: const EdgeInsets.only(right: 20),
+                child: const TextMessageNormal('호칭, 문구톤, 태그 선택 후 맨 밑에 있는 등록하기 버튼을 누르세요', 12.0),
+              )
+            ],
           ),
         ),
 

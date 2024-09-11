@@ -77,7 +77,7 @@ class _SendMessageFriendListState extends State<SendMessageFriendList> {
                     color: const Color(0xff000000),
                     width: 1
                 ),
-                color: const Color(0xfff0f0f0)
+                color: ThemeSet.step2Color
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -128,9 +128,9 @@ class _SendMessageFriendListState extends State<SendMessageFriendList> {
             height: 34,
             alignment: Alignment.centerRight,
             padding: const EdgeInsets.only(right: 12),
-            decoration: const BoxDecoration(
-              color: Color(0xfff0f0f0),
-              border: Border(
+            decoration: BoxDecoration(
+              color: ThemeSet.step2Color,
+              border: const Border(
                 left: BorderSide(color: Color(0xff000000), width: 1.0),
                 right: BorderSide(color: Color(0xff000000), width: 1.0),
                 bottom: BorderSide(color: Color(0xff000000), width: 1.0),

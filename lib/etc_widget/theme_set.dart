@@ -5,6 +5,8 @@ class ThemeSet {
 
   static Color disableColor = const Color(0xffc9ced9);
 
+  static Color step2Color = const Color(0xfff0f0f0);
+
   static Color leftMenuColor = const Color(0xffffffff);
   static Color leftMenuSelectedColor = const Color(0xffe96558);
 

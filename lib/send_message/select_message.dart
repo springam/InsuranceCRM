@@ -699,28 +699,28 @@ class _SelectMessageState extends State<SelectMessage> {
 
                       const SizedBox(height: 13),
 
-                      Material(
-                        color: const Color(0xffffffff),
-                        child: InkWell(
-                          borderRadius: BorderRadius.circular(10),
-                          splashColor: const Color(0xffffdf8e),
-                          hoverColor: Colors.grey,
-                          child: Ink(
-                            height: 38,
-                            decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(10)),
-                              color: Color(0xffffdf8e),
-                            ),
-                            child: Center(
-                              child: Text('뒤로가기(테스트용 버튼)', style: buttonTextStyle,),
-                            ),
-                          ),
-                          onTap: () {
-                            sIP.initItem();
-                            cIP.setCurrentSubPage(0);
-                          },
-                        ),
-                      ),
+                      // Material(
+                      //   color: const Color(0xffffffff),
+                      //   child: InkWell(
+                      //     borderRadius: BorderRadius.circular(10),
+                      //     splashColor: const Color(0xffffdf8e),
+                      //     hoverColor: Colors.grey,
+                      //     child: Ink(
+                      //       height: 38,
+                      //       decoration: const BoxDecoration(
+                      //         borderRadius: BorderRadius.all(Radius.circular(10)),
+                      //         color: Color(0xffffdf8e),
+                      //       ),
+                      //       child: Center(
+                      //         child: Text('뒤로가기(테스트용 버튼)', style: buttonTextStyle,),
+                      //       ),
+                      //     ),
+                      //     onTap: () {
+                      //       sIP.initItem();
+                      //       cIP.setCurrentSubPage(0);
+                      //     },
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),
