@@ -58,7 +58,7 @@ class SelectFriendsState extends State<SelectFriends> {
   String searchText = '';
   Color friendListColorReg = const Color(0xffd7e3f7);
   Color friendListColorNew = const Color(0xfff0f0f0);
-  Color selectedColor = ThemeSet.tabSelectedBackGroundColor;
+  Color selectedColor = ThemeSet.menuBarBackground1;
   Color unSelectedColor = ThemeSet.whiteColor;
   bool selectedRegFriend = true;
 
@@ -371,10 +371,10 @@ class SelectFriendsState extends State<SelectFriends> {
                         padding: const EdgeInsets.only(left: 10, right: 10),
                         decoration: BoxDecoration(
                             border: Border.all(
-                                color: ThemeSet.step2Color,
+                                color: ThemeSet.menuBarBackground1,
                                 width: 1
                             ),
-                            color: ThemeSet.step2Color
+                            color: ThemeSet.menuBarBackground1
                         ),
                         child: titleTextSet('Step 2', const Color(0xff606163), 14.0)
                       ),
@@ -384,7 +384,7 @@ class SelectFriendsState extends State<SelectFriends> {
                         padding: const EdgeInsets.only(left: 10, right: 10),
                         decoration: BoxDecoration(
                           border: Border.all(
-                              color: ThemeSet.step2Color,
+                              color: ThemeSet.menuBarBackground1,
                               width: 1
                           ),
                           // color: const Color(0xff384d6a)
@@ -560,7 +560,7 @@ class SelectFriendsState extends State<SelectFriends> {
                                   // )
 
                                   child: TextField(
-                                    maxLines: null,
+                                    maxLines: 1,
                                     controller: searchFriendController,
                                     style: buttonTextStyle,
                                     decoration: const InputDecoration(
@@ -570,7 +570,6 @@ class SelectFriendsState extends State<SelectFriends> {
                                         border: InputBorder.none
                                     ),
                                     onChanged: (value) {
-
                                       setState(() {
                                         searchText = value;
                                       });
@@ -590,6 +589,8 @@ class SelectFriendsState extends State<SelectFriends> {
                   Row(
                     children: [
                       InkWell(
+                        hoverColor: ThemeSet.hoverColor,
+                        splashColor: ThemeSet.splashColor,
                         child: Container(
                           width: 130,
                           height: 32,
@@ -611,6 +612,8 @@ class SelectFriendsState extends State<SelectFriends> {
                         },
                       ),
                       InkWell(
+                        hoverColor: ThemeSet.hoverColor,
+                        splashColor: ThemeSet.splashColor,
                         child: Container(
                           width: 130,
                           height: 32,
@@ -633,7 +636,7 @@ class SelectFriendsState extends State<SelectFriends> {
                     ],
                   ),
 
-                  (selectedRegFriend) ? RegisteredFriends(key: registeredFriendsStateKey) : const NewFriends(),
+                  (selectedRegFriend) ? RegisteredFriends(key: registeredFriendsStateKey) : NewFriends(key: newFriendsStateKey),
 
                   // (resIP.getItem().isEmpty) ? const SizedBox() : const NewFriends(),
 

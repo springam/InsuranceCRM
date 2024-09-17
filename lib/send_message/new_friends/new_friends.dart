@@ -7,18 +7,21 @@ import 'package:mosaicbluenco/user_data/user_data.dart';
 import 'package:provider/provider.dart';
 import '../../etc_widget/alert_dialog.dart';
 import '../../etc_widget/text_message.dart';
+import '../../etc_widget/theme_set.dart';
 import '../../user_data/registered_friends_provider.dart';
 import '../../user_data/response_friend_provider.dart';
 import 'new_friend_tile.dart';
 
+GlobalKey<NewFriendsState> newFriendsStateKey = GlobalKey();
+
 class NewFriends extends StatefulWidget {
-  const NewFriends({super.key});
+  const NewFriends({Key? key}) : super(key: key);
 
   @override
-  State<NewFriends> createState() => _NewFriendsState();
+  State<NewFriends> createState() => NewFriendsState();
 }
 
-class _NewFriendsState extends State<NewFriends> {
+class NewFriendsState extends State<NewFriends> {
 
   late RegisteredFriendsItemProvider regIP;
   late ResponseFriendsItemProvider resIP;
@@ -104,7 +107,7 @@ class _NewFriendsState extends State<NewFriends> {
                   color: const Color(0xff000000),
                   width: 1
               ),
-              color: const Color(0xfffbf8f1) // 0xffc9ced9
+              color: ThemeSet.menuBarBackground2,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -171,13 +174,13 @@ class _NewFriendsState extends State<NewFriends> {
                 height: 34,
                 alignment: Alignment.centerRight,
                 padding: const EdgeInsets.only(right: 19),
-                color: const Color(0xfff0f0f0),
+                color: ThemeSet.menuBarBackground2,
                 child: Material(
-                  color: const Color(0xfff0f0f0),
+                  color: ThemeSet.menuBarBackground2,
                   child: InkWell(
                     borderRadius: BorderRadius.circular(10),
                     splashColor: const Color(0xffffdf8e),
-                    hoverColor: Colors.grey,
+                    hoverColor: ThemeSet.hoverColor,
                     child: Ink(
                       width: 88,
                       height: 21,

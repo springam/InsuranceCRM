@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mosaicbluenco/etc_widget/text_message.dart';
 import 'package:provider/provider.dart';
+import '../../etc_widget/theme_set.dart';
 import '../../user_data/registered_friends_provider.dart';
 
 class RegisteredFriendTile extends StatefulWidget {
@@ -70,7 +71,7 @@ class _RegisteredFriendTileState extends State<RegisteredFriendTile> {
                 child: InkWell(
                   borderRadius: BorderRadius.circular(15),
                   splashColor: const Color(0xffffdf8e),
-                  hoverColor: const Color(0xffbcc0c7),
+                  hoverColor: ThemeSet.hoverColor,
                   child: Ink(
                     width: double.infinity,
                     height: 34,

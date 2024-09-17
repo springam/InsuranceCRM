@@ -88,6 +88,12 @@ class _HomeMainState extends State<HomeMain> {
       menuColor = menuNormalColor;
       // imageColor = imageColorNormal;
       fontWeight = fontWeightNormal;
+
+      if (cIP.getMainPage() + 1 == menuNumber) {
+        menuColor = menuHoverColor; //메뉴 text의 선택되거나 hover 색상
+        // imageColor = imageColorHover; //메뉴 아이콘의 선택되거나 hover 색상
+        fontWeight = fontWeightHover;
+      }
     }
 
     leftMenuImage = leftMenuImageList[menuNumber - 1];
@@ -208,7 +214,7 @@ class _HomeMainState extends State<HomeMain> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(
-                        flex: 15,
+                        flex: 12,
                         child: Container( //left menu
                           width: 192,
                           height: MediaQuery.of(context).size.height * 1.5,
@@ -242,7 +248,7 @@ class _HomeMainState extends State<HomeMain> {
                       ),
 
                       Expanded(
-                          flex: 85,
+                          flex: 88,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
@@ -255,8 +261,8 @@ class _HomeMainState extends State<HomeMain> {
                                       color: Colors.white,
                                       child: InkWell(
                                         borderRadius: BorderRadius.circular(10),
-                                        splashColor: const Color(0xffffdf8e),
-                                        hoverColor: Colors.grey,
+                                        splashColor: ThemeSet.splashColor,
+                                        hoverColor: ThemeSet.hoverColor,
                                         onTap: () async{
                                           try {
                                             await UserApi.instance.logout();

@@ -72,14 +72,14 @@ class RegisteredFriendsState extends State<RegisteredFriends> {
                   color: const Color(0xff000000),
                   width: 1
               ),
-              color: const Color(0xfffbf8f1)
+              color: ThemeSet.menuBarBackground2
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
                 margin: const EdgeInsets.only(left: 20),
-                color: const Color(0xfffbf8f1),
+                color: ThemeSet.menuBarBackground2,
                 child: TextMessageNormal('등록한 사람들 ($registeredCount명)', 12.0),
               ),
               Container(

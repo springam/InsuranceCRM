@@ -77,7 +77,7 @@ class _SendMessageFriendListState extends State<SendMessageFriendList> {
                     color: const Color(0xff000000),
                     width: 1
                 ),
-                color: ThemeSet.step2Color
+                color: ThemeSet.menuBarBackground2
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -129,7 +129,7 @@ class _SendMessageFriendListState extends State<SendMessageFriendList> {
             alignment: Alignment.centerRight,
             padding: const EdgeInsets.only(right: 12),
             decoration: BoxDecoration(
-              color: ThemeSet.step2Color,
+              color: ThemeSet.menuBarBackground2,
               border: const Border(
                 left: BorderSide(color: Color(0xff000000), width: 1.0),
                 right: BorderSide(color: Color(0xff000000), width: 1.0),
@@ -145,13 +145,13 @@ class _SendMessageFriendListState extends State<SendMessageFriendList> {
             // color: ThemeSet.messageBackGroundColor,
             child: InkWell(
               borderRadius: BorderRadius.circular(10),
-              splashColor: const Color(0xffffdf8e),
+              splashColor: ThemeSet.splashColor,
               hoverColor: ThemeSet.hoverColor,
               child: Ink(
                 height: 38,
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                  color: Color(0xffe5e8ec),
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  color: ThemeSet.menuBarBackground1,
                 ),
                 child: Center(
                   child: Text('메시지 작성', style: buttonTextStyle,),
