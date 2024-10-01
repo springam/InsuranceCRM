@@ -8,6 +8,7 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 import '../etc_widget/alert_dialog.dart';
 import '../etc_widget/design_widget.dart';
 import '../etc_widget/text_message.dart';
+import '../etc_widget/theme_set.dart';
 import '../user_data/image_provider.dart';
 import '../user_data/message_provider.dart';
 import '../user_data/registered_friends_provider.dart';
@@ -152,6 +153,38 @@ class _SelectMessageState extends State<SelectMessage> {
         },
       ),
     )).toList();
+  }
+
+  Widget messageSelectChip(String title) {
+    return Container(
+      width: 105,
+      height: 28,
+      alignment: Alignment.center,
+      margin: const EdgeInsets.only(left: 5, right: 5),
+      child: Material(
+        color: const Color(0xfff0f0f0),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(20),
+          splashColor: ThemeSet.splashColor,
+          hoverColor: ThemeSet.hoverColor,
+          child: Ink(
+            // width: 88,
+            // height: 21,
+            decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(20)),
+                color: ThemeSet.whiteColor
+            ),
+            child: Center(
+              child: TextMessage400(title, 12.0),
+            ),
+          ),
+          onTap: () {
+            cIP.setCurrentSubPage(2);
+            cIP.setSelectedThemeIndex(0);
+          },
+        ),
+      ),
+    );
   }
 
   Widget fileOptionWidget(String title) {
@@ -336,14 +369,26 @@ class _SelectMessageState extends State<SelectMessage> {
                         child: const TitleNormal('1. 아래에 원하는 주제 버튼을 눌러서 보낼 문구나 이미지를 선택 하세요. 문구와 이미지를 둘다 보낼 수도 있습니다.', 14.0),
                       ),
 
+                      // Container(
+                      //   width: double.infinity,
+                      //   height: listHeight,
+                      //   decoration: const BoxDecoration(
+                      //       color: Color(0xfff0f0f0)
+                      //   ),
+                      //   padding: const EdgeInsets.only(left: 10, top: 5, right: 10, bottom: 5),
+                      //   child: Wrap(spacing: 10, children: themeList()),
+                      // ),
+
                       Container(
-                        width: double.infinity,
-                        height: listHeight,
-                        decoration: const BoxDecoration(
-                            color: Color(0xfff0f0f0)
+                        height: 40,
+                        color: ThemeSet.titleBackGroundColor,
+                        padding: const EdgeInsets.only(left: 5),
+                        child: Row(
+                          children: [
+                            messageSelectChip('텍스트 메시지'),
+                            messageSelectChip('이미지 메시지'),
+                          ],
                         ),
-                        padding: const EdgeInsets.only(left: 10, top: 5, right: 10, bottom: 5),
-                        child: Wrap(spacing: 10, children: themeList()),
                       ),
 
                       Container(

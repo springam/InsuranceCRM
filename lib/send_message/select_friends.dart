@@ -341,10 +341,10 @@ class SelectFriendsState extends State<SelectFriends> {
                         padding: const EdgeInsets.only(left: 10, right: 10),
                         decoration: BoxDecoration(
                             border: Border.all(
-                                color: const Color(0xff384d6a),
+                                color: ThemeSet.leftMenuBackGroundColor,
                                 width: 1
                             ),
-                            color: const Color(0xff384d6a)
+                            color: ThemeSet.leftMenuBackGroundColor
                         ),
                         child: titleTextSet('Step 1', ThemeSet.leftMenuColor, 14.0)
                       ),
@@ -354,7 +354,7 @@ class SelectFriendsState extends State<SelectFriends> {
                         padding: const EdgeInsets.only(left: 10, right: 10),
                         decoration: BoxDecoration(
                             border: Border.all(
-                                color: const Color(0xff384d6a),
+                                color: ThemeSet.leftMenuBackGroundColor,
                                 width: 1
                             ),
                             // color: const Color(0xff384d6a)
@@ -502,7 +502,7 @@ class SelectFriendsState extends State<SelectFriends> {
                     children: [
                       Container(
                         height: 40,
-                        color: const Color(0xffe5e8ec),
+                        color: ThemeSet.tagBackGroundColor,
                         padding: const EdgeInsets.only(left: 15, right: 15),
                         child: Row( //TagListChipAdd를 사용하지 않을 경우 Row 삭제
                           children: [

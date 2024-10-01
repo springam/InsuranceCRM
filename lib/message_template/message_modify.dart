@@ -77,7 +77,7 @@ class _MessageModifyState extends State<MessageModify> {
     await docRef.doc(imageCard.documentId).delete();
   }
 
-  Future<void> saveData(PresetMessageItem presetMessage) async{
+  Future<void> saveData(PresetMessageItem presetMessage) async {
     final docRef = FirebaseFirestore.instance.collection('message').doc(presetMessage.documentId);
     await docRef.update({
       'creation_date': DateFormat("yyyy년 MM월 dd일 hh시 mm분").format(DateTime.now()),
@@ -86,6 +86,11 @@ class _MessageModifyState extends State<MessageModify> {
       'message_body_talk_down': messageTalkDownController.text,
       'subject_index': SelectedTheme.selectedTheme,
     });
+  }
+
+  Future<void> deleteData(PresetMessageItem presetMessage) async {
+    final docRef = FirebaseFirestore.instance.collection('message').doc(presetMessage.documentId);
+    await docRef.delete();
   }
 
   Widget messageGridViewBoxM(PresetMessageItem presetMessage) {
@@ -216,6 +221,14 @@ class _MessageModifyState extends State<MessageModify> {
                   ),
                 ),
                 actions: [
+                  ElevatedButton(
+                      onPressed: () {
+                        deleteData(presetMessage);
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('삭제')
+                  ),
+                  const SizedBox(width: 40),
                   ElevatedButton(
                       onPressed: () {
                         saveData(presetMessage);
