@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_network/image_network.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
-import 'package:mosaicbluenco/user_data/kakao_login.dart';
 import 'package:mosaicbluenco/message_template/image_card_generate.dart';
 import 'package:mosaicbluenco/message_template/message_generate.dart';
 import 'package:mosaicbluenco/user_data/user_data.dart';
@@ -11,7 +10,6 @@ import 'etc_widget/theme_set.dart';
 import 'first_page/main_first.dart';
 import 'friend_care/friend_care.dart';
 import 'homepage_main.dart';
-import 'login.dart';
 import 'message_template/message_modify.dart';
 import 'send_message/message_templates/message_preset.dart';
 import 'send_message/select_friends.dart';
@@ -354,7 +352,7 @@ class _HomeMainState extends State<HomeMain> {
                 )
             ),
 
-            (cIP.getSubPage() == 2) ? const MessagePreset() : const SizedBox()
+            (cIP.getSubPage() == 2) ? (cIP.getTitleIsMessage()) ? const MessagePreset(titleIsMessage: true) : const MessagePreset(titleIsMessage: false) : const SizedBox()
           ],
         ),
       );

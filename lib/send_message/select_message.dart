@@ -155,7 +155,7 @@ class _SelectMessageState extends State<SelectMessage> {
     )).toList();
   }
 
-  Widget messageSelectChip(String title) {
+  Widget messageSelectChip(String title, bool titleBool) {
     return Container(
       width: 105,
       height: 28,
@@ -180,6 +180,7 @@ class _SelectMessageState extends State<SelectMessage> {
           ),
           onTap: () {
             cIP.setCurrentSubPage(2);
+            cIP.setTitleIsMessage(titleBool);
             cIP.setSelectedThemeIndex(0);
           },
         ),
@@ -385,8 +386,8 @@ class _SelectMessageState extends State<SelectMessage> {
                         padding: const EdgeInsets.only(left: 5),
                         child: Row(
                           children: [
-                            messageSelectChip('텍스트 메시지'),
-                            messageSelectChip('이미지 메시지'),
+                            messageSelectChip('텍스트 메시지', true),
+                            messageSelectChip('이미지 메시지', false),
                           ],
                         ),
                       ),

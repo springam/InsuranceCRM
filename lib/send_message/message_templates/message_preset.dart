@@ -11,7 +11,9 @@ import 'message_gridview_box.dart';
 import 'message_theme_subject.dart';
 
 class MessagePreset extends StatefulWidget {
-  const MessagePreset({super.key});
+  const MessagePreset({required this.titleIsMessage, super.key});
+
+  final bool titleIsMessage;
 
   @override
   State<MessagePreset> createState() => _MessagePresetState();
@@ -46,7 +48,7 @@ class _MessagePresetState extends State<MessagePreset> {
     MessageItemProvider().addListener(() { });
     CurrentPageProvider().addListener(() { });
     ImageCardItemProvider().addListener(() { });
-
+    titleIsMessage = widget.titleIsMessage;
   }
 
   @override
@@ -109,7 +111,15 @@ class _MessagePresetState extends State<MessagePreset> {
         crossCountGrid = 4;
       }
 
-      (titleIsMessage) ? gridCount = messageList.length : gridCount = imageList.length;
+      if (titleIsMessage) {
+        gridCount = messageList.length;
+        messageColor = selectedColor;
+        imageColor = normalColor;
+      } else {
+        gridCount = imageList.length;
+        messageColor = normalColor;
+        imageColor = selectedColor;
+      }
 
       return Container(
         height: MediaQuery.of(context).size.height,
@@ -136,8 +146,6 @@ class _MessagePresetState extends State<MessagePreset> {
                           if (!titleIsMessage) {
                             setState(() {
                               titleIsMessage = true;
-                              messageColor = selectedColor;
-                              imageColor = normalColor;
                             });
                           }
                         },
@@ -157,8 +165,6 @@ class _MessagePresetState extends State<MessagePreset> {
                           if (titleIsMessage) {
                             setState(() {
                               titleIsMessage = false;
-                              messageColor = normalColor;
-                              imageColor = selectedColor;
                             });
                           }
                         },

@@ -3,8 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:mosaicbluenco/user_data/user_data.dart';
 import 'package:mosaicbluenco/user_data/user_provider.dart';
-import 'package:provider/provider.dart';
-import '../gate/gate_main.dart';
 
 late UserItemProvider uIP;
 

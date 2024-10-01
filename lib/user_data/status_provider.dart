@@ -6,6 +6,7 @@ class CurrentPageProvider with ChangeNotifier {
   int currentSubPage = 0;
   int selectedThemeIndex = 20;
   int talkDown = 0;
+  bool titleIsMessage = true;
 
   // mainPage
   // 0: 메인
@@ -34,6 +35,10 @@ class CurrentPageProvider with ChangeNotifier {
     return talkDown;
   }
 
+  bool getTitleIsMessage() {
+    return titleIsMessage;
+  }
+
   setCurrentMainPage(int mainPageIndex) {
     currentMainPage = mainPageIndex;
     notifyListeners();
@@ -52,6 +57,10 @@ class CurrentPageProvider with ChangeNotifier {
   setTalkDown(int talkDownIndex) {
     talkDown = talkDownIndex;
     notifyListeners();
+  }
+
+  setTitleIsMessage(bool messageBool) {
+    titleIsMessage = messageBool;
   }
 
 }
