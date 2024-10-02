@@ -227,7 +227,17 @@ class _MessageGenerateState extends State<MessageGenerate> {
                     builder: (BuildContext context) {
                       return const AlertMessage(
                         title: '빈 필드가 존재 합니다.',
-                        message: '존대 메시지와 반말 메시지를 모두 입력해야 저장이 가능합니다.',
+                        message: '반말메시지와 존대메시지를 모두 입력해야 합니다.',
+                      );
+                    }
+                );
+              } else if (SelectedTheme.selectedTheme.isEmpty) {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return const AlertMessage(
+                        title: 'Tag를 선택하지 않았습니다.',
+                        message: '적어도 하나의 Tag를 선택해야 합니다.(복수선택 가능)',
                       );
                     }
                 );
